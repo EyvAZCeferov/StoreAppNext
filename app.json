@@ -1,6 +1,6 @@
 {
   "expo": {
-    "name": "StoreAPPnext",
+    "name": "PW",
     "slug": "StoreAPPnext",
     "version": "1.0.0",
     "orientation": "portrait",
@@ -17,8 +17,15 @@
       "**/*"
     ],
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "bundleIdentifier": "com.alov.wayAndPay",
+      "buildNumber": "1.0.0"
     },
+    "android": {
+      "package": "com.alov.wayAndPay",
+      "versionCode": 1
+    },
+    "description": "Way And Pay with us.",
     "web": {
       "favicon": "./assets/favicon.png"
     }

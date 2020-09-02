@@ -1,0 +1,47 @@
+[
+  {
+    "name": "Oba Market",
+    "address": "41st-A Block, Sumqayıt 5880, Azerbaijan",
+    "coords": {
+      "latitude": 40.576913,
+      "longitude": 49.6684218
+    },
+    "image_url": "https://media.glassdoor.com/l/de/cd/ae/b6/the-face-shop.jpg"
+  },
+  {
+    "name": "Sevgilim Şadlıq Sarayı",
+    "address": "Mirza Alakbar Sabir, Sumqayit 5008, Azerbaijan",
+    "coords": {
+      "latitude": 40.5761552,
+      "longitude": 49.6688671
+    },
+    "image_url": "http://dreamercosmetic.com/uploads/source/chekd101/trangdiem/bomyphamchanel5moncaocap11600x450.jpg"
+  },
+  {
+    "name": "State Real Estate Registration Service",
+    "address": "13 Koroghlu, Sumqayit 5008, Azerbaijan",
+    "coords": {
+      "latitude": 40.5737675,
+      "longitude": 49.6703047
+    },
+    "image_url": "https://www.vinpearl.com/landmark81/wp-content/uploads/sites/39/2018/09/VP-Luxury-Landmark-81-22-bot.jpg"
+  },
+  {
+    "name": "Araz Supermarket",
+    "address": "Sumqayit 5008, Azerbaijan",
+    "coords": {
+      "latitude": 40.5758048,
+      "longitude": 49.6688832
+    },
+    "image_url": "http://i.dtinews.vn/images/editor/images/ngovan/12018/19/Big/pho-di-bo-bui-vien-anh-hoang-trieuimg8663-1516201119295.jpg"
+  },
+  {
+    "name": "Tek Tut",
+    "address": "Koroghlu, Sumqayit 5008, Azerbaijan",
+    "coords": {
+      "latitude": 40.5785061,
+      "longitude": 49.666614
+    },
+    "image_url": "http://static.asiawebdirect.com/m/bangkok/portals/vietnam/homepage/ho-chi-minh-city/ben-thanh-market/allParagraphs/BucketComponent/ListingContainer/03/image/ben-thanh-market-ext.jpg"
+  }
+]
