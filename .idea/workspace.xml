@@ -17,48 +17,8 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="64eff0f2-a29f-4a6e-8bcc-bb9791a422d7" name="Default Changelist" comment="Fles">
+      <change afterPath="$PROJECT_DIR$/Readme.md" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/App.js" beforeDir="false" afterPath="$PROJECT_DIR$/App.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Components/AppFiles/Lang/index.js" beforeDir="false" afterPath="$PROJECT_DIR$/Components/AppFiles/Lang/index.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Components/AppFiles/Screens/ScreenFolder/Bread/Components/PayStart/Paying.js" beforeDir="false" afterPath="$PROJECT_DIR$/Components/AppFiles/Screens/ScreenFolder/Bread/Components/PayStart/Paying.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Components/AppFiles/Screens/ScreenFolder/Bread/Components/PayStart/RecentOperation.js" beforeDir="false" afterPath="$PROJECT_DIR$/Components/AppFiles/Screens/ScreenFolder/Bread/Components/PayStart/RecentOperation.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Components/AppFiles/Screens/ScreenFolder/Bread/Screens/BarCodes.js" beforeDir="false" afterPath="$PROJECT_DIR$/Components/AppFiles/Screens/ScreenFolder/Bread/Screens/BarCodes.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Components/AppFiles/Screens/ScreenFolder/Bread/Screens/BarcodeReader.js" beforeDir="false" afterPath="$PROJECT_DIR$/Components/AppFiles/Screens/ScreenFolder/Bread/Screens/BarcodeReader.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Components/AppFiles/Screens/ScreenFolder/Bread/Screens/OneCheck.js" beforeDir="false" afterPath="$PROJECT_DIR$/Components/AppFiles/Screens/ScreenFolder/Bread/Screens/OneCheck.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Components/AppFiles/Screens/ScreenFolder/Bread/Screens/TermOfUses.js" beforeDir="false" afterPath="$PROJECT_DIR$/Components/AppFiles/Screens/ScreenFolder/Bread/Screens/TermOfUses.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Components/AppFiles/Screens/ScreenFolder/Draw/Component/ContactUsFooter.js" beforeDir="false" afterPath="$PROJECT_DIR$/Components/AppFiles/Screens/ScreenFolder/Draw/Component/ContactUsFooter.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Components/AppFiles/Screens/ScreenFolder/Draw/Component/Home/Components/Transformations/assets/card1.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Components/AppFiles/Screens/ScreenFolder/Draw/Component/Home/Components/Transformations/assets/card2.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Components/AppFiles/Screens/ScreenFolder/Draw/Component/Home/Components/Transformations/assets/card3.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Components/AppFiles/Screens/ScreenFolder/Draw/Component/Home/Components/Transformations/assets/card4.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Components/AppFiles/Screens/ScreenFolder/Draw/Component/Home/Components/Transformations/assets/card5.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Components/AppFiles/Screens/ScreenFolder/Draw/Component/Home/Components/Transformations/assets/card6.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Components/AppFiles/Screens/ScreenFolder/Draw/Component/Home/Components/Transformations/components/Card.tsx" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Components/AppFiles/Screens/ScreenFolder/Draw/Component/Home/Components/Wallet/Wallet.tsx" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Components/AppFiles/Screens/ScreenFolder/Draw/Component/Home/Components/Wallet/WalletCard.tsx" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Components/AppFiles/Screens/ScreenFolder/Draw/Component/Home/Components/Wallet/WalletFlatlist.tsx" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Components/AppFiles/Screens/ScreenFolder/Draw/Component/Home/Components/Wallet/index.ts" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Components/AppFiles/Screens/ScreenFolder/Draw/Component/Home/RecentOperations.js" beforeDir="false" afterPath="$PROJECT_DIR$/Components/AppFiles/Screens/ScreenFolder/Draw/Component/Home/RecentOperations.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Components/AppFiles/Screens/ScreenFolder/Draw/Component/Home/SliderCards.js" beforeDir="false" afterPath="$PROJECT_DIR$/Components/AppFiles/Screens/ScreenFolder/Draw/Component/Home/SliderCards.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Components/AppFiles/Screens/ScreenFolder/Draw/Component/Home/cards.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Components/AppFiles/Screens/ScreenFolder/Draw/Component/Maps/TabMapsLists.js" beforeDir="false" afterPath="$PROJECT_DIR$/Components/AppFiles/Screens/ScreenFolder/Draw/Component/Maps/TabMapsLists.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Components/AppFiles/Screens/ScreenFolder/Draw/Component/ProfileSection.js" beforeDir="false" afterPath="$PROJECT_DIR$/Components/AppFiles/Screens/ScreenFolder/Draw/Component/ProfileSection.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Components/AppFiles/Screens/ScreenFolder/Draw/Component/ScreensStandart.js" beforeDir="false" afterPath="$PROJECT_DIR$/Components/AppFiles/Screens/ScreenFolder/Draw/Component/ScreensStandart.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Components/AppFiles/Screens/ScreenFolder/Draw/Screens/AccountSettings.js" beforeDir="false" afterPath="$PROJECT_DIR$/Components/AppFiles/Screens/ScreenFolder/Draw/Screens/AccountSettings.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Components/AppFiles/Screens/ScreenFolder/Draw/Screens/Bonuses.js" beforeDir="false" afterPath="$PROJECT_DIR$/Components/AppFiles/Screens/ScreenFolder/Draw/Screens/Bonuses.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Components/AppFiles/Screens/ScreenFolder/Draw/Screens/CardsScreen.js" beforeDir="false" afterPath="$PROJECT_DIR$/Components/AppFiles/Screens/ScreenFolder/Draw/Screens/CardsScreen.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Components/AppFiles/Screens/ScreenFolder/Draw/Screens/ContactUs.js" beforeDir="false" afterPath="$PROJECT_DIR$/Components/AppFiles/Screens/ScreenFolder/Draw/Screens/ContactUs.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Components/AppFiles/Screens/ScreenFolder/Draw/Screens/Home2.js" beforeDir="false" afterPath="$PROJECT_DIR$/Components/AppFiles/Screens/ScreenFolder/Draw/Screens/Home2.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Components/AppFiles/Screens/ScreenFolder/Draw/Screens/Settings.js" beforeDir="false" afterPath="$PROJECT_DIR$/Components/AppFiles/Screens/ScreenFolder/Draw/Screens/Settings.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app.json" beforeDir="false" afterPath="$PROJECT_DIR$/app.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/assets/W192x192 logo.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/assets/favicon.png" beforeDir="false" afterPath="$PROJECT_DIR$/assets/favicon.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/assets/icon-ios.png" beforeDir="false" afterPath="$PROJECT_DIR$/assets/icon-ios.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/assets/icon.png" beforeDir="false" afterPath="$PROJECT_DIR$/assets/icon.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/assets/splash.png" beforeDir="false" afterPath="$PROJECT_DIR$/assets/splash.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/package.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/yarn-error.log" beforeDir="false" afterPath="$PROJECT_DIR$/yarn-error.log" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/yarn.lock" beforeDir="false" afterPath="$PROJECT_DIR$/yarn.lock" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -152,7 +112,7 @@
       <workItem from="1599331234897" duration="2933000" />
       <workItem from="1599372941083" duration="25976000" />
       <workItem from="1599471298104" duration="405000" />
-      <workItem from="1599474701794" duration="5593000" />
+      <workItem from="1599474701794" duration="6380000" />
     </task>
     <task id="LOCAL-00001" summary="Fles">
       <created>1599058921979</created>
