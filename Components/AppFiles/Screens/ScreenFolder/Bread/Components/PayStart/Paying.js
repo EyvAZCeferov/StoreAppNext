@@ -6,171 +6,161 @@ import {Tooltip} from 'react-native-elements';
 
 const {width, height} = Dimensions.get('window')
 
-export default class PayCards extends React.Component {
-    constructor(props) {
-        super(props);
-        this.state = {
-            cards: null,
-            refresh: true,
-        };
-    }
+export default function PayCards(props) {
 
-    async getInfo() {
+    const [refresh, setRefresh] = React.useState(true);
+    const [selectedCard, setSelectedCard] = React.useState(props.cardNumb);
+    const [cards, setCards] = React.useState(null);
+    const [priceAll, setPriceAll] = React.useState(15)
+
+    function getInfo() {
+        firebase.database().goOnline();
         var user = firebase.auth().currentUser;
         if (user) {
-            var datas = [];
             firebase
                 .database()
-                .ref('users/' + user.uid + '/cards')
+                .ref('users/' + user.uid + '/cards/' + selectedCard)
                 .on('value', (data) => {
-                    data.forEach((data) => {
-                        datas.push(data.val());
-                    });
-                    this.setState({
-                        cards: datas,
-                        refresh: false
-                    });
-                });
+                        var dataW = data.val();
+                        setCards(dataW);
+                        setRefresh(false)
+                    }
+                );
         } else {
-            this.props.navigation.navigate('CreateAccount');
+            props.navigation.goBack();
         }
     }
 
-    componentDidMount() {
-        this.getInfo();
-    }
+    React.useEffect(() => {
+        getInfo();
+    }, [])
 
-    async handleRefresh() {
+    async function handleRefresh() {
         this.getInfo();
         this.setState({refresh: false})
     }
 
-    price() {
+    function price() {
         return '0.00'
     }
 
-    renderCards({item, index}) {
-        function hideNumb() {
-            var numb = item.cardInfo.number;
-            //use slice to remove first 12 elements
-            let first12 = numb.slice(4, 14);
-            //define what char to use to replace numbers
-            let char = '*'
-            let repeatedChar = char.repeat(numb.length - 14);
-            // replace numbers with repeated char
-            first12 = first12.replace(first12, repeatedChar);
-            //concat hidden char with last 4 digits of input
-            let hiddenNumbers = numb.slice(0, 4) + first12 + numb.slice(numb.length - 4);
-            //return
-            return hiddenNumbers;
-        }
-
+    function renderCardDatas() {
         return (
-            <View style={styles.cardOne} key={index}>
-                <Text style={styles.cardOnePass}>{hideNumb()}</Text>
-                <Text style={styles.cardOneVal}>{item.cardInfo.cvc}Azn</Text>
-            </View>
-        )
-    }
-
-    render() {
-        return (
-            <View style={styles.container}>
-                <View style={styles.cardArea}>
-                    <View style={styles.card}>
-                        <View style={styles.cardCotnent}>
-                            <View style={{
-                                backgroundColor: "#fff",
-                                width: width / 1.94,
-                                height: height / 3,
-                                borderRadius: 12
-                            }}>
-                                <View style={{
-                                    justifyContent: "space-between",
-                                    flex: 1,
-                                    flexDirection: "column",
-                                    marginVertical: 10,
-                                    paddingHorizontal: 15
-                                }}>
-                                    <View>
-                                        <Text style={{fontSize: 20, fontWeight: "bold"}}>Balans</Text>
-                                        <View style={{width: '100%', height: 100, marginTop: 5}}>
-                                            <FlatList style={{width: '100%', height: 100, paddingHorizontal: 5}}
-                                                      data={this.state.cards} refreshing={this.state.refresh}
-                                                      onRefresh={this.handleRefresh}
-                                                      keyExtractor={(index) => index}
-                                                      renderItem={this.renderCards}/>
-                                        </View>
-                                    </View>
-                                    <View style={{marginTop: 5}}>
-                                        <Text style={{fontSize: 25, fontWeight: "bold"}}>Yekun Məbləğ</Text>
-                                        <Text
-                                            style={{
-                                                color: "rgba(0,0,0,.5)",
-                                                fontSize: 15,
-                                                marginLeft: 5
-                                            }}>{this.price()}</Text>
-                                    </View>
-                                </View>
-                            </View>
-                            <View style={{
-                                backgroundColor: "#7c9d32",
-                                width: width / 3,
-                                height: height / 3.03,
-                                borderBottomLeftRadius: width / 5.2,
-                                borderTopLeftRadius: 0,
-                                flexDirection: "column",
-                                paddingHorizontal: 8,
-                                paddingVertical: 15
-                            }}>
-                                <View style={{
-                                    flex: 1,
-                                    flexDirection: "row",
-                                    justifyContent: "space-around",
-                                    alignItems: "center",
-                                    alignContent: "center"
-                                }}>
-                                    <Tooltip popover={<Text>Info here</Text>}>
-                                        <AntDesign name="shoppingcart" size={30} color="#fff"/>
-                                    </Tooltip>
-                                    <Tooltip popover={<Text>Info here</Text>}>
-                                        <Feather name="shopping-bag"
-                                                 size={29} color="#fff"/>
-                                    </Tooltip>
-                                </View>
-                                <View style={{
-                                    flex: 1,
-                                    flexDirection: "row",
-                                    justifyContent: "space-around",
-                                    alignItems: "center",
-                                    alignContent: "center"
-                                }}>
-                                    <Tooltip popover={<Text>Info here</Text>}>
-                                        <AntDesign name="mobile1" size={24} color="#fff"/>
-                                    </Tooltip>
-                                </View>
-                                <View style={{
-                                    flex: 1,
-                                    flexDirection: "row",
-                                    justifyContent: "space-around",
-                                    alignItems: "center",
-                                    alignContent: "center",
-                                }}>
-                                    <Tooltip popover={<Text>Info here</Text>}>
-                                        <Ionicons name="ios-qr-scanner" style={{marginLeft: 10}}
-                                                  size={28} color="#fff"/>
-                                    </Tooltip>
-                                    <Tooltip popover={<Text>Info here</Text>}>
-                                        <FontAwesome name="barcode" style={{marginLeft: 15}} size={27} color="#fff"/>
-                                    </Tooltip>
-                                </View>
-                            </View>
+            <View style={{
+                backgroundColor: "#fff",
+                width: width / 2.2,
+                height: height / 3,
+                borderRadius: 12
+            }}>
+                <View style={{
+                    justifyContent: "space-between",
+                    flex: 1,
+                    flexDirection: "column",
+                    marginVertical: 10,
+                    paddingHorizontal: 15
+                }}>
+                    <View>
+                        <Text style={{
+                            fontSize: 21,
+                            fontWeight: "bold",
+                            color: "#000",
+                            marginTop: 14
+                        }}>Kart Haqqında</Text>
+                        <View style={{
+                            width: '100%',
+                            marginTop: 5,
+                            flexDirection: "column-reverse",
+                            justifyContent: "center"
+                        }}>
+                            <Text style={{color: "rgba(0,0,0,.5)", fontSize: 14}}>Kart Nömrəsi</Text>
+                            <Text style={{
+                                color: "#000",
+                                fontSize: 18
+                            }}>{cards != null ? hideNumb(cards.cardInfo.number) : '*********'} </Text>
+                        </View>
+                        <View style={{marginTop: 15}}/>
+                        <View style={{
+                            width: '100%',
+                            marginTop: 5,
+                            flexDirection: "column-reverse",
+                            justifyContent: "space-around"
+                        }}>
+                            <Text style={{color: "rgba(0,0,0,.5)", fontSize: 14}}>Balans</Text>
+                            <Text style={{
+                                color: "#000",
+                                fontSize: 18
+                            }}>{cards != null ? cards.cardInfo.cvc : 0} ₼</Text>
                         </View>
                     </View>
                 </View>
             </View>
         )
     }
+
+    function renderRight() {
+        return (
+            <View style={{
+                backgroundColor: "#7c9d32",
+                width: width / 2.6,
+                height: height / 3.03,
+                borderBottomLeftRadius: width / 5.2,
+                borderTopLeftRadius: 0,
+                flexDirection: "column",
+                paddingHorizontal: 8,
+                paddingVertical: 3
+            }}>
+                <Text style={{fontSize: 20, fontWeight: "bold", color: "#fff", marginTop: 20}}>Yekun
+                    Məbləğ</Text>
+                <Text
+                    style={{
+                        color: "rgba(255,255,255,.5)",
+                        fontSize: 17,
+                        marginLeft: 5,
+                        marginTop: 2,
+                    }}>{price()} ₼</Text>
+                <View style={{marginTop: 40, marginLeft: 5}}>
+                    <Text style={{color: "#fff", fontSize: 20, fontWeight: "bold"}}>Qalan Məbləğ</Text>
+                    <Text
+                        style={{
+                            color: "rgba(255,255,255,.5)",
+                            fontSize: 17,
+                            marginLeft: 5,
+                            marginTop: 2,
+                        }}>{cards != null ? parseInt(cards.cardInfo.cvc) - parseInt(priceAll) : 0} ₼</Text>
+                </View>
+            </View>
+        )
+    }
+
+
+    function hideNumb(e) {
+        var numb = e;
+        //use slice to remove first 12 elements
+        let first12 = numb.slice(4, 14);
+        //define what char to use to replace numbers
+        let char = '*'
+        let repeatedChar = char.repeat(numb.length - 14);
+        // replace numbers with repeated char
+        first12 = first12.replace(first12, repeatedChar);
+        //concat hidden char with last 4 digits of input
+        let hiddenNumbers = numb.slice(0, 4) + first12 + numb.slice(numb.length - 4);
+        //return
+        return hiddenNumbers;
+    }
+
+    return (
+        <View style={styles.container}>
+            <View style={styles.cardArea}>
+                <View style={styles.card}>
+                    <View style={styles.cardCotnent}>
+                        {renderCardDatas()}
+                        {renderRight()}
+                    </View>
+                </View>
+            </View>
+        </View>
+    )
+
 }
 
 const styles = StyleSheet.create({

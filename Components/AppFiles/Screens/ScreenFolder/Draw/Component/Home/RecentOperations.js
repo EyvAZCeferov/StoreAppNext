@@ -4,6 +4,7 @@ import {useNavigation} from '@react-navigation/native'
 import SlidingUpPanel from 'rn-sliding-up-panel';
 import {Body, Button, Left, ListItem, Right, Thumbnail} from "native-base";
 import {t} from "../../../../../Lang";
+import ShimmerPlaceholder from "react-native-shimmer-placeholder";
 
 const {width, height} = Dimensions.get('window');
 export default function RecentOperations() {
@@ -74,12 +75,18 @@ export default function RecentOperations() {
             ficsalId: '7C5d2AAA546',
         },
     ]);
+    const [refresh, setRefresh] = React.useState(true);
     const [dragableRang, setDragableRang] = React.useState({
         top: height - 80,
         bottom: 155
     })
     const _draggedValue = new Animated.Value(180);
     const ModalRef = React.useRef(null);
+    React.useEffect(() => {
+        setTimeout(() => {
+            setRefresh(false)
+        }, 1000)
+    }, [])
 
     function renderItem3() {
         if (oper != null) {
@@ -147,7 +154,7 @@ export default function RecentOperations() {
                             justifyContent: "space-between",
                             flexDirection: "row",
                         }}>
-                            <Text style={{color: "#7c9d32", marginVertical: 10}}>Recent</Text>
+                            <Text style={{color: "#7c9d32", marginVertical: 10}}>{t('recentoperations')}</Text>
                             <View style={{
                                 alignItems: "center",
                                 justifyContent: "center",
@@ -168,15 +175,62 @@ export default function RecentOperations() {
                                         height: 4,
                                         borderRadius: 10
                                     }}/></Button></View>
-                            <Text style={{color: "#7c9d32", marginVertical: 10}}>Today</Text>
+                            <Text style={{color: "#7c9d32", marginVertical: 10}}>{t('yesterday')}</Text>
                         </View>
                     </View>
                     <View style={{height: 500, paddingBottom: 10}}>
-                        <FlatList
-                            data={oper}
-                            keyExtractor={(index) => index}
-                            renderItem={renderItem3}
-                        />
+                        {refresh ? (
+                            <View style={{width: width}}>
+                                <ShimmerPlaceholder
+                                    visible={false}
+                                    delay={1000}
+                                    duration={1000}
+                                    isInteraction={true}
+                                    style={{width: width, height: 80, borderRadius: 8, marginBottom: 8}}
+                                />
+                                <ShimmerPlaceholder
+                                    visible={false}
+                                    delay={1000}
+                                    duration={1000}
+                                    isInteraction={true}
+                                    style={{width: width, height: 80, borderRadius: 8, marginBottom: 8}}
+                                />
+                                <ShimmerPlaceholder
+                                    visible={false}
+                                    delay={1000}
+                                    duration={1000}
+                                    isInteraction={true}
+                                    style={{width: width, height: 80, borderRadius: 8, marginBottom: 8}}
+                                />
+                                <ShimmerPlaceholder
+                                    visible={false}
+                                    delay={1000}
+                                    duration={1000}
+                                    isInteraction={true}
+                                    style={{width: width, height: 80, borderRadius: 8, marginBottom: 8}}
+                                />
+                                <ShimmerPlaceholder
+                                    visible={false}
+                                    delay={1000}
+                                    duration={1000}
+                                    isInteraction={true}
+                                    style={{width: width, height: 80, borderRadius: 8, marginBottom: 8}}
+                                />
+                                <ShimmerPlaceholder
+                                    visible={false}
+                                    delay={1000}
+                                    duration={1000}
+                                    isInteraction={true}
+                                    style={{width: width, height: 80, borderRadius: 8, marginBottom: 8}}
+                                />
+                            </View>
+                        ) : (
+                            <FlatList
+                                data={oper}
+                                keyExtractor={(index) => index}
+                                renderItem={renderItem3}
+                            />
+                        )}
                     </View>
                 </View>
             </SlidingUpPanel>

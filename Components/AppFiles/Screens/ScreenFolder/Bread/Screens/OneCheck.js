@@ -11,7 +11,7 @@ import {AntDesign} from '@expo/vector-icons';
 var width = Dimensions.get('window').width;
 var height = Dimensions.get('window').height;
 import {Col, Grid} from 'react-native-easy-grid';
-import {Left, Body, Button} from 'native-base';
+import {Button} from 'native-base';
 import {QRCode as CustomQRCode} from 'react-native-custom-qr-codes-expo';
 import {StatusBar} from "expo-status-bar";
 
@@ -36,11 +36,12 @@ export default class PayThanks extends React.Component {
         const title = params ? params.title : null;
         return (
             <View style={{width: width, height: height}}>
+                <StatusBar style="dark" backgroundColor="#fff"/>
                 <View
                     style={{
-                        height: 40,
-                        flex: 1,
-                        padding: 5,
+                        height: 70,
+                        paddingVertical: 15,
+                        paddingHorizontal: 7,
                         borderColor: "#fff",
                         backgroundColor: "#fff",
                         width: width,
@@ -50,11 +51,12 @@ export default class PayThanks extends React.Component {
                         alignContent: "center",
                         textAlign: "center",
                     }}>
-                    <View>
+                    <View style={{width: width / 5}}>
                         <Button style={{
                             alignItems: "center",
                             alignContent: "center",
-                            textAlign: "center", justifyContent: "center"
+                            textAlign: "center",
+                            justifyContent: "center"
                         }} transparent iconLeft large onPress={() => this.props.navigation.goBack()}>
                             <AntDesign name="back" size={24} color="#7c9d32"/>
                         </Button>
@@ -62,11 +64,13 @@ export default class PayThanks extends React.Component {
                     <View style={{
                         alignItems: "center",
                         alignContent: "center",
-                        textAlign: "center", justifyContent: "center"
+                        textAlign: "center",
+                        justifyContent: "center",
+                        width: width / 1.5,
                     }}>
-                        <Text>{title}</Text>
+                        <Text style={{color: "#7c9d32", fontSize: 18, fontWeight: 'bold'}}>{title}</Text>
                     </View>
-                    <View/>
+                    <View style={{width: width / 3}}/>
                 </View>
                 <View style={[styles.f1, styles.bgWhite, styles.center]}>
                     <ScrollView style={[styles.f1, styles.mt, styles.check]}>

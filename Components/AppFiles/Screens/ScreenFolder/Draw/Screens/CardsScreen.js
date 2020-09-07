@@ -6,7 +6,7 @@ import {
     View,
     FlatList,
     Modal,
-    Alert,
+    Alert, ScrollView,
 } from 'react-native';
 import {
     Button,
@@ -32,6 +32,7 @@ import firebase from '../../../../Functions/FireBase/firebaseConfig';
 
 const {width, height} = Dimensions.get('window');
 import {t} from '../../../../Lang';
+import ShimmerPlaceholder from "react-native-shimmer-placeholder";
 
 export default class CardsScreen extends React.Component {
     constructor(props) {
@@ -135,31 +136,99 @@ export default class CardsScreen extends React.Component {
         }
 
         return (
-            <ListItem style={styles.firstList} thumbnail key={index + 1}>
-                <Left style={styles.left}>
-                    <Thumbnail
-                        square
-                        source={{
-                            uri:
-                                'https://kapitalbank.az/images/cards/M/mastercard-platinum1594371040.png',
-                        }}
-                        style={styles.thumbImage}
-                    />
-                </Left>
-                <Body style={styles.body}>
-                    <View>
-                        <Text style={styles.cardNumbText}>{item.cardInfo.number}</Text>
-                    </View>
-                    <View>
-                        <Text>{item.cardInfo.cvc} Azn</Text>
-                    </View>
-                </Body>
-                <Right style={styles.right}>
-                    <Button transparent onPress={() => deleteItem(item.cardId)}>
-                        <EvilIcons name="trash" size={30} color="#BF360C"/>
-                    </Button>
-                </Right>
-            </ListItem>
+            <View>
+                {
+                    this.state.refreshing || this.state.loading ?
+                        (
+                            <ScrollView>
+                                <ShimmerPlaceholder
+                                    visible={false}
+                                    delay={1000}
+                                    duration={1000}
+                                    isInteraction={true}
+                                    style={{width: width, height: 50, marginBottom: 15}}
+                                />
+                                <ShimmerPlaceholder
+                                    visible={false}
+                                    delay={1000}
+                                    duration={1000}
+                                    isInteraction={true}
+                                    style={{width: width, height: 50, marginBottom: 15}}
+                                />
+                                <ShimmerPlaceholder
+                                    visible={false}
+                                    delay={1000}
+                                    duration={1000}
+                                    isInteraction={true}
+                                    style={{width: width, height: 50, marginBottom: 15}}
+                                />
+                                <ShimmerPlaceholder
+                                    visible={false}
+                                    delay={1000}
+                                    duration={1000}
+                                    isInteraction={true}
+                                    style={{width: width, height: 50, marginBottom: 15}}
+                                />
+                                <ShimmerPlaceholder
+                                    visible={false}
+                                    delay={1000}
+                                    duration={1000}
+                                    isInteraction={true}
+                                    style={{width: width, height: 50, marginBottom: 15}}
+                                />
+                                <ShimmerPlaceholder
+                                    visible={false}
+                                    delay={1000}
+                                    duration={1000}
+                                    isInteraction={true}
+                                    style={{width: width, height: 50, marginBottom: 15}}
+                                />
+                                <ShimmerPlaceholder
+                                    visible={false}
+                                    delay={1000}
+                                    duration={1000}
+                                    isInteraction={true}
+                                    style={{width: width, height: 50, marginBottom: 15}}
+                                />
+                                <ShimmerPlaceholder
+                                    visible={false}
+                                    delay={1000}
+                                    duration={1000}
+                                    isInteraction={true}
+                                    style={{width: width, height: 50, marginBottom: 15}}
+                                />
+                            </ScrollView>
+                        )
+                        :
+                        (
+                            <ListItem style={styles.firstList} thumbnail key={index + 1}>
+                                <Left style={styles.left}>
+                                    <Thumbnail
+                                        square
+                                        source={{
+                                            uri:
+                                                'https://kapitalbank.az/images/cards/M/mastercard-platinum1594371040.png',
+                                        }}
+                                        style={styles.thumbImage}
+                                    />
+                                </Left>
+                                <Body style={styles.body}>
+                                    <View>
+                                        <Text style={styles.cardNumbText}>{item.cardInfo.number}</Text>
+                                    </View>
+                                    <View>
+                                        <Text>{item.cardInfo.cvc} Azn</Text>
+                                    </View>
+                                </Body>
+                                <Right style={styles.right}>
+                                    <Button transparent onPress={() => deleteItem(item.cardId)}>
+                                        <EvilIcons name="trash" size={30} color="#BF360C"/>
+                                    </Button>
+                                </Right>
+                            </ListItem>
+                        )
+                }
+            </View>
         );
     }
 
@@ -175,24 +244,13 @@ export default class CardsScreen extends React.Component {
         );
     }
 
-    makeid(length) {
-        var result = '';
-        var characters =
-            'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
-        var charactersLength = characters.length;
-        for (var i = 0; i < length; i++) {
-            result += characters.charAt(Math.floor(Math.random() * charactersLength));
-        }
-        return result;
-    }
-
     addCard = () => {
         if (this.state.pinCode == null) {
             this.setState({active: false});
             alert(t('pinCodeNull'));
         } else {
             var user = firebase.auth().currentUser;
-            var uid = this.makeid(15);
+            var uid = this.state.cardInfos.number;
             firebase
                 .database()
                 .ref('users/' + user.uid + '/cards/' + uid)
@@ -225,16 +283,37 @@ export default class CardsScreen extends React.Component {
 
     listComponent() {
         return (
-            <List style={styles.w100}>
-                <FlatList
-                    data={this.state.cards}
-                    renderItem={this.renderItems.bind(this)}
-                    keyExtractor={(item, index) => index.toString()}
-                    refreshing={this.state.refreshing}
-                    onRefresh={this.handleRefresh}
-                />
-            </List>
+            <FlatList
+                data={this.state.cards}
+                renderItem={this.renderItems.bind(this)}
+                keyExtractor={(item, index) => index.toString()}
+                refreshing={this.state.refreshing}
+                onRefresh={this.handleRefresh}
+            />
         );
+    }
+
+    renderRefreshLists() {
+        if (this.state.refreshing || this.state.loading) {
+            return (
+                <ScrollView>
+                    <ShimmerPlaceholder
+                        visible={false}
+                        delay={1000}
+                        duration={1000}
+                        isInteraction={true}
+                        style={{width: width, height: 50, marginBottom: 15}}
+                    />
+                    <ShimmerPlaceholder
+                        visible={false}
+                        delay={1000}
+                        duration={1000}
+                        isInteraction={true}
+                        style={{width: width, height: 50, marginBottom: 15}}
+                    />
+                </ScrollView>
+            )
+        }
     }
 
     render() {
@@ -243,15 +322,18 @@ export default class CardsScreen extends React.Component {
                 <ScreensStandart {...this.props} name={t('cards')}/>
                 <View style={styles.f1}>
                     <View style={styles.f1}>
-                        {this.state.refreshing == true ||
-                        this.state.loading == true ||
-                        this.state.cardCount == 0 ||
+                        {this.renderRefreshLists()}
+                        {this.state.cardCount == 0 ||
                         this.state.cards == null ? (
                             <List style={styles.w100}>
                                 <Text style={styles.nullObject}>{t('noResult')}</Text>
                             </List>
                         ) : (
-                            this.listComponent()
+                            <ScrollView>
+                                <List style={styles.w100}>
+                                    {this.listComponent()}
+                                </List>
+                            </ScrollView>
                         )}
                         <View style={{flex: 1}}>
                             <Fab

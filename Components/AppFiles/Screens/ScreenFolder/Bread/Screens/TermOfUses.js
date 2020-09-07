@@ -21,7 +21,8 @@ var height = Dimensions.get('window').height;
 import firebase from '../../../../Functions/FireBase/firebaseConfig';
 import HTMLView from 'react-native-htmlview';
 import {t} from '../../../../Lang';
-
+import {StatusBar} from "expo-status-bar";
+import * as Localization from "expo-localization";
 
 export default class TermOfUses extends React.Component {
     constructor(props) {
@@ -49,19 +50,30 @@ export default class TermOfUses extends React.Component {
             });
     }
 
+    langConvert(e) {
+        if (Localization.locale == 'en' || Localization.locale === 'en') {
+            return e.en_text;
+        } else if (Localization.locale == 'ru' || Localization.locale === 'ru') {
+            return e.ru_text;
+        } else if (Localization.locale == 'az' || Localization.locale === 'az') {
+            return e.az_text;
+        }
+    }
+
     render() {
         return (
             <View>
-                <Header style={styles.header} backgroundColor="#7c9d32">
-                    <Left>
+                <StatusBar style="dark" backgroundColor="#fff"/>
+                <Header style={styles.header}>
+                    <View>
                         <Button transparent onPress={() => this.props.navigation.goBack()}>
-                            <AntDesign name="back" size={24} color="#fff"/>
+                            <AntDesign name="back" size={24} color="#7c9d32"/>
                         </Button>
-                    </Left>
-                    <Body style={styles.headerBody}>
+                    </View>
+                    <View style={styles.headerBody}>
                         <Text style={styles.headerTitle}>{t('termsofuseoftheapplication')}</Text>
-                    </Body>
-                    <Right/>
+                    </View>
+                    <View/>
                 </Header>
                 <ScrollView>
                     <View style={styles.justify}>
@@ -69,10 +81,19 @@ export default class TermOfUses extends React.Component {
                             source={{uri: this.state.datas.icon}}
                             style={styles.icon}
                         />
-
+                        <Text style={{
+                            fontSize: 20,
+                            fontWeight: "bold",
+                            color: '#010101',
+                            width: width,
+                            height: 20
+                        }}>
+                            Pay And Way
+                        </Text>
                         <HTMLView
-                            value={this.state.datas.text}
+                            value={this.langConvert(this.state.datas)}
                             stylesheet={styles.textColor}
+                            addLineBreaks={true}
                         />
                     </View>
                 </ScrollView>
@@ -95,13 +116,21 @@ const styles = StyleSheet.create({
         height: height / 6,
     },
     header: {
-        backgroundColor: '#7c9d32',
+        backgroundColor: '#fff',
+        justifyContent: "space-around",
+        alignContent: 'center',
+        alignItems: 'center',
+        textAlign: 'center',
+        marginTop: 59,
     },
     headerBody: {
-        flex: 1.5,
+        justifyContent: 'center',
+        alignContent: 'center',
+        alignItems: 'center',
+        textAlign: 'center',
     },
     headerTitle: {
-        color: '#fff',
+        color: '#7c9d32',
         fontWeight: 'bold',
         fontSize: 19,
     },

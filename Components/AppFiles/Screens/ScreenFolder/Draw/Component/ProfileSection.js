@@ -1,5 +1,5 @@
 import React, {useState, useEffect} from 'react';
-import {View, StyleSheet, Text} from 'react-native';
+import {View, StyleSheet, Text, Dimensions, ScrollView} from 'react-native';
 import {Thumbnail, List, ListItem, Left, Right, Body} from 'native-base';
 import {
     MaterialCommunityIcons,
@@ -11,23 +11,20 @@ import {
 import {Col, Grid} from 'react-native-easy-grid';
 import {t} from '../../../../Lang';
 
+const {width, height} = Dimensions.get('window')
 import firebase from '../../../../Functions/FireBase/firebaseConfig';
 import {StatusBar} from "expo-status-bar";
+import ShimmerPlaceholder from 'react-native-shimmer-placeholder'
 
 export default function ProfileSection(props) {
     const [nameSurname, setnameSurname] = useState(null);
+    const [refresh, setRefresh] = useState(true);
     const [profPic, setprofPic] = useState(null);
     useEffect(() => {
         getInfo();
-        setTimeout(() => {
-            getInfo();
-        }, 8000);
-        setTimeout(() => {
-            renderImage();
-        }, 5000);
     }, []);
 
-    function getInfo() {
+    async function getInfo() {
         var user = firebase.auth().currentUser;
         if (user != null) {
             firebase
@@ -41,19 +38,40 @@ export default function ProfileSection(props) {
                         setprofPic(null);
                     }
                     setnameSurname('Way Way Way Way And Pay');
+                    renderImage();
+                    setTimeout(() => {
+                        setRefresh(false);
+                    }, 1000)
                 });
         }
     }
 
     function renderImage() {
-        return (
-            <Thumbnail
-                style={styles.image}
-                source={{
-                    uri: profPic,
-                }}
-            />
-        );
+        if (refresh) {
+            return (
+                <ShimmerPlaceholder
+                    visible={false}
+                    delay={1000}
+                    duration={1000}
+                    height={60}
+                    width={60}
+                    style={{borderRadius: 60}}
+                    isInteraction={true}>
+                    <View
+                        style={styles.logo}
+                    />
+                </ShimmerPlaceholder>
+            )
+        } else {
+            return (
+                <Thumbnail
+                    style={styles.logo}
+                    source={{
+                        uri: profPic,
+                    }}
+                />
+            );
+        }
     }
 
     return (
@@ -80,89 +98,161 @@ export default function ProfileSection(props) {
                     </Grid>
                 </ListItem>
             </View>
-            <List style={styles.drawerSection}>
-                <ListItem style={styles.listItem}
-                          onPress={() => props.navigation.navigate('OtherPages', {screen: 'Cards'})}>
-                    <Left style={styles.headerLeft}>
-                        <AntDesign name="creditcard" size={25} color="#7c9d32"/>
-                    </Left>
-                    <Body style={styles.headerBody}><Text style={styles.headerBodyText}>{t('cards')}</Text></Body>
-                    <Right style={styles.headerRight}>
-                        <AntDesign name="right" size={19} color="#7c9d32"/>
-                    </Right>
-                </ListItem>
-                <ListItem style={styles.listItem}
-                          onPress={() => props.navigation.navigate('OtherPages', {screen: 'Bonuses'})}>
-                    <Left style={styles.headerLeft}>
-                        <Entypo name="price-ribbon" size={25} color="#7c9d32"/>
-                    </Left>
-                    <Body style={styles.headerBody}><Text style={styles.headerBodyText}>{t('bonuses')}</Text></Body>
-                    <Right style={styles.headerRight}>
-                        <AntDesign name="right" size={19} color="#7c9d32"/>
-                    </Right>
-                </ListItem>
-                <ListItem style={styles.listItem}
-                          onPress={() => props.navigation.navigate('OtherPages', {screen: 'AccountSettings'})}>
-                    <Left style={styles.headerLeft}>
-                        <MaterialCommunityIcons
-                            name="account-edit"
-                            size={25}
-                            color="#7c9d32"
+            {refresh ? (
+                <List style={{position: "absolute", top: 100}}>
+                    <ScrollView>
+                        <ShimmerPlaceholder
+                            visible={false}
+                            delay={1000}
+                            duration={1000}
+                            isInteraction={true}
+                            style={{width: width, height: 50, marginBottom: 15}}
                         />
-                    </Left>
-                    <Body style={styles.headerBody}><Text style={styles.headerBodyText}>{t('accounts')}</Text></Body>
-                    <Right style={styles.headerRight}>
-                        <AntDesign name="right" size={19} color="#7c9d32"/>
-                    </Right>
-                </ListItem>
-                <ListItem style={styles.listItem}
-                          onPress={() => props.navigation.navigate('OtherPages', {screen: 'Map'})}>
-                    <Left style={styles.headerLeft}>
-                        <FontAwesome5 name="map-marked-alt" size={25} color="#7c9d32"/>
-                    </Left>
-                    <Body style={styles.headerBody}><Text style={styles.headerBodyText}>{t('map')}</Text></Body>
-                    <Right style={styles.headerRight}>
-                        <AntDesign name="right" size={19} color="#7c9d32"/>
-                    </Right>
-                </ListItem>
-                <ListItem style={styles.listItem}
-                          onPress={() => props.navigation.navigate('OtherPages', {screen: 'Histories'})}>
-                    <Left style={styles.headerLeft}>
-                        <FontAwesome5 name="history" size={25} color="#7c9d32"/>
-                    </Left>
-                    <Body style={styles.headerBody}><Text style={styles.headerBodyText}>{t('history')}</Text></Body>
-                    <Right style={styles.headerRight}>
-                        <AntDesign name="right" size={19} color="#7c9d32"/>
-                    </Right>
-                </ListItem>
-                <ListItem style={styles.listItem}
-                          onPress={() => props.navigation.navigate('OtherPages', {screen: 'ContactUs'})}>
-                    <Left style={styles.headerLeft}>
-                        <Ionicons name="ios-call" size={25} color="#7c9d32"/>
-                    </Left>
-                    <Body style={styles.headerBody}><Text style={styles.headerBodyText}>{t('contactus')}</Text></Body>
-                    <Right style={styles.headerRight}>
-                        <AntDesign name="right" size={19} color="#7c9d32"/>
-                    </Right>
-                </ListItem>
-                <ListItem style={styles.listItem}
-                          onPress={() => props.navigation.navigate('OtherPages', {screen: 'Settings'})}>
-                    <Left style={styles.headerLeft}>
-                        <Ionicons name="md-settings" size={25} color="#7c9d32"/>
-                    </Left>
-                    <Body style={styles.headerBody}><Text style={styles.headerBodyText}>{t('setting')}</Text></Body>
-                    <Right style={styles.headerRight}>
-                        <AntDesign name="right" size={19} color="#7c9d32"/>
-                    </Right>
-                </ListItem>
-                <ListItem style={styles.listItem} onPress={() => firebase.auth().signOut()}>
-                    <Left style={styles.headerLeft}>
-                        <AntDesign name="logout" size={25} color="#7c9d32"/>
-                    </Left>
-                    <Body style={styles.headerBody}><Text style={styles.headerBodyText}>{t('exit')}</Text></Body>
-                    <Right style={styles.headerRight}/>
-                </ListItem>
-            </List>
+                        <ShimmerPlaceholder
+                            visible={false}
+                            delay={1000}
+                            duration={1000}
+                            isInteraction={true}
+                            style={{width: width, height: 50, marginBottom: 15}}
+                        />
+                        <ShimmerPlaceholder
+                            visible={false}
+                            delay={1000}
+                            duration={1000}
+                            isInteraction={true}
+                            style={{width: width, height: 50, marginBottom: 15}}
+                        />
+                        <ShimmerPlaceholder
+                            visible={false}
+                            delay={1000}
+                            duration={1000}
+                            isInteraction={true}
+                            style={{width: width, height: 50, marginBottom: 15}}
+                        />
+                        <ShimmerPlaceholder
+                            visible={false}
+                            delay={1000}
+                            duration={1000}
+                            isInteraction={true}
+                            style={{width: width, height: 50, marginBottom: 15}}
+                        />
+                        <ShimmerPlaceholder
+                            visible={false}
+                            delay={1000}
+                            duration={1000}
+                            isInteraction={true}
+                            style={{width: width, height: 50, marginBottom: 15}}
+                        />
+                        <ShimmerPlaceholder
+                            visible={false}
+                            delay={1000}
+                            duration={1000}
+                            isInteraction={true}
+                            style={{width: width, height: 50, marginBottom: 15}}
+                        />
+                        <ShimmerPlaceholder
+                            visible={false}
+                            delay={1000}
+                            duration={1000}
+                            isInteraction={true}
+                            style={{width: width, height: 50, marginBottom: 15}}
+                        />
+                        <ShimmerPlaceholder
+                            visible={false}
+                            delay={1000}
+                            duration={1000}
+                            isInteraction={true}
+                            style={{width: width, height: 50, marginBottom: 15}}
+                        />
+                    </ScrollView>
+                </List>
+            ) : (
+                <List style={styles.drawerSection}>
+                    <ListItem style={styles.listItem}
+                              onPress={() => props.navigation.navigate('OtherPages', {screen: 'Cards'})}>
+                        <Left style={styles.headerLeft}>
+                            <AntDesign name="creditcard" size={25} color="#7c9d32"/>
+                        </Left>
+                        <Body style={styles.headerBody}><Text style={styles.headerBodyText}>{t('cards')}</Text></Body>
+                        <Right style={styles.headerRight}>
+                            <AntDesign name="right" size={19} color="#7c9d32"/>
+                        </Right>
+                    </ListItem>
+                    <ListItem style={styles.listItem}
+                              onPress={() => props.navigation.navigate('OtherPages', {screen: 'Bonuses'})}>
+                        <Left style={styles.headerLeft}>
+                            <Entypo name="price-ribbon" size={25} color="#7c9d32"/>
+                        </Left>
+                        <Body style={styles.headerBody}><Text style={styles.headerBodyText}>{t('bonuses')}</Text></Body>
+                        <Right style={styles.headerRight}>
+                            <AntDesign name="right" size={19} color="#7c9d32"/>
+                        </Right>
+                    </ListItem>
+                    <ListItem style={styles.listItem}
+                              onPress={() => props.navigation.navigate('OtherPages', {screen: 'AccountSettings'})}>
+                        <Left style={styles.headerLeft}>
+                            <MaterialCommunityIcons
+                                name="account-edit"
+                                size={25}
+                                color="#7c9d32"
+                            />
+                        </Left>
+                        <Body style={styles.headerBody}><Text
+                            style={styles.headerBodyText}>{t('accounts')}</Text></Body>
+                        <Right style={styles.headerRight}>
+                            <AntDesign name="right" size={19} color="#7c9d32"/>
+                        </Right>
+                    </ListItem>
+                    <ListItem style={styles.listItem}
+                              onPress={() => props.navigation.navigate('OtherPages', {screen: 'Map'})}>
+                        <Left style={styles.headerLeft}>
+                            <FontAwesome5 name="map-marked-alt" size={25} color="#7c9d32"/>
+                        </Left>
+                        <Body style={styles.headerBody}><Text style={styles.headerBodyText}>{t('map')}</Text></Body>
+                        <Right style={styles.headerRight}>
+                            <AntDesign name="right" size={19} color="#7c9d32"/>
+                        </Right>
+                    </ListItem>
+                    <ListItem style={styles.listItem}
+                              onPress={() => props.navigation.navigate('OtherPages', {screen: 'Histories'})}>
+                        <Left style={styles.headerLeft}>
+                            <FontAwesome5 name="history" size={25} color="#7c9d32"/>
+                        </Left>
+                        <Body style={styles.headerBody}><Text style={styles.headerBodyText}>{t('history')}</Text></Body>
+                        <Right style={styles.headerRight}>
+                            <AntDesign name="right" size={19} color="#7c9d32"/>
+                        </Right>
+                    </ListItem>
+                    <ListItem style={styles.listItem}
+                              onPress={() => props.navigation.navigate('OtherPages', {screen: 'ContactUs'})}>
+                        <Left style={styles.headerLeft}>
+                            <Ionicons name="ios-call" size={25} color="#7c9d32"/>
+                        </Left>
+                        <Body style={styles.headerBody}><Text
+                            style={styles.headerBodyText}>{t('contactus')}</Text></Body>
+                        <Right style={styles.headerRight}>
+                            <AntDesign name="right" size={19} color="#7c9d32"/>
+                        </Right>
+                    </ListItem>
+                    <ListItem style={styles.listItem}
+                              onPress={() => props.navigation.navigate('OtherPages', {screen: 'Settings'})}>
+                        <Left style={styles.headerLeft}>
+                            <Ionicons name="md-settings" size={25} color="#7c9d32"/>
+                        </Left>
+                        <Body style={styles.headerBody}><Text style={styles.headerBodyText}>{t('setting')}</Text></Body>
+                        <Right style={styles.headerRight}>
+                            <AntDesign name="right" size={19} color="#7c9d32"/>
+                        </Right>
+                    </ListItem>
+                    <ListItem style={styles.listItem} onPress={() => firebase.auth().signOut()}>
+                        <Left style={styles.headerLeft}>
+                            <AntDesign name="logout" size={25} color="#7c9d32"/>
+                        </Left>
+                        <Body style={styles.headerBody}><Text style={styles.headerBodyText}>{t('exit')}</Text></Body>
+                        <Right style={styles.headerRight}/>
+                    </ListItem>
+                </List>
+            )}
         </View>
     );
 }
@@ -206,8 +296,8 @@ const styles = StyleSheet.create({
         marginTop: -15,
     },
     logo: {
-        width: 80,
-        height: 80,
+        width: 60,
+        height: 60,
         borderRadius: 40,
         padding: 1,
         margin: 0,

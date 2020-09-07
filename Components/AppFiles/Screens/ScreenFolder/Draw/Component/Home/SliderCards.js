@@ -1,14 +1,12 @@
 import * as React from 'react';
 import {StyleSheet, Dimensions, SafeAreaView, View, FlatList} from 'react-native';
-import {Text, Right, Button} from 'native-base';
+import {Text, Right} from 'native-base';
 import {Col, Grid} from 'react-native-easy-grid';
 import {LinearGradient} from 'expo-linear-gradient';
-
-
-var width = Dimensions.get('window').width;
 import customStyle from '../../../../../../../assets/Theme';
 import firebase from '../../../../../Functions/FireBase/firebaseConfig';
-import {Entypo} from '@expo/vector-icons';
+
+var width = Dimensions.get('window').width;
 
 export default class SliderCards extends React.Component {
     constructor(props) {
@@ -36,10 +34,9 @@ export default class SliderCards extends React.Component {
                         cardCount: data.numChildren(),
                     });
                     this.renderCards();
-                    this.renderDots();
                 });
         } else {
-            this.props.navigation.navigate('CreateAccount');
+            this.props.navigation.navigate('Home');
         }
     }
 
@@ -100,24 +97,6 @@ export default class SliderCards extends React.Component {
         );
     }
 
-    renderDots() {
-        var dotes = [];
-        for (let i = 0; i < this.state.cardCount; i++) {
-            dotes.push(
-                <Col style={styles.dot}>
-                    <Button style={styles.dot} transparent>
-                        <Entypo
-                            name="dot-single"
-                            size={30}
-                            color={i == this.state.activeIndex ? '#1B5E20' : '#7c9d32'}
-                        />
-                    </Button>
-                </Col>
-            );
-        }
-        return dotes;
-    }
-
     renderCards() {
         if (this.state.cards != null) {
             return (
@@ -126,13 +105,14 @@ export default class SliderCards extends React.Component {
                         flex: 1,
                         flexDirection: 'row',
                         justifyContent: 'center',
+                        backgroundColor: "red"
                     }}>
                     <FlatList
                         vertical={true}
                         loop={true}
                         autoplay={false}
                         backgroundColor="#fff"
-                        keyExtractor={(index) => index}
+                        keyExtractor={(item, index) => index.toString()}
                         data={this.state.cards}
                         renderItem={this._renderItem2}
                     />
@@ -142,8 +122,6 @@ export default class SliderCards extends React.Component {
     }
 
     render() {
-        const cardCounts = this.state.cardCount;
-        const dotArenas = cardCounts * 20;
         return (
             <View style={styles.container}>
                 <View style={styles.container}>
@@ -154,13 +132,6 @@ export default class SliderCards extends React.Component {
                             paddingTop: 20,
                         }}>
                         {this.renderCards()}
-                        <View style={styles.dotsArena}>
-                            <View style={[styles.dotarena, {width: dotArenas}]}>
-                                <Grid style={[styles.dotarena, {width: dotArenas}]}>
-                                    {this.renderDots()}
-                                </Grid>
-                            </View>
-                        </View>
                     </SafeAreaView>
                 </View>
             </View>
@@ -256,33 +227,5 @@ const styles = StyleSheet.create({
         marginTop: -9,
         fontSize: 12,
         marginLeft: 4,
-    },
-    dotsArena: {
-        position: 'absolute',
-        bottom: 15,
-        backgroundColor: "transparent",
-        left: 0,
-        right: 5,
-        width: width,
-        height: 20,
-        justifyContent: 'center',
-        alignContent: 'center',
-        alignItems: 'center',
-        textAlign: 'center',
-        flexDirection: "column",
-    },
-    dotarena: {
-        justifyContent: 'center',
-        alignContent: 'center',
-        alignItems: 'center',
-        textAlign: 'center',
-        height: 20,
-    },
-    dot: {
-        borderRadius: 20,
-        justifyContent: 'center',
-        alignContent: 'center',
-        alignItems: 'center',
-        textAlign: 'center',
     },
 });

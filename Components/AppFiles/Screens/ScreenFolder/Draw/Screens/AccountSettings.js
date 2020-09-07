@@ -8,14 +8,12 @@ import {
 } from 'react-native';
 import {
     Thumbnail,
-    Container,
     Header,
     Content,
     Form,
     Input,
     Button,
     Item,
-    Toast,
 } from 'native-base';
 import ScreensStandart from '../Component/ScreensStandart';
 import customStyle from '../../../../../../assets/Theme';
@@ -199,8 +197,10 @@ export default class AccountSettings extends React.Component {
 
     render() {
         return (
-            <View>
+            <View style={{backgroundColor: "#fff"}}>
+
                 <ScreensStandart {...this.props} name={t('mypersonalinformation')}/>
+                <StatusBar style="dark" backgroundColor="#fff"/>
                 <View style={customStyle.f1}>
                     <View>
                         <Header style={styles.header}>

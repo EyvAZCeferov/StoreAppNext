@@ -162,17 +162,6 @@ function NavigateAuth(props) {
     return user ? <Screen {...props} /> : <AuthStackScreen {...props}/>;
 }
 
-
-function Nav(props) {
-    const [isLoading, setIsLoading] = React.useState(true);
-    React.useEffect(() => {
-        setTimeout(() => {
-            setIsLoading(false);
-        }, 1000);
-    }, []);
-    return isLoading ? <SplashScreen/> : <NavigateAuth {...props}/>;
-}
-
 export default function (props) {
     React.useEffect(() => {
         getLang();
@@ -180,7 +169,7 @@ export default function (props) {
     return (
         <Root>
             <NavigationContainer>
-                <Nav  {...props}/>
+                <NavigateAuth/>
             </NavigationContainer>
         </Root>
 

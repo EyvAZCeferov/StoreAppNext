@@ -1,7 +1,7 @@
 {
   "expo": {
     "name": "PW",
-    "slug": "StoreAPPnext",
+    "slug": "pay-and-win",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
@@ -17,12 +17,18 @@
       "**/*"
     ],
     "ios": {
+      "icon": "./assets/icon-ios.png",
       "supportsTablet": true,
-      "bundleIdentifier": "com.alov.wayAndPay",
+      "bundleIdentifier": "com.alov.payandway",
       "buildNumber": "1.0.0"
     },
     "android": {
-      "package": "com.alov.wayAndPay",
+      "adaptiveIcon": {
+        "backgroundColor": "#ffffff",
+        "backgroundImage": "./assets/icon.png",
+        "foregroundImage": "./assets/icon.png"
+      },
+      "package": "com.alov.payandway",
       "versionCode": 1
     },
     "description": "Way And Pay with us.",

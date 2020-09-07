@@ -3,28 +3,201 @@ import {
     View,
     Text,
     StyleSheet,
-    Dimensions
+    Dimensions,
+    Modal,
+    TouchableOpacity
 } from 'react-native';
+import {Picker, Item} from 'native-base'
 import RecentOperation from '../Components/PayStart/RecentOperation';
 import {StatusBar} from "expo-status-bar";
 import PayCards from "../Components/PayStart/Paying";
+import firebase from "../../../../Functions/FireBase/firebaseConfig";
+import {Entypo, AntDesign} from '@expo/vector-icons';
+import {Tooltip} from 'react-native-elements';
 
 const {width, height} = Dimensions.get("window");
 export default class BarCodeReader extends React.Component {
+    constructor(props) {
+        super(props);
+        this.state = {
+            allCards: null,
+            selectedCard: null,
+            refresh: true,
+            okay: false,
+        }
+    }
+
+    async getInfo() {
+        firebase.database().goOnline();
+        var user = firebase.auth().currentUser;
+        if (user) {
+            var datas = [];
+            firebase
+                .database()
+                .ref('users/' + user.uid + '/cards')
+                .on('value', (data) => {
+                    data.forEach((e) => {
+                        datas.push(e.val());
+                    });
+                    this.setState({
+                        allCards: datas
+                    });
+                    if (this.state.allCards != null) {
+                        this.setState({refresh: false})
+                    }
+                    this.renderSelectedCard();
+                    this.renderCards();
+                });
+        } else {
+            alert('connection Error');
+        }
+    }
+
+    componentDidMount() {
+        this.getInfo();
+    }
+
+    UNSAFE_componentWillMount() {
+        this.getInfo();
+    }
+
+    componentWillUnmount() {
+        firebase.database().goOffline();
+        this.setState({
+            allCards: null,
+            selectedCard: null,
+            refresh: true,
+            okay: false,
+        });
+        this.renderSelectedCard();
+    }
+
+    renderCards() {
+        if (this.state.refresh) {
+            //
+        }
+        if (this.state.allCards != null) {
+            return this.state.allCards.map(element => {
+                return (
+                    <Picker.Item
+                        label={element.cardInfo.number}
+                        value={element.cardInfo.number}
+                        color="#7c9d32"/>
+                )
+            })
+        }
+
+    }
+
+    goBack() {
+        this.setState({
+            allCards: null,
+            selectedCard: null,
+            refresh: true,
+            okay: false,
+        })
+        this.props.navigation.navigate('Home');
+    }
+
+    renderSelectedCard() {
+        if (this.state.okay == true && this.state.selectedCard != null) {
+            return (
+                <View>
+                    <StatusBar backgroundColor="#7c9d32" style="light"/>
+                    <View style={styles.upperView}>
+                        <PayCards cardNumb={this.state.selectedCard}/>
+                    </View>
+                    <View style={styles.downerView}>
+                        <RecentOperation {...this.props} />
+                    </View>
+                </View>
+            )
+        } else {
+            return (
+                <View>
+                    <StatusBar backgroundColor="#fff" style="dark"/>
+                    <Modal animationType="slide" animated={true} transparent={false}
+                           onRequestClose={() => console.log('Close')} presentationStyle="fullScreen"
+                           visible={true} statusBarTranslucent={true}>
+                        <View style={{
+                            width: width,
+                            height: height,
+                            justifyContent: "center",
+                            alignContent: "center",
+                            alignItems: "center",
+                            textAlign: "center"
+                        }}>
+                            <View style={{marginTop: -20, marginBottom: 30}}>
+                                <TouchableOpacity onPress={() => this.goBack()}>
+                                    <AntDesign name="back" size={30} color="black"/>
+                                </TouchableOpacity>
+                            </View>
+                            <View style={{
+                                justifyContent: "space-around",
+                                width: width,
+                                height: 80,
+                                flexDirection: "row"
+                            }}>
+                                <Text style={{fontSize: 20, color: "#010101"}}>Alışverişə kart seçərək başlayın</Text>
+                                <Tooltip popover={<Text>Info here</Text>}>
+                                    <Entypo name="help-with-circle" size={27} color="#7c9d32"/>
+                                </Tooltip>
+                            </View>
+                            <View style={{width: 300, height: 120}}>
+                                <Item picker>
+                                    <Picker
+                                        iosHeader="Kart Seç"
+                                        itemStyle={{
+                                            padding: 15,
+                                        }}
+                                        itemTextStyle={{
+                                            fontSize: 18
+                                        }}
+                                        mode="dropdown"
+                                        iosIcon={<Entypo name="credit-card" size={24} color="black"/>}
+                                        icon={<Entypo name="credit-card" size={24} color="black"/>}
+                                        androidIcon={<Entypo name="credit-card" size={24} color="black"/>}
+                                        placeholder="Select your card"
+                                        placeholderStyle={{color: "#bfc6ea"}}
+                                        placeholderIconColor="#007aff"
+                                        selectedValue={this.state.selectedCard}
+                                        onValueChange={(text) => this.setState({selectedCard: text})}
+                                    >
+                                        <Picker.Item label="Kart Secin" color="#7c9d32" value=""/>
+                                        {this.renderCards()}
+                                    </Picker>
+                                </Item>
+                            </View>
+                            <View>
+                                <TouchableOpacity
+                                    onPress={() => this.setState({okay: true})}
+                                    style={{
+                                        backgroundColor: "transparent",
+                                        borderColor: "#7c9d32",
+                                        borderWidth: 2,
+                                        borderRadius: 8
+                                    }}
+                                ><Text style={{
+                                    color: "#7c9d32",
+                                    fontSize: 16,
+                                    fontWeight: "bold",
+                                    paddingHorizontal: 15,
+                                    paddingVertical: 10
+                                }}>Davam
+                                    Et</Text></TouchableOpacity>
+                            </View>
+                        </View>
+                    </Modal>
+                </View>
+            )
+        }
+    }
+
     render() {
         return (
-
             <View style={styles.content}>
-                <StatusBar backgroundColor="#7c9d32" style="light"/>
-                <View style={styles.upperView}>
-                    <PayCards/>
-                </View>
-                <View style={styles.downerView}>
-                    <RecentOperation {...this.props} />
-                </View>
-
+                {this.renderSelectedCard()}
             </View>
-
         );
     }
 

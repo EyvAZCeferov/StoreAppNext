@@ -11,27 +11,25 @@ export default class ScreenStandart extends React.Component {
 
     render() {
         return (
-            <View>
-                <Header style={styles.header}>
-                    <View style={styles.headerComponents}>
-                        <Button
-                            transparent
-                            onPress={() => this.props.navigation.goBack()}>
-                            <AntDesign name="left" size={24} color="#7c9d32"/>
-                        </Button>
-                        <Text style={styles.title}>{this.props.name}</Text>
-                        <View></View>
-                    </View>
-                </Header>
-            </View>
+            <Header style={styles.header}>
+                <View style={styles.headerComponents}>
+                    <Button
+                        transparent
+                        onPress={() => this.props.navigation.goBack()}>
+                        <AntDesign name="left" size={24} color="#7c9d32"/>
+                    </Button>
+                    <Text style={styles.title}>{this.props.name}</Text>
+                    <View/>
+                </View>
+            </Header>
         );
     }
 }
 
 const styles = StyleSheet.create({
     header: {
-        backgroundColor: 'transparent',
-        borderColor: 'transparent',
+        backgroundColor: '#fff',
+        borderColor: '#fff',
         minHeight: 20,
         maxHeight: 100,
         width: width,
@@ -44,8 +42,8 @@ const styles = StyleSheet.create({
     },
     headerComponents: {
         width: width - 20,
-        backgroundColor: 'transparent',
-        borderColor: 'transparent',
+        backgroundColor: '#fff',
+        borderColor: '#fff',
         minHeight: 20,
         maxHeight: 100,
         flexDirection: "row",

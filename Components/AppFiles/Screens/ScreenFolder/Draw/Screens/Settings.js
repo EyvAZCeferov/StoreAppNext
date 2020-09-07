@@ -5,7 +5,6 @@ import {
     Dimensions,
     ScrollView,
     View,
-    Picker
 } from 'react-native';
 import {
     Button,
@@ -14,10 +13,13 @@ import {
     ListItem,
     List,
     Body,
-    Content,
+    Picker,
 } from 'native-base';
+import {Restart} from 'fiction-expo-restart';
+
 import {
     Entypo,
+    Feather,
     MaterialCommunityIcons,
     Foundation,
 } from '@expo/vector-icons';
@@ -28,6 +30,7 @@ import * as Localization from 'expo-localization';
 var width = Dimensions.get('window').width;
 var height = Dimensions.get('window').height;
 import {setLang, t} from '../../../../Lang';
+import {StatusBar} from "expo-status-bar";
 
 export default class Settings extends React.Component {
     constructor(props) {
@@ -38,116 +41,180 @@ export default class Settings extends React.Component {
         };
     }
 
+    onValueChange(sel) {
+        setLang(sel);
+        this.props.navigation.navigate('Settings');
+        this.setState({selected: sel});
+        Restart();
+    }
+
     render() {
         return (
-            <View>
-                <ScreensStandart {...this.props} name={t('setting')}/>
+            <View style={{backgroundColor:"#fff"}}>
+                <View style={{marginTop: -22}}>
+                    <ScreensStandart {...this.props} name={t('setting')}/>
+                    <StatusBar backgroundColor="#fff" style="dark" />
+                </View>
                 <ScrollView>
-                    <Content style={styles.content}>
-                        <View style={[styles.content, styles.ptop]}>
-                            <List style={styles.lists}>
-                                <ListItem style={styles.listitemDivider} itemDivider>
-                                    <Text style={styles.listitemDividerText}>{t('general')}</Text>
-                                </ListItem>
-
-                                <ListItem style={styles.listitemDivider} itemDivider>
-                                    <Text style={styles.listitemDividerText}>
-                                        {t('security')}
-                                    </Text>
-                                </ListItem>
-                                <ListItem
-                                    style={[styles.listitem, styles.active]}
-                                    icon
-                                >
-                                    <Left
-                                        style={styles.left}
-                                    >
-                                        <MaterialCommunityIcons
-                                            name="textbox-password"
+                    <View style={[styles.content, styles.ptop]}>
+                        <List style={styles.lists}>
+                            <ListItem style={styles.listitemDivider} itemDivider>
+                                <Text style={styles.listitemDividerText}>{t('general')}</Text>
+                            </ListItem>
+                            <ListItem style={styles.listitemDivider} itemDivider>
+                                <Entypo name="language" size={24} color="#6d7587"/>
+                                <Picker
+                                    mode="dropdown"
+                                    iosIcon={
+                                        <Entypo
+                                            name="chevron-down"
                                             size={24}
+                                            style={styles.pickerIcon}
                                             color="#6d7587"
-
                                         />
-                                    </Left>
-                                    <Body
-                                        style={styles.body}
+                                    }
+                                    androidIcon={
+                                        <Entypo
+                                            name="chevron-down"
+                                            size={24}
+                                            style={styles.pickerIcon}
+                                            color="#6d7587"
+                                        />
+                                    }
+                                    icon={
+                                        <Entypo
+                                            name="chevron-down"
+                                            size={24}
+                                            style={styles.pickerIcon}
+                                            color="#6d7587"
+                                        />
+                                    }
+                                    placeholder={t('language')}
+                                    placeholderStyle={{color: '#bfc6ea'}}
+                                    placeholderIconColor="#6d7587"
+                                    style={{
+                                        color: '#6d7587',
+                                        width: 150,
+                                    }}
+                                    selectedValue={this.state.selected}
+                                    onValueChange={(val) => this.onValueChange(val)}>
+                                    <Picker.Item
+                                        label="    Az"
+                                        color="#6d7587"
+                                        icon={
+                                            <Feather name="check-circle" size={24} color="black"/>
+                                        }
+                                        value="az"
+                                    />
+                                    <Picker.Item
+                                        label="    En"
+                                        color="#6d7587"
+                                        icon={
+                                            <Feather name="check-circle" size={24} color="black"/>
+                                        }
+                                        value="en"
+                                    />
+                                    <Picker.Item
+                                        label="    Ru"
+                                        color="#6d7587"
+                                        icon={
+                                            <Feather name="check-circle" size={24} color="black"/>
+                                        }
+                                        value="ru"
+                                    />
+                                </Picker>
+                            </ListItem>
+                            <ListItem style={styles.listitemDivider} itemDivider>
+                                <Text style={styles.listitemDividerText}>
+                                    {t('security')}
+                                </Text>
+                            </ListItem>
+                            <ListItem
+                                style={[styles.listitem, styles.active]}
+                                icon
+                            >
+                                <Left
+                                    style={styles.left}
+                                >
+                                    <MaterialCommunityIcons
+                                        name="textbox-password"
+                                        size={24}
+                                        color="#6d7587"
+
+                                    />
+                                </Left>
+                                <Body
+                                    style={styles.body}
+                                >
+                                    <Text
+                                        style={styles.text}
                                     >
-                                        <Text
-                                            style={styles.text}
-                                        >
-                                            {t('changetheloginpassword')}
-                                        </Text>
-                                    </Body>
-                                </ListItem>
-                                <ListItem style={styles.listitem} icon>
-                                    <Left style={styles.left}>
-                                        <Entypo name="fingerprint" size={24} color="#6d7587"/>
-                                    </Left>
-                                    <Body style={styles.body}>
-                                        <Text style={styles.text}>{t('fingerprintlogin')}</Text>
-                                    </Body>
-                                    {this.state.haveFinger ? (
-                                        <Right>
-                                            <Button danger block full padding>
-                                                <Text style={{color: '#fff', padding: 10}}>
-                                                    {t('delete')}
-                                                </Text>
-                                            </Button>
-                                        </Right>
-                                    ) : <Right>
-                                        <Button danger block full padding>
+                                        {t('changetheloginpassword')}
+                                    </Text>
+                                </Body>
+                            </ListItem>
+                            <ListItem style={styles.listitem} icon>
+                                <Left style={styles.left}>
+                                    <Entypo name="fingerprint" size={24} color="#6d7587"/>
+                                </Left>
+                                <Body style={styles.body}>
+                                    <Text style={styles.text}>{t('fingerprintlogin')}</Text>
+                                </Body>
+                                {this.state.haveFinger ? (
+                                    <Right>
+                                        <Button danger block full>
                                             <Text style={{color: '#fff', padding: 10}}>
-                                                {t('add')}
+                                                {t('delete')}
                                             </Text>
                                         </Button>
-                                    </Right>}
-                                </ListItem>
-                                <ListItem style={styles.listitemDivider} itemDivider last>
-                                    <Text style={styles.listitemDividerText}>
-                                        {t('abouttheapplication')}
+                                    </Right>
+                                ) : null}
+                            </ListItem>
+                            <ListItem style={styles.listitemDivider} itemDivider last>
+                                <Text style={styles.listitemDividerText}>
+                                    {t('abouttheapplication')}
+                                </Text>
+                            </ListItem>
+                            <ListItem
+                                style={styles.listitem}
+                                icon
+                                onPress={() => this.props.navigation.navigate('TermOfUses')}>
+                                <Left
+                                    style={styles.left}
+                                >
+                                    <Foundation name="page-doc" size={24} color="#6d7587"/>
+                                </Left>
+                                <Body
+                                    style={styles.body}
+                                >
+                                    <Text style={styles.text}>
+                                        {t('termsofuseoftheapplication')}
                                     </Text>
-                                </ListItem>
-                                <ListItem
-                                    style={styles.listitem}
-                                    icon
-                                    onPress={() => this.props.navigation.navigate('TermOfUses')}>
-                                    <Left
-                                        style={styles.left}
-                                    >
-                                        <Foundation name="page-doc" size={24} color="#6d7587"/>
-                                    </Left>
-                                    <Body
-                                        style={styles.body}
-                                    >
-                                        <Text style={styles.text}>
-                                            {t('termsofuseoftheapplication')}
-                                        </Text>
-                                    </Body>
-                                </ListItem>
-                                <ListItem
-                                    style={styles.listitemDivider}
-                                    itemDivider
-                                    last
-                                    onPress={() => this.props.navigation.navigate('TermOfUses')}>
-                                    <Text style={styles.listitemDividerText}>
-                                        {t('versionoftheapplication')}
-                                    </Text>
-                                </ListItem>
-                                <ListItem style={styles.listitem} icon>
-                                    <Left style={styles.left}>
-                                        <MaterialCommunityIcons
-                                            name="cloud-print-outline"
-                                            size={24}
-                                            color="#6d7587"
-                                        />
-                                    </Left>
-                                    <Body style={styles.body}>
-                                        <Text style={styles.text}>{t('version')} 1.0.0</Text>
-                                    </Body>
-                                </ListItem>
-                            </List>
-                        </View>
-                    </Content>
+                                </Body>
+                            </ListItem>
+                            <ListItem
+                                style={styles.listitemDivider}
+                                itemDivider
+                                last
+                                onPress={() => this.props.navigation.navigate('TermOfUses')}>
+                                <Text style={styles.listitemDividerText}>
+                                    {t('versionoftheapplication')}
+                                </Text>
+                            </ListItem>
+                            <ListItem style={styles.listitem} icon>
+                                <Left style={styles.left}>
+                                    <MaterialCommunityIcons
+                                        name="cloud-print-outline"
+                                        size={24}
+                                        color="#6d7587"
+                                    />
+                                </Left>
+                                <Body style={styles.body}>
+                                    <Text style={styles.text}>{t('version')} 1.0.0</Text>
+                                </Body>
+                            </ListItem>
+                        </List>
+                    </View>
                 </ScrollView>
             </View>
         );

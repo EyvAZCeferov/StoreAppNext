@@ -5,6 +5,7 @@ import {StatusBar} from "expo-status-bar";
 import {Entypo, AntDesign} from '@expo/vector-icons';
 import {InputGroup, Input} from 'native-base';
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view'
+import BarcodeMask from 'react-native-barcode-mask';
 
 const {width, height} = Dimensions.get('window');
 export default function BarCodes({navigation}) {
@@ -59,186 +60,188 @@ export default function BarCodes({navigation}) {
                 hidden={true}
             />
             <Camera style={{flex: 1}} type="back" flashMode={flashMode} onBarCodeScanned={(item) => alert(item.data)}>
-                <View
-                    style={{
-                        flex: 1,
-                        flexDirection: 'column',
-                        justifyContent: "space-between",
-                        alignContent: "center",
-                        alignItems: "center",
-                    }}>
-                    <View style={{
-                        width: width,
-                        height: 50,
-                        marginTop: 30,
-                        flexDirection: "row",
-                        justifyContent: "space-between",
-                        alignItems: "center",
-                        alignContent: "center",
-                        textAlign: "center",
-                    }}>
-                        <TouchableOpacity
-                            style={{
-                                minHeight: 45,
-                                maxHeight: 60,
-                                minWidth: 45,
-                                maxWidth: 60,
-                                marginLeft: 30,
-                                borderRadius: 5,
-                                flexDirection: "row",
-                                justifyContent: "center",
-                                alignItems: "center",
-                                alignContent: "center",
-                                textAlign: "center",
-                                backgroundColor: "rgba(0,0,0,.5)"
-                            }}
-                            onPress={() => {
-                                navigation.goBack();
-                            }}>
-                            <AntDesign name="back" size={25} color="#fff"/>
-                        </TouchableOpacity>
-                        <TouchableOpacity
-                            style={{
-                                minHeight: 45,
-                                maxHeight: 60,
-                                minWidth: 45,
-                                maxWidth: 60,
-                                marginRight: 30,
-                                borderRadius: 5,
-                                justifyContent: "center",
-                                alignItems: "center",
-                                alignContent: "center",
-                                textAlign: "center",
-                                backgroundColor: "#7c9d32"
-                            }}
-                            onPress={() => {
-                                flashToggle()
-                            }}>
-                            {iconRender()}
-                        </TouchableOpacity>
-                    </View>
-                    <View style={{
-                        width: 300,
-                        height: 180,
-                        borderWidth: 3,
-                        borderColor: "#7c9d32",
-                        justifyContent: "center",
-                        alignItems: "center",
-                        alignContent: "center",
-                        textAlign: "center"
-                    }}>
-                        <View style={{borderWidth: 1.5, width: '100%', height: 1, borderColor: "#DD2C00"}}/>
-                    </View>
-                    <View
+                <BarcodeMask
+                    outerMaskOpacity={0.6}
+                    edgeBorderWidth={1}
+                    edgeColor={'#7c9d32'}
+                    edgeBorderWidth={5}
+                    animatedLineColor="#DD2C00"
+                    animatedLineHeight={2}
+                    lineAnimationDuration={1400}
+                    animatedLineWidth={'90%'}
+                />
+            </Camera>
+            <View
+                style={{
+                    position: "absolute",
+                    top: 15,
+                    width: width,
+                    height: 140,
+                    flexDirection: 'column',
+                    justifyContent: "space-between",
+                    alignContent: "center",
+                    alignItems: "center",
+                }}>
+                <View style={{
+                    width: width,
+                    height: 50,
+                    marginTop: 30,
+                    flexDirection: "row",
+                    justifyContent: "space-between",
+                    alignItems: "center",
+                    alignContent: "center",
+                    textAlign: "center",
+                }}>
+                    <TouchableOpacity
                         style={{
-                            width: width,
-                            height: 80,
+                            minHeight: 45,
+                            maxHeight: 60,
+                            minWidth: 45,
+                            maxWidth: 60,
+                            marginLeft: 30,
+                            borderRadius: 5,
+                            flexDirection: "row",
                             justifyContent: "center",
                             alignItems: "center",
                             alignContent: "center",
-                            textAlign: "right",
+                            textAlign: "center",
+                            backgroundColor: "rgba(0,0,0,.5)"
+                        }}
+                        onPress={() => {
+                            navigation.goBack();
                         }}>
-                        <TouchableOpacity
-                            style={{
-                                minHeight: 45,
-                                maxHeight: 60,
-                                minWidth: 150,
-                                maxWidth: 200,
-                                borderRadius: 5,
-                                flexDirection: "row",
-                                justifyContent: "space-around",
-                                alignItems: "center",
-                                alignContent: "center",
-                                textAlign: "center",
-                                backgroundColor: "#7c9d32"
-                            }}
-                            onPress={() => toggleModal()}
-                        >
-                            <AntDesign name="edit" style={{paddingHorizontal: 15, paddingVertical: 10}} size={30}
-                                       color="#fff"/>
-                            <Text style={{color: "#fff", fontSize: 14, fontWeight: "bold"}}>No Barcode?</Text>
-                        </TouchableOpacity>
-                    </View>
+                        <AntDesign name="back" size={25} color="#fff"/>
+                    </TouchableOpacity>
+                    <TouchableOpacity
+                        style={{
+                            minHeight: 45,
+                            maxHeight: 60,
+                            minWidth: 45,
+                            maxWidth: 60,
+                            marginRight: 30,
+                            borderRadius: 5,
+                            justifyContent: "center",
+                            alignItems: "center",
+                            alignContent: "center",
+                            textAlign: "center",
+                            backgroundColor: "#7c9d32"
+                        }}
+                        onPress={() => {
+                            flashToggle()
+                        }}>
+                        {iconRender()}
+                    </TouchableOpacity>
                 </View>
-                <View>
-                    <Modal animationType="slide" animated={true} transparent={false}
-                           onRequestClose={() => console.log('Close')} presentationStyle="fullScreen"
-                           visible={modalState} statusBarTranslucent={true}>
-                        <KeyboardAwareScrollView>
+            </View>
+            <View
+                style={{
+                    position: "absolute",
+                    bottom: 15,
+                    right: 0,
+                    left: 0,
+                    width: width,
+                    height: 80,
+                }}>
+                <TouchableOpacity
+                    style={{
+                        minHeight: 45,
+                        maxHeight: 60,
+                        minWidth: 150,
+                        maxWidth: 200,
+                        borderRadius: 5,
+                        flexDirection: "row",
+                        justifyContent: "space-around",
+                        alignItems: "center",
+                        alignContent: "center",
+                        textAlign: "center",
+                        backgroundColor: "#7c9d32",
+                        marginLeft: "auto",
+                        marginRight: 10
+                    }}
+                    onPress={() => toggleModal()}
+                >
+                    <AntDesign name="edit" style={{paddingHorizontal: 15, paddingVertical: 10}} size={30}
+                               color="#fff"/>
+                    <Text style={{color: "#fff", fontSize: 14, fontWeight: "bold"}}>No Barcode?</Text>
+                </TouchableOpacity>
+            </View>
+            <View>
+                <Modal animationType="slide" animated={true} transparent={false}
+                       onRequestClose={() => console.log('Close')} presentationStyle="fullScreen"
+                       visible={modalState} statusBarTranslucent={true}>
+                    <KeyboardAwareScrollView>
+                        <View style={{
+                            width: width, height: 90, justifyContent: "center",
+                            alignContent: "center",
+                            alignItems: "center", textAlign: "center"
+                        }}>
+                            <TouchableOpacity style={{
+                                marginTop: 40
+                            }} onPress={() => setModalState(false)}>
+                                <AntDesign name="back" size={24} color="black"/>
+                            </TouchableOpacity>
+                        </View>
+                        <View style={{
+                            marginTop: 50,
+                            flexDirection: "row",
+                            justifyContent: "center",
+                            alignContent: "center",
+                            alignItems: "center"
+                        }}>
                             <View style={{
-                                width: width, height: 90, justifyContent: "center",
                                 alignContent: "center",
-                                alignItems: "center", textAlign: "center"
-                            }}>
-                                <TouchableOpacity style={{
-                                    marginTop: 40
-                                }} onPress={() => setModalState(false)}>
-                                    <AntDesign name="back" size={24} color="black"/>
-                                </TouchableOpacity>
-                            </View>
-                            <View style={{
-                                marginTop: 50,
-                                flexDirection: "row",
+                                alignItems: "center",
+                                textAlign: "center",
                                 justifyContent: "center",
-                                alignContent: "center",
-                                alignItems: "center"
+                                flexDirection: "column"
                             }}>
-                                <View style={{
+                                <InputGroup style={{
+                                    width: width - 50,
+                                    marginTop: width / 5,
+                                    flexDirection: "column",
                                     alignContent: "center",
                                     alignItems: "center",
                                     textAlign: "center",
                                     justifyContent: "center",
-                                    flexDirection: "column"
+                                    height: 140,
+                                    borderColor: "transparent",
                                 }}>
-                                    <InputGroup style={{
+                                    <Input style={{
+                                        alignContent: "center",
+                                        alignItems: "center",
+                                        textAlign: "center",
+                                        borderColor: "rgba(0,0,0,.7)",
+                                        borderWidth: 3,
+                                        width: "100%",
+                                        height: 80,
+                                    }} autoCapitalize="none" placeholder="Type BarCode"
+                                           placeholderTextColor="rgba(0,0,0,.5)"
+                                           keyboardType="numeric"/>
+                                    <TouchableOpacity onPress={() => barcodeWrited()} style={{
+                                        backgroundColor: "#7c9d32",
                                         width: width - 50,
-                                        marginTop: width / 5,
-                                        flexDirection: "column",
+                                        borderRadius: 8,
+                                        height: 50,
+                                        marginTop: 15,
                                         alignContent: "center",
                                         alignItems: "center",
                                         textAlign: "center",
                                         justifyContent: "center",
-                                        height: 140,
-                                        borderColor: "transparent",
                                     }}>
-                                        <Input style={{
-                                            alignContent: "center",
-                                            alignItems: "center",
-                                            textAlign: "center",
-                                            borderColor: "rgba(0,0,0,.7)",
-                                            borderWidth: 3,
-                                            width: "100%",
-                                            height: 80,
-                                        }} autoCapitalize="none" placeholder="Type BarCode"
-                                               placeholderTextColor="rgba(0,0,0,.5)"/>
-                                        <TouchableOpacity onPress={() => barcodeWrited()} style={{
-                                            backgroundColor: "#7c9d32",
-                                            width: width - 50,
-                                            borderRadius: 8,
-                                            height: 50,
-                                            marginTop: 15,
-                                            alignContent: "center",
-                                            alignItems: "center",
-                                            textAlign: "center",
-                                            justifyContent: "center",
-                                        }}>
-                                            <Text style={{
-                                                color: "#fff",
-                                                fontWeight: "bold",
-                                                fontSize: 24,
-                                                paddingHorizontal: 0,
-                                                paddingVertical: 20,
-                                            }}>Send</Text>
-                                        </TouchableOpacity>
-                                    </InputGroup>
-                                </View>
+                                        <Text style={{
+                                            color: "#fff",
+                                            fontWeight: "bold",
+                                            fontSize: 24,
+                                            paddingHorizontal: 0,
+                                            paddingVertical: 20,
+                                        }}>Send</Text>
+                                    </TouchableOpacity>
+                                </InputGroup>
                             </View>
-                        </KeyboardAwareScrollView>
-                    </Modal>
-                </View>
-            </Camera>
-
-
+                        </View>
+                    </KeyboardAwareScrollView>
+                </Modal>
+            </View>
         </View>
 
     )

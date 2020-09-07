@@ -76,11 +76,25 @@ export default class RecentOperation extends React.Component {
     }
 
     renderNullList() {
+        const nullCheck = {
+            backgroundColor: "#fff",
+            borderColor: "#7c9d32",
+            borderWidth: 2,
+            width: 50,
+            height: 50,
+        };
+        const unnullCheck = {
+            backgroundColor: "#000",
+            borderColor: "#7c9d32",
+            borderWidth: 2,
+            width: 50,
+            height: 50,
+        };
         return (
             <List style={{width: width, height: height}}>
                 <Text style={styles.nullObject}>{t('noResult')}</Text>
-                <View>
-                    <View style={{justifyContent: "flex-end", marginLeft: "auto"}}>
+                <View style={{marginTop: 80, width: width, justifyContent: "space-around"}}>
+                    <View style={{justifyContent: "flex-end", marginLeft: "auto", marginRight: 10, marginVertical: 15}}>
                         <Button
                             onPress={() => this.props.navigation.navigate('OtherPages', {
                                 screen: "Barcode"
@@ -94,6 +108,26 @@ export default class RecentOperation extends React.Component {
                             }]}
                         >
                             <AntDesign name="plus" size={24} color="#7c9d32"/>
+                        </Button>
+                    </View>
+                    <View style={{justifyContent: "flex-end", marginLeft: "auto", marginRight: 10, marginVertical: 15}}>
+                        <Button
+                            onPress={() =>
+                                this.state.checks != null ? this.props.navigation.navigate('OtherPages', {
+                                    screen: "PayPre",
+                                    params: {
+                                        summary: 50
+                                    }
+                                }) : alert('Please Fill')}
+                            style={[styles.buttonBarcode, {
+                                backgroundColor: "#fff",
+                                borderColor: "#7c9d32",
+                                borderWidth: 2,
+                                width: 50,
+                                height: 50,
+                            }]}
+                        >
+                            <AntDesign name="check" size={24} color="#7c9d32"/>
                         </Button>
                     </View>
                 </View>
@@ -273,6 +307,7 @@ const styles = StyleSheet.create({
         alignContent: 'center',
         alignItems: 'center',
         fontSize: 20,
+        marginTop: 5,
         fontWeight: 'bold',
     },
     listHeader: {
