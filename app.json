@@ -4,7 +4,7 @@
     "slug": "pay-and-win",
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./assets/icon.png",
+    "icon": "./assets/icon-ios.png",
     "splash": {
       "image": "./assets/splash.png",
       "resizeMode": "contain",
@@ -31,7 +31,7 @@
       "package": "com.alov.payandway",
       "versionCode": 1
     },
-    "description": "Way And Pay with us.",
+    "description": "Pay and Win mobil tətbiqetməsi istifadəçilərin rahat,sürətli,kassa növbəsi gözləmədən,nəğd pulla və digər insanlarla minumum təməsda olmaq alış veriş etmələri üçün nəzərdə tutulub.",
     "web": {
       "favicon": "./assets/favicon.png"
     }

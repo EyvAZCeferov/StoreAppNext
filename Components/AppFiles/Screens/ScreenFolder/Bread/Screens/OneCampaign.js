@@ -68,7 +68,7 @@ export default class OneCampaign extends React.Component {
     componentDidMount() {
         this.getInfo();
     }
-    
+
     async share() {
         this.setState({active: !this.state.active});
         if (!(await Sharing.isAvailableAsync())) {
@@ -108,15 +108,12 @@ export default class OneCampaign extends React.Component {
                         </Button>
                     </Left>
                     <Body style={styles.headerBody}>
-                        <Text style={styles.headerTitle}>{this.name(this.state.oneCampaign)}</Text>
+                        <Text
+                            style={styles.headerTitle}>
+                            {this.state.oneCampaign != null ? this.name(this.state.oneCampaign) : null}
+                        </Text>
                     </Body>
-                    <Right>
-                        <Button
-                            transparent
-                            onPress={() => this.props.navigation.navigate('Home')}>
-                            <AntDesign name="home" size={24} color="#fff"/>
-                        </Button>
-                    </Right>
+                    <Right/>
                 </Header>
                 <View style={styles.f1}>
                     <Content>
@@ -124,30 +121,36 @@ export default class OneCampaign extends React.Component {
                             <Card style={styles.card}>
                                 <CardItem>
                                     <Left>
-                                        <Thumbnail
-                                            source={{
-                                                uri: this.state.oneCampaign.marketIcon,
-                                            }}
-                                        />
+                                        {this.state.oneCampaign != null ? (
+                                            <Thumbnail
+                                                source={{
+                                                    uri: this.state.oneCampaign.marketIcon,
+                                                }}
+                                            />
+                                        ) : null}
+
                                         <Body>
                                             <Text style={styles.titleColor}>
-                                                {this.state.oneCampaign.marketName}
+                                                {this.state.oneCampaign != null ? this.state.oneCampaign.marketName : null}
                                             </Text>
                                             <Text note>
-                                                {this.state.oneCampaign.created_at}
+
+                                                {this.state.oneCampaign != null ? this.state.oneCampaign.created_at : null}
                                             </Text>
                                         </Body>
                                     </Left>
                                 </CardItem>
                                 <CardItem cardBody>
-                                    <SliderBox
-                                        images={this.state.newImages}
-                                        dotColor="#7c9d32"
-                                        inactiveDotColor="#6d7587"
-                                        circleLoop={true}
-                                        imageLoadingColor="#7c9d32"
-                                        sliderBoxHeight={300}
-                                    />
+                                    {this.state.newImages != null ? (
+                                        <SliderBox
+                                            images={this.state.newImages}
+                                            dotColor="#7c9d32"
+                                            inactiveDotColor="#6d7587"
+                                            circleLoop={true}
+                                            imageLoadingColor="#7c9d32"
+                                            sliderBoxHeight={300}
+                                        />
+                                    ) : null}
                                 </CardItem>
                                 <CardItem>
                                     <View style={styles.fabArena}>
@@ -163,12 +166,14 @@ export default class OneCampaign extends React.Component {
                                 </CardItem>
                                 <CardItem>
                                     <Body>
-                                        <Text style={styles.title}>{this.name(this.state.oneCampaign)}</Text>
-                                        <HTMLView
+                                        <Text
+                                            style={styles.title}>{this.state.oneCampaign != null ? this.name(this.state.oneCampaign) : null}</Text>
+                                        {this.state.oneCampaign != null ? (<HTMLView
                                             value={this.desc(this.state.oneCampaign)}
                                             onLinkPress={() => Linking.openURL(this.state.oneCampaign.slug)}
                                             stylesheet={styles.textColor}
-                                        />
+                                        />) : null}
+
                                     </Body>
                                 </CardItem>
                             </Card>

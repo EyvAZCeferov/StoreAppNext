@@ -95,59 +95,43 @@ export default class TabMapsLists extends React.Component {
                             <ScrollView>
                                 <ShimmerPlaceholder
                                     visible={false}
-                                    delay={1000}
-                                    duration={1000}
                                     isInteraction={true}
-                                    style={{width: width, height: 50, marginBottom: 15}}
+                                    style={{width: width, height: 150, marginBottom: 15}}
                                 />
                                 <ShimmerPlaceholder
                                     visible={false}
-                                    delay={1000}
-                                    duration={1000}
                                     isInteraction={true}
-                                    style={{width: width, height: 50, marginBottom: 15}}
+                                    style={{width: width, height: 150, marginBottom: 15}}
                                 />
                                 <ShimmerPlaceholder
                                     visible={false}
-                                    delay={1000}
-                                    duration={1000}
                                     isInteraction={true}
-                                    style={{width: width, height: 50, marginBottom: 15}}
+                                    style={{width: width, height: 150, marginBottom: 15}}
                                 />
                                 <ShimmerPlaceholder
                                     visible={false}
-                                    delay={1000}
-                                    duration={1000}
                                     isInteraction={true}
-                                    style={{width: width, height: 50, marginBottom: 15}}
+                                    style={{width: width, height: 150, marginBottom: 15}}
                                 />
                                 <ShimmerPlaceholder
                                     visible={false}
-                                    delay={1000}
-                                    duration={1000}
                                     isInteraction={true}
-                                    style={{width: width, height: 50, marginBottom: 15}}
+                                    style={{width: width, height: 150, marginBottom: 15}}
                                 />
                                 <ShimmerPlaceholder
                                     visible={false}
-                                    delay={1000}
-                                    duration={1000}
                                     isInteraction={true}
-                                    style={{width: width, height: 50, marginBottom: 15}}
+                                    style={{width: width, height: 150, marginBottom: 15}}
                                 />
                                 <ShimmerPlaceholder
                                     visible={false}
-                                    delay={1000}
-                                    duration={1000}
                                     isInteraction={true}
-                                    style={{width: width, height: 50, marginBottom: 15}}
+                                    style={{width: width, height: 150, marginBottom: 15}}
                                 />
                                 <ShimmerPlaceholder
                                     visible={false}
-                                    delay={1000}
-                                    duration={1000}
                                     isInteraction={true}
-                                    style={{width: width, height: 50, marginBottom: 15}}
+                                    style={{width: width, height: 150, marginBottom: 15}}
                                 />
                             </ScrollView>
                         )
@@ -185,17 +169,13 @@ export default class TabMapsLists extends React.Component {
                 <ScrollView>
                     <ShimmerPlaceholder
                         visible={false}
-                        delay={1000}
-                        duration={1000}
                         isInteraction={true}
-                        style={{width: width, height: 50, marginBottom: 15}}
+                        style={{width: width, height: 150, marginBottom: 15}}
                     />
                     <ShimmerPlaceholder
                         visible={false}
-                        delay={1000}
-                        duration={1000}
                         isInteraction={true}
-                        style={{width: width, height: 50, marginBottom: 15}}
+                        style={{width: width, height: 150, marginBottom: 15}}
                     />
                 </ScrollView>
             )

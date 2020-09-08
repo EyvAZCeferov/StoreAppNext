@@ -26,6 +26,7 @@ import {
 import * as Localization from 'expo-localization';
 
 import firebase from '../../../../Functions/FireBase/firebaseConfig';
+import ShimmerPlaceholder from "react-native-shimmer-placeholder";
 
 var width = Dimensions.get('window').width;
 var height = Dimensions.get('window').height;
@@ -33,6 +34,7 @@ export default class Campaigns extends React.Component {
     state = {
         serviceData: null,
         newsData: null,
+        refresh: true,
     };
 
     getInfo() {
@@ -50,6 +52,7 @@ export default class Campaigns extends React.Component {
                     });
                     this.setState({
                         newsData: datas,
+                        refresh: false
                     });
                 });
             firebase
@@ -61,10 +64,11 @@ export default class Campaigns extends React.Component {
                     });
                     this.setState({
                         serviceData: services,
+                        refresh: false
                     });
                 });
         } else {
-            this.props.navigation.navigate('Login');
+            this.props.navigation.navigate('Home');
         }
     }
 
@@ -133,6 +137,7 @@ export default class Campaigns extends React.Component {
                 return item.az_title;
             }
         }
+
         if (this.state.newsData != null) {
             return this.state.newsData.map((item) => {
                 return (
@@ -199,17 +204,78 @@ export default class Campaigns extends React.Component {
         return (
             <Container>
                 <View style={styles.f1}>
-                    <ScrollView>
+                    {this.state.refresh ? (
                         <View style={styles.services}>
-                            <FlatList
-                                data={this.state.serviceData}
-                                renderItem={this.renderService}
-                                keyExtractor={(index) => index}
-                                horizontal={true}
-                            />
+                            <ScrollView showsHorizontalScrollIndicator={false} horizontal={true}
+                                        scrollEnabled={true} bounces={true} bouncesZoom={true}
+                            >
+                                <ShimmerPlaceholder
+                                    visible={false}
+                                    isInteraction={true}
+                                    style={{width: 90, height: 90, marginTop: 10, marginRight: 10}}
+                                />
+                                <ShimmerPlaceholder
+                                    visible={false}
+                                    isInteraction={true}
+                                    style={{width: 90, height: 90, marginTop: 10, marginRight: 10}}
+                                />
+                                <ShimmerPlaceholder
+                                    visible={false}
+                                    isInteraction={true}
+                                    style={{width: 90, height: 90, marginTop: 10, marginRight: 10}}
+                                />
+                                <ShimmerPlaceholder
+                                    visible={false}
+                                    isInteraction={true}
+                                    style={{width: 90, height: 90, marginTop: 10, marginRight: 10}}
+                                />
+                                <ShimmerPlaceholder
+                                    visible={false}
+                                    isInteraction={true}
+                                    style={{width: 90, height: 90, marginTop: 10, marginRight: 10}}
+                                />
+
+                            </ScrollView>
                         </View>
-                    </ScrollView>
-                    <ScrollView style={{marginBottom: 70}}>{this.renderCards(this.props.navigation)}</ScrollView>
+                    ) : (
+                        <ScrollView>
+                            <View style={styles.services}>
+                                <FlatList
+                                    data={this.state.serviceData}
+                                    renderItem={this.renderService}
+                                    keyExtractor={(index) => index}
+                                    horizontal={true}
+                                />
+                            </View>
+                        </ScrollView>
+                    )}
+                    {this.state.refresh ? (
+                        <ScrollView>
+                            <ShimmerPlaceholder
+                                visible={false}
+                                isInteraction={true}
+                                style={{width: width, height: 325, marginTop: 10}}
+                            />
+                            <ShimmerPlaceholder
+                                visible={false}
+                                isInteraction={true}
+                                style={{width: width, height: 325, marginTop: 10}}
+                            />
+                            <ShimmerPlaceholder
+                                visible={false}
+                                isInteraction={true}
+                                style={{width: width, height: 325, marginTop: 10}}
+                            />
+                            <ShimmerPlaceholder
+                                visible={false}
+                                isInteraction={true}
+                                style={{width: width, height: 325, marginTop: 10}}
+                            />
+
+                        </ScrollView>
+                    ) : (
+                        <ScrollView style={{marginBottom: 70}}>{this.renderCards(this.props.navigation)}</ScrollView>
+                    )}
                 </View>
             </Container>
         );

@@ -24,7 +24,7 @@ export default function ProfileSection(props) {
         getInfo();
     }, []);
 
-    async function getInfo() {
+    function getInfo() {
         var user = firebase.auth().currentUser;
         if (user != null) {
             firebase
@@ -39,9 +39,7 @@ export default function ProfileSection(props) {
                     }
                     setnameSurname('Way Way Way Way And Pay');
                     renderImage();
-                    setTimeout(() => {
-                        setRefresh(false);
-                    }, 1000)
+                    setRefresh(false);
                 });
         }
     }
@@ -103,64 +101,36 @@ export default function ProfileSection(props) {
                     <ScrollView>
                         <ShimmerPlaceholder
                             visible={false}
-                            delay={1000}
-                            duration={1000}
                             isInteraction={true}
                             style={{width: width, height: 50, marginBottom: 15}}
                         />
                         <ShimmerPlaceholder
                             visible={false}
-                            delay={1000}
-                            duration={1000}
                             isInteraction={true}
                             style={{width: width, height: 50, marginBottom: 15}}
                         />
                         <ShimmerPlaceholder
                             visible={false}
-                            delay={1000}
-                            duration={1000}
                             isInteraction={true}
                             style={{width: width, height: 50, marginBottom: 15}}
                         />
                         <ShimmerPlaceholder
                             visible={false}
-                            delay={1000}
-                            duration={1000}
                             isInteraction={true}
                             style={{width: width, height: 50, marginBottom: 15}}
                         />
                         <ShimmerPlaceholder
                             visible={false}
-                            delay={1000}
-                            duration={1000}
                             isInteraction={true}
                             style={{width: width, height: 50, marginBottom: 15}}
                         />
                         <ShimmerPlaceholder
                             visible={false}
-                            delay={1000}
-                            duration={1000}
                             isInteraction={true}
                             style={{width: width, height: 50, marginBottom: 15}}
                         />
                         <ShimmerPlaceholder
                             visible={false}
-                            delay={1000}
-                            duration={1000}
-                            isInteraction={true}
-                            style={{width: width, height: 50, marginBottom: 15}}
-                        />
-                        <ShimmerPlaceholder
-                            visible={false}
-                            delay={1000}
-                            duration={1000}
-                            isInteraction={true}
-                            style={{width: width, height: 50, marginBottom: 15}}
-                        />
-                        <ShimmerPlaceholder
-                            visible={false}
-                            delay={1000}
-                            duration={1000}
                             isInteraction={true}
                             style={{width: width, height: 50, marginBottom: 15}}
                         />

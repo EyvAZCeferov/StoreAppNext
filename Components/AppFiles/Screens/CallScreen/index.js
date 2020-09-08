@@ -4,8 +4,6 @@ import {View, StyleSheet} from "react-native";
 import LoginScreen from '../ScreenFolder/Auth/Screens/LoginScreen';
 import CreateAccount from '../ScreenFolder/Auth/Screens/CreateAccount';
 import ForgotPassword from '../ScreenFolder/Auth/Screens/ForgotPassword';
-//Splash
-import Splash from '../ScreenFolder/Splash/Splash';
 //Drawer And Bread
 import Home2 from "../ScreenFolder/Draw/Screens/Home2";
 import AccountSettings from "../ScreenFolder/Draw/Screens/AccountSettings";

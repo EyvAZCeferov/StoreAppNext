@@ -1,10 +1,11 @@
 import * as React from 'react';
-import {StyleSheet, Dimensions, SafeAreaView, View, FlatList} from 'react-native';
+import {StyleSheet, Dimensions, SafeAreaView, View, FlatList, Animated} from 'react-native';
 import {Text, Right} from 'native-base';
 import {Col, Grid} from 'react-native-easy-grid';
 import {LinearGradient} from 'expo-linear-gradient';
 import customStyle from '../../../../../../../assets/Theme';
 import firebase from '../../../../../Functions/FireBase/firebaseConfig';
+import ShimmerPlaceholder from "react-native-shimmer-placeholder";
 
 var width = Dimensions.get('window').width;
 
@@ -15,10 +16,11 @@ export default class SliderCards extends React.Component {
             activeIndex: 0,
             cards: [],
             cardCount: 1,
+            refresh: true
         };
     }
 
-    async getInfo() {
+    getInfo() {
         var user = firebase.auth().currentUser;
         if (user) {
             var datas = [];
@@ -32,6 +34,7 @@ export default class SliderCards extends React.Component {
                     this.setState({
                         cards: datas,
                         cardCount: data.numChildren(),
+                        refresh: false,
                     });
                     this.renderCards();
                 });
@@ -105,10 +108,19 @@ export default class SliderCards extends React.Component {
                         flex: 1,
                         flexDirection: 'row',
                         justifyContent: 'center',
-                        backgroundColor: "red"
                     }}>
                     <FlatList
                         vertical={true}
+                        nestedScrollEnabled={true}
+                        inverted={false}
+                        zoomScale={3}
+                        windowSize={width}
+                        snapToStart={true}
+                        bouncesZoom={true}
+                        bounces={true}
+                        refreshing={this.state.refresh}
+                        showsVerticalScrollIndicator={false}
+                        keyboardDismissMode="on-drag"
                         loop={true}
                         autoplay={false}
                         backgroundColor="#fff"
@@ -128,10 +140,19 @@ export default class SliderCards extends React.Component {
                     <SafeAreaView
                         style={{
                             flex: 1,
-                            backgroundColor: '#fff',
                             paddingTop: 20,
                         }}>
-                        {this.renderCards()}
+                        {this.state.refresh ? (
+                                <View>
+                                    <ShimmerPlaceholder
+                                        visible={false}
+                                        isInteraction={true}
+                                        style={{width: width, height: 200}}
+                                    />
+                                </View>
+                            ) :
+                            this.renderCards()
+                        }
                     </SafeAreaView>
                 </View>
             </View>
@@ -145,14 +166,16 @@ const styles = StyleSheet.create({
         height: 200,
     },
     slide: {
-        width: width,
-        height: 180,
+        width: width - 20,
+        height: 181,
         justifyContent: 'center',
+        alignItems: "center",
+        alignContent: "center"
     },
     cardBg: {
         borderRadius: 15,
-        height: 150,
-        width: width - 30,
+        height: 170,
+        width: width - 20,
     },
     rightSec: {
         width: width,

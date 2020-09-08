@@ -11,7 +11,6 @@ enableScreens();
 import {Root} from 'native-base';
 //Screnns
 import {
-    SplashScreen,
     Login,
     Register,
     HomeSc,
@@ -165,6 +164,7 @@ function NavigateAuth(props) {
 export default function (props) {
     React.useEffect(() => {
         getLang();
+        console.disableYellowBox = true;
     }, [])
     return (
         <Root>

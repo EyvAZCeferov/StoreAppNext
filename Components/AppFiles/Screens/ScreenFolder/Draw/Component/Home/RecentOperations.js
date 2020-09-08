@@ -183,43 +183,31 @@ export default function RecentOperations() {
                             <View style={{width: width}}>
                                 <ShimmerPlaceholder
                                     visible={false}
-                                    delay={1000}
-                                    duration={1000}
                                     isInteraction={true}
                                     style={{width: width, height: 80, borderRadius: 8, marginBottom: 8}}
                                 />
                                 <ShimmerPlaceholder
                                     visible={false}
-                                    delay={1000}
-                                    duration={1000}
                                     isInteraction={true}
                                     style={{width: width, height: 80, borderRadius: 8, marginBottom: 8}}
                                 />
                                 <ShimmerPlaceholder
                                     visible={false}
-                                    delay={1000}
-                                    duration={1000}
                                     isInteraction={true}
                                     style={{width: width, height: 80, borderRadius: 8, marginBottom: 8}}
                                 />
                                 <ShimmerPlaceholder
                                     visible={false}
-                                    delay={1000}
-                                    duration={1000}
                                     isInteraction={true}
                                     style={{width: width, height: 80, borderRadius: 8, marginBottom: 8}}
                                 />
                                 <ShimmerPlaceholder
                                     visible={false}
-                                    delay={1000}
-                                    duration={1000}
                                     isInteraction={true}
                                     style={{width: width, height: 80, borderRadius: 8, marginBottom: 8}}
                                 />
                                 <ShimmerPlaceholder
                                     visible={false}
-                                    delay={1000}
-                                    duration={1000}
                                     isInteraction={true}
                                     style={{width: width, height: 80, borderRadius: 8, marginBottom: 8}}
                                 />
@@ -275,9 +263,9 @@ const styles = StyleSheet.create({
     },
     slideUp: {
         backgroundColor: "#fff",
-        marginTop: 80,
+        marginTop: 10,
         alignSelf: "center",
         width: width,
-        height: 100
+        height: 90
     }
 })

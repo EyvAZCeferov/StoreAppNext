@@ -27,7 +27,6 @@ export default class Home2 extends React.Component {
         }
     }
 
-
     render() {
         return (
             <Container>
@@ -38,6 +37,7 @@ export default class Home2 extends React.Component {
                     <Body/>
                     <Right style={styles.height}>
                         <Button
+                            style={{marginBottom: 12}}
                             transparent
                             onPress={() => this.props.navigation.navigate('OtherPages', {screen: "Notification"})}>
                             <Ionicons name="ios-notifications" size={24} color="#7c9d32"/>
@@ -45,7 +45,7 @@ export default class Home2 extends React.Component {
                     </Right>
                 </Header>
                 <View style={styles.contentArena}>
-                    <View>
+                    <View style={{backgroundColor:"#fff",flex:1}}>
                         <SafeAreaView>
                             <SliderCards/>
                         </SafeAreaView>
