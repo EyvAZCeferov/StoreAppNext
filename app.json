@@ -1,6 +1,6 @@
 {
   "expo": {
-    "name": "PW",
+    "name": "Pay and Win",
     "slug": "pay-and-win",
     "version": "1.0.0",
     "orientation": "portrait",
@@ -16,6 +16,7 @@
     "assetBundlePatterns": [
       "**/*"
     ],
+    "backgroundColor": "#ffffff",
     "ios": {
       "icon": "./assets/icon-ios.png",
       "supportsTablet": true,
@@ -23,11 +24,6 @@
       "buildNumber": "1.0.0"
     },
     "android": {
-      "adaptiveIcon": {
-        "backgroundColor": "#ffffff",
-        "backgroundImage": "./assets/icon.png",
-        "foregroundImage": "./assets/icon.png"
-      },
       "package": "com.alov.payandway",
       "versionCode": 1
     },

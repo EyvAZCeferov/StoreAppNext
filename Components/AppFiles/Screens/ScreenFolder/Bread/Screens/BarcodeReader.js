@@ -14,6 +14,9 @@ import PayCards from "../Components/PayStart/Paying";
 import firebase from "../../../../Functions/FireBase/firebaseConfig";
 import {Entypo, AntDesign} from '@expo/vector-icons';
 import {Tooltip} from 'react-native-elements';
+import {t} from "../../../../Lang";
+import DropdownAlert from "react-native-dropdownalert";
+const succesImage = require('../../../../../../assets/images/Alert/tick.png');
 
 const {width, height} = Dimensions.get("window");
 export default class BarCodeReader extends React.Component {
@@ -78,14 +81,32 @@ export default class BarCodeReader extends React.Component {
         }
         if (this.state.allCards != null) {
             return this.state.allCards.map(element => {
+                var label=this.hideNumb(element.cardInfo.number);
                 return (
                     <Picker.Item
-                        label={element.cardInfo.number}
+                        label={label}
                         value={element.cardInfo.number}
                         color="#7c9d32"/>
                 )
             })
         }
+
+    }
+
+    hideNumb(e) {
+        var numb = e;
+        //use slice to remove first 12 elements
+        let first12 = numb.slice(4, 14);
+        //define what char to use to replace numbers
+        let char = '*'
+        let repeatedChar = char.repeat(numb.length - 14);
+        // replace numbers with repeated char
+        first12 = first12.replace(first12, repeatedChar);
+        //concat hidden char with last 4 digits of input
+        let hiddenNumbers = numb.slice(0, 4) + first12 + numb.slice(numb.length - 4);
+        //return
+        return hiddenNumbers;
+        this.dropDownAlertRef.alertWithType('success', t('cardSelected'));
 
     }
 
@@ -103,7 +124,19 @@ export default class BarCodeReader extends React.Component {
         if (this.state.okay == true && this.state.selectedCard != null) {
             return (
                 <View>
-                    <StatusBar backgroundColor="#7c9d32" style="light"/>
+                    <StatusBar backgroundColor="#fff" style="dark"/>
+                    <DropdownAlert
+                        ref={ref => this.dropDownAlertRef = ref}
+                        useNativeDriver={true}
+                        closeInterval={1000}
+                        zIndex={5000}
+                        updateStatusBar={true}
+                        tapToCloseEnabled={true}
+                        showCancel={true}
+                        elevation={10}
+                        isInteraction={true}
+                        successImageSrc={succesImage}
+                    />
                     <View style={styles.upperView}>
                         <PayCards cardNumb={this.state.selectedCard}/>
                     </View>

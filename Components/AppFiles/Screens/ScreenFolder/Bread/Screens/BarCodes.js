@@ -8,7 +8,7 @@ import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view'
 import BarcodeMask from 'react-native-barcode-mask';
 
 const {width, height} = Dimensions.get('window');
-export default function BarCodes({navigation}) {
+export default function BarCodes(props) {
     const [hasPermission, setHasPermission] = useState(null);
     const [flashMode, setFlashMode] = useState("off");
     const [modalState, setModalState] = useState(false);
@@ -53,13 +53,19 @@ export default function BarCodes({navigation}) {
         setModalState(false);
     }
 
+    function barcodeScanned(item) {
+        console.log(item);
+        props.navigation.goBack()
+    }
+
     return (
         <View
             style={{flex: 1}}>
             <StatusBar
                 hidden={true}
             />
-            <Camera style={{flex: 1}} type="back" flashMode={flashMode} onBarCodeScanned={(item) => alert(item.data)}>
+            <Camera style={{flex: 1}} type="back" flashMode={flashMode}
+                    onBarCodeScanned={(item) => barcodeScanned(item)}>
                 <BarcodeMask
                     outerMaskOpacity={0.6}
                     edgeBorderWidth={1}
@@ -67,6 +73,7 @@ export default function BarCodes({navigation}) {
                     edgeBorderWidth={5}
                     animatedLineColor="#DD2C00"
                     animatedLineHeight={2}
+                    showAnimatedLine={true}
                     lineAnimationDuration={1400}
                     animatedLineWidth={'90%'}
                 />
@@ -108,7 +115,7 @@ export default function BarCodes({navigation}) {
                             backgroundColor: "rgba(0,0,0,.5)"
                         }}
                         onPress={() => {
-                            navigation.goBack();
+                            props.navigation.goBack();
                         }}>
                         <AntDesign name="back" size={25} color="#fff"/>
                     </TouchableOpacity>

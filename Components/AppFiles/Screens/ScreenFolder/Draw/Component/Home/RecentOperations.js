@@ -133,95 +133,64 @@ export default function RecentOperations() {
 
     return (
         <View style={{flex: 1}}>
-            <SlidingUpPanel
-                ref={ModalRef}
-                draggableRange={dragableRang}
-                animatedValue={_draggedValue}
-                backdropOpacity={0}
-                snappingPoints={[360]}
-                height={height + 25}
-                friction={0.9}
-                containerStyle={styles.slideUp}
-            >
-                <View sttyle={styles.panelHandle}>
+            <View sttyle={styles.panelHandle}>
+                <View style={{
+                    maxHeight: 70,
+                    minHeight: 45,
+                    width: width,
+                }}>
                     <View style={{
-                        maxHeight: 70,
-                        minHeight: 45,
-                        width: width,
+                        marginHorizontal: 20,
+                        justifyContent: "space-between",
+                        flexDirection: "row",
                     }}>
-                        <View style={{
-                            marginHorizontal: 20,
-                            justifyContent: "space-between",
-                            flexDirection: "row",
-                        }}>
-                            <Text style={{color: "#7c9d32", marginVertical: 10}}>{t('recentoperations')}</Text>
-                            <View style={{
-                                alignItems: "center",
-                                justifyContent: "center",
-                                textAlign: "center",
-                            }}>
-                                <Button style={{
-                                    backgroundColor: "#7c9d32",
-                                    width: 80,
-                                    height: 18,
-                                    borderRadius: 40,
-                                    alignItems: "center",
-                                    justifyContent: "center",
-                                    textAlign: "center",
-                                }}><View
-                                    style={{
-                                        backgroundColor: "rgba(255,255,255,.9)",
-                                        width: 40,
-                                        height: 4,
-                                        borderRadius: 10
-                                    }}/></Button></View>
-                            <Text style={{color: "#7c9d32", marginVertical: 10}}>{t('yesterday')}</Text>
-                        </View>
-                    </View>
-                    <View style={{height: 500, paddingBottom: 10}}>
-                        {refresh ? (
-                            <View style={{width: width}}>
-                                <ShimmerPlaceholder
-                                    visible={false}
-                                    isInteraction={true}
-                                    style={{width: width, height: 80, borderRadius: 8, marginBottom: 8}}
-                                />
-                                <ShimmerPlaceholder
-                                    visible={false}
-                                    isInteraction={true}
-                                    style={{width: width, height: 80, borderRadius: 8, marginBottom: 8}}
-                                />
-                                <ShimmerPlaceholder
-                                    visible={false}
-                                    isInteraction={true}
-                                    style={{width: width, height: 80, borderRadius: 8, marginBottom: 8}}
-                                />
-                                <ShimmerPlaceholder
-                                    visible={false}
-                                    isInteraction={true}
-                                    style={{width: width, height: 80, borderRadius: 8, marginBottom: 8}}
-                                />
-                                <ShimmerPlaceholder
-                                    visible={false}
-                                    isInteraction={true}
-                                    style={{width: width, height: 80, borderRadius: 8, marginBottom: 8}}
-                                />
-                                <ShimmerPlaceholder
-                                    visible={false}
-                                    isInteraction={true}
-                                    style={{width: width, height: 80, borderRadius: 8, marginBottom: 8}}
-                                />
-                            </View>
-                        ) : (
-                            <FlatList
-                                data={oper}
-                                keyExtractor={(index) => index}
-                                renderItem={renderItem3}
-                            />
-                        )}
+                        <Text style={{color: "#7c9d32", marginVertical: 10}}>{t('recentoperations')}</Text>
+                        <Text style={{color: "#7c9d32", marginVertical: 10}}>{t('yesterday')}</Text>
                     </View>
                 </View>
-            </SlidingUpPanel>
+                <View style={{height: 500, paddingBottom: 10}}>
+                    {refresh ? (
+                        <View style={{width: width}}>
+                            <ShimmerPlaceholder
+                                visible={false}
+                                isInteraction={true}
+                                style={{width: width, height: 80, borderRadius: 8, marginBottom: 8}}
+                            />
+                            <ShimmerPlaceholder
+                                visible={false}
+                                isInteraction={true}
+                                style={{width: width, height: 80, borderRadius: 8, marginBottom: 8}}
+                            />
+                            <ShimmerPlaceholder
+                                visible={false}
+                                isInteraction={true}
+                                style={{width: width, height: 80, borderRadius: 8, marginBottom: 8}}
+                            />
+                            <ShimmerPlaceholder
+                                visible={false}
+                                isInteraction={true}
+                                style={{width: width, height: 80, borderRadius: 8, marginBottom: 8}}
+                            />
+                            <ShimmerPlaceholder
+                                visible={false}
+                                isInteraction={true}
+                                style={{width: width, height: 80, borderRadius: 8, marginBottom: 8}}
+                            />
+                            <ShimmerPlaceholder
+                                visible={false}
+                                isInteraction={true}
+                                style={{width: width, height: 80, borderRadius: 8, marginBottom: 8}}
+                            />
+                        </View>
+                    ) : (
+                        <FlatList
+                            data={oper}
+                            keyExtractor={(index) => index}
+                            renderItem={renderItem3}
+                        />
+                    )}
+                </View>
+            </View>
         </View>
     )
 }
@@ -255,7 +224,7 @@ const styles = StyleSheet.create({
         textAlign: 'center',
     },
     panelHandle: {
-        height: 5,
+        height: 300,
         width: width,
         backgroundColor: "#666",
         borderRadius: 6,

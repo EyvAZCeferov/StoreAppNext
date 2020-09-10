@@ -235,7 +235,6 @@ const styles = StyleSheet.create({
     userInfoSection: {
         paddingVertical: 2,
         paddingHorizontal: 9,
-        flex: 1,
         flexDirection: 'column',
     },
     listItem: {
@@ -259,18 +258,18 @@ const styles = StyleSheet.create({
     title: {
         fontWeight: 'bold',
         fontSize: 17,
-        marginLeft: -70,
-        marginTop: 20,
+        marginLeft: '-45%',
+        marginTop: '15%',
     },
     drawerSection: {
         marginTop: -15,
     },
     logo: {
-        width: 60,
-        height: 60,
+        width: 80,
+        height: 80,
         borderRadius: 40,
         padding: 1,
         margin: 0,
-        marginLeft: -15
+        marginLeft: '-5%'
     },
 });

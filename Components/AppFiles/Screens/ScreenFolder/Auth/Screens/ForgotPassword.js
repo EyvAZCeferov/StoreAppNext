@@ -17,14 +17,16 @@ import {
     Content,
     Body,
     Thumbnail,
-    Toast,
 } from 'native-base';
 import customStyle from '../../../../../../assets/Theme';
 import {t} from '../../../../Lang';
 
+const succesImage = require('../../../../../../assets/images/Alert/tick.png');
+
 var width = Dimensions.get('window').width;
 const icon = require('../../../../../../assets/images/logo.jpeg');
 import firebase from '../../../../Functions/FireBase/firebaseConfig';
+import DropdownAlert from "react-native-dropdownalert";
 
 export default class ForgotPassword extends React.Component {
     constructor(props) {
@@ -49,11 +51,10 @@ export default class ForgotPassword extends React.Component {
             .sendPasswordResetEmail(this.state.phoneNumb)
             .then(
                 () => {
-                    var user = firebase.auth().currentUser;
-                    alert(t('sendVerify'))
+                    this.dropDownAlertRef.alertWithType('success', t('sendVerify'));
                 },
                 (err) => {
-                    alert(err.message)
+                    this.dropDownAlertRef.alertWithType('error', err.message);
                 }
             );
     };
@@ -61,6 +62,19 @@ export default class ForgotPassword extends React.Component {
     render() {
         return (
             <View style={customStyle.container}>
+                <StatusBar backgroundColor="#7c9d32" style="light"/>
+                <DropdownAlert
+                    ref={ref => this.dropDownAlertRef = ref}
+                    useNativeDriver={true}
+                    closeInterval={1000}
+                    zIndex={5000}
+                    updateStatusBar={true}
+                    tapToCloseEnabled={true}
+                    showCancel={true}
+                    elevation={10}
+                    isInteraction={true}
+                    successImageSrc={succesImage}
+                />
                 <Container>
                     <Header style={customStyle.loginheader}>
                         <Thumbnail source={icon}/>

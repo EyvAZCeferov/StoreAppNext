@@ -6,6 +6,7 @@ import {
     Dimensions,
     Linking,
     Text,
+    Share
 } from 'react-native';
 import {
     Container,
@@ -14,22 +15,21 @@ import {
     CardItem,
     Thumbnail,
     Left,
-    Right,
     Body,
     Button,
-    Fab,
-    Header,
 } from 'native-base';
 import {SliderBox} from 'react-native-image-slider-box';
 import {AntDesign} from '@expo/vector-icons';
-import * as Sharing from 'expo-sharing';
 import * as Localization from 'expo-localization';
+import {StatusBar} from 'expo-status-bar';
 
 var width = Dimensions.get('window').width;
 var height = Dimensions.get('window').height;
 import firebase from '../../../../Functions/FireBase/firebaseConfig';
 import HTMLView from 'react-native-htmlview';
+import DropdownAlert from "react-native-dropdownalert";
 
+const succesImage = require('../../../../../../assets/images/Alert/tick.png');
 export default class OneCampaign extends React.Component {
     state = {
         active: false,
@@ -69,14 +69,29 @@ export default class OneCampaign extends React.Component {
         this.getInfo();
     }
 
-    async share() {
-        this.setState({active: !this.state.active});
-        if (!(await Sharing.isAvailableAsync())) {
-            alert(`Paylaşım etməyiniz gözlənilir`);
-            return null;
+    async share(title, desc, url) {
+        console.log(title, desc, url)
+        try {
+            const result = await Share.share({
+                    title: title,
+                    message: desc,
+                    url: url != null ? url : 'https://payandwin.az',
+                }, {
+                    dialogTitle: title + " Paylaşmaq üçün hazırdır.",
+                    subject: title,
+                    tintColor: "7c9d32"
+                })
+            ;
+
+            if (result.action === Share.sharedAction) {
+                this.dropDownAlertRef.alertWithType('success', 'Paylaşmaq üçün hazırdır.');
+            } else if (result.action === Share.dismissedAction) {
+                this.dropDownAlertRef.alertWithType('error', 'Post paylaşıla bilmədi.', 'Təkrar yoxlayın.');
+            }
+        } catch (error) {
+            this.dropDownAlertRef.alertWithType('error', 'Xəta', error.message);
         }
-        Sharing.shareAsync('https://www.google.com');
-    }
+    };
 
     name(item) {
         if (Localization.locale == 'en' || Localization.locale === 'en') {
@@ -101,20 +116,33 @@ export default class OneCampaign extends React.Component {
     render() {
         return (
             <Container>
-                <Header style={styles.header} backgroundColor="#7c9d32">
-                    <Left>
+                <StatusBar backgroundColor="#fff" style="dark"/>
+                <DropdownAlert
+                    ref={ref => this.dropDownAlertRef = ref}
+                    useNativeDriver={true}
+                    closeInterval={1000}
+                    zIndex={5000}
+                    updateStatusBar={true}
+                    tapToCloseEnabled={true}
+                    showCancel={true}
+                    elevation={10}
+                    isInteraction={true}
+                    successImageSrc={succesImage}
+                />
+                <View style={styles.header}>
+                    <View>
                         <Button transparent onPress={() => this.props.navigation.goBack()}>
-                            <AntDesign name="back" size={24} color="#fff"/>
+                            <AntDesign name="back" size={24} color="#7c9d32"/>
                         </Button>
-                    </Left>
-                    <Body style={styles.headerBody}>
+                    </View>
+                    <View style={styles.headerBody}>
                         <Text
                             style={styles.headerTitle}>
                             {this.state.oneCampaign != null ? this.name(this.state.oneCampaign) : null}
                         </Text>
-                    </Body>
-                    <Right/>
-                </Header>
+                    </View>
+                    <View/>
+                </View>
                 <View style={styles.f1}>
                     <Content>
                         <ScrollView style={styles.f1}>
@@ -134,7 +162,6 @@ export default class OneCampaign extends React.Component {
                                                 {this.state.oneCampaign != null ? this.state.oneCampaign.marketName : null}
                                             </Text>
                                             <Text note>
-
                                                 {this.state.oneCampaign != null ? this.state.oneCampaign.created_at : null}
                                             </Text>
                                         </Body>
@@ -154,26 +181,29 @@ export default class OneCampaign extends React.Component {
                                 </CardItem>
                                 <CardItem>
                                     <View style={styles.fabArena}>
-                                        <Fab
-                                            active={this.state.active}
-                                            direction="up"
-                                            style={{backgroundColor: '#7c9d32'}}
-                                            position="bottomRight"
-                                            onPress={() => this.share}>
+                                        <Text
+                                            style={styles.title}>{this.state.oneCampaign != null ? this.name(this.state.oneCampaign) : null}</Text>
+                                        <Button
+                                            style={styles.shareButton}
+                                            onPress={
+                                                () =>
+                                                    this.share(
+                                                        this.name(this.state.oneCampaign),
+                                                        this.desc(this.state.oneCampaign),
+                                                        this.state.oneCampaign.slug
+                                                    )
+                                            }>
                                             <AntDesign name="sharealt" size={27} color="#fff"/>
-                                        </Fab>
+                                        </Button>
                                     </View>
                                 </CardItem>
                                 <CardItem>
-                                    <Body>
-                                        <Text
-                                            style={styles.title}>{this.state.oneCampaign != null ? this.name(this.state.oneCampaign) : null}</Text>
+                                    <Body style={{marginBottom: 20}}>
                                         {this.state.oneCampaign != null ? (<HTMLView
                                             value={this.desc(this.state.oneCampaign)}
                                             onLinkPress={() => Linking.openURL(this.state.oneCampaign.slug)}
                                             stylesheet={styles.textColor}
                                         />) : null}
-
                                     </Body>
                                 </CardItem>
                             </Card>
@@ -191,13 +221,22 @@ const styles = StyleSheet.create({
         height: height,
     },
     header: {
-        backgroundColor: '#7c9d32',
+        justifyContent: "space-between",
+        flexDirection: "row",
+        paddingHorizontal: 10,
+        textAlign: "center",
+        alignItems: "center",
+        alignContent: "center",
+        width: width
     },
     headerBody: {
-        flex: 2.5,
+        textAlign: "center",
+        alignItems: "center",
+        alignContent: "center",
+        justifyContent: "center"
     },
     headerTitle: {
-        color: '#fff',
+        color: '#7c9d32',
         fontSize: 19,
         fontWeight: 'bold',
     },
@@ -212,20 +251,32 @@ const styles = StyleSheet.create({
         fontWeight: 'bold',
     },
     title: {
-        color: '#fff',
+        color: '#010101',
         fontWeight: 'bold',
         fontSize: 20,
-        marginVertical: 10,
-        width: width,
-        maxHeight: 140,
-        marginBottom: 25,
     },
     fabArena: {
-        width: width / 4,
-        height: 40,
-        position: 'absolute',
-        top: -2,
-        right: 0,
+        width: width,
+        minHeight: 50,
+        maxHeight: 150,
+        flexDirection: "row",
+        backgroundColor: "transparent",
+        justifyContent: "space-around",
+        alignItems: "center",
+        alignContent: "center",
+        textAlign: "center",
+        borderRadius: 13
+    },
+    shareButton: {
+        textAlign: "center",
+        alignItems: "center",
+        justifyContent: "center",
+        alignContent: "center",
+        width: 50,
+        height: "100%",
+        backgroundColor: "#7c9d32",
+        borderRadius: 13,
+        marginRight: '5%'
     },
     textColor: {
         color: '#6d7587',

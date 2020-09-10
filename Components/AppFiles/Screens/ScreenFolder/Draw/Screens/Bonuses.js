@@ -22,7 +22,6 @@ import {
     Form,
     Item,
     Input,
-    Toast,
 } from 'native-base';
 
 import ScreensStandart from '../Component/ScreensStandart';
@@ -33,6 +32,7 @@ var width = Dimensions.get('window').width;
 var height = Dimensions.get('window').height;
 import {t} from '../../../../Lang';
 import ShimmerPlaceholder from "react-native-shimmer-placeholder";
+const succesImage = require('../../../../../../assets/images/Alert/tick.png');
 
 export default class Bonuses extends React.Component {
     constructor(props) {
@@ -116,11 +116,11 @@ export default class Bonuses extends React.Component {
                 .then(
                     () => {
                         that.setState({bonuses: null, cardCount: 0, refreshing: true});
-                        alert(t('deleted'));
+                        that.dropDownAlertRef.alertWithType('success', t('deleted'));
                         that.handleRefresh();
                     },
                     (err) => {
-                        alert(err.message)
+                        that.dropDownAlertRef.alertWithType('error', err.message);
                         that.handleRefresh();
                     }
                 );
@@ -176,7 +176,7 @@ export default class Bonuses extends React.Component {
                         )
                         :
                         (
-                            <ListItem style={styles.firstList}  key={index}>
+                            <ListItem style={styles.firstList} key={index}>
                                 <Left style={styles.left}>
                                     <Thumbnail
                                         square

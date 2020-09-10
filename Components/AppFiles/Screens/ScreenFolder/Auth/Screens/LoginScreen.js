@@ -21,10 +21,12 @@ import customStyle from '../../../../../../assets/Theme';
 import {t} from '../../../../Lang';
 
 var width = Dimensions.get('window').width;
+const succesImage = require('../../../../../../assets/images/Alert/tick.png');
 
 const icon = require('../../../../../../assets/images/logo.jpeg');
 import firebase from '../../../../Functions/FireBase/firebaseConfig';
 import {StatusBar} from "expo-status-bar";
+import DropdownAlert from "react-native-dropdownalert";
 
 export default class LoginScreen extends React.Component {
     constructor(props) {
@@ -42,10 +44,10 @@ export default class LoginScreen extends React.Component {
             .signInWithEmailAndPassword(this.state.phoneNumb, this.state.password)
             .then(
                 () => {
-                    alert(t('signedIn'))
+                    this.dropDownAlertRef.alertWithType('success', t('signedIn'));
                 },
                 (err) => {
-                   alert(err.message)
+                    this.dropDownAlertRef.alertWithType('error', err.message);
                 }
             );
     };
@@ -61,6 +63,19 @@ export default class LoginScreen extends React.Component {
     render() {
         return (
             <View style={customStyle.container}>
+                <StatusBar backgroundColor="#7c9d32" style="light"/>
+                <DropdownAlert
+                    ref={ref => this.dropDownAlertRef = ref}
+                    useNativeDriver={true}
+                    closeInterval={1000}
+                    zIndex={5000}
+                    updateStatusBar={true}
+                    tapToCloseEnabled={true}
+                    showCancel={true}
+                    elevation={10}
+                    isInteraction={true}
+                    successImageSrc={succesImage}
+                />
                 <Container>
                     <Header style={customStyle.loginheader}>
                         <Thumbnail source={icon}/>

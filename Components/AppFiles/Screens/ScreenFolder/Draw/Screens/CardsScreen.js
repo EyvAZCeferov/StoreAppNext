@@ -6,7 +6,7 @@ import {
     View,
     FlatList,
     Modal,
-    Alert, ScrollView,
+    Alert, ScrollView, StatusBar,
 } from 'react-native';
 import {
     Button,
@@ -25,6 +25,8 @@ import {
     Toast,
 } from 'native-base';
 
+const succesImage = require('../../../../../../assets/images/Alert/tick.png');
+
 import {LiteCreditCardInput} from 'react-native-credit-card-input';
 import ScreensStandart from '../Component/ScreensStandart';
 import {AntDesign, EvilIcons} from '@expo/vector-icons';
@@ -33,6 +35,7 @@ import firebase from '../../../../Functions/FireBase/firebaseConfig';
 const {width, height} = Dimensions.get('window');
 import {t} from '../../../../Lang';
 import ShimmerPlaceholder from "react-native-shimmer-placeholder";
+import DropdownAlert from "react-native-dropdownalert";
 
 export default class CardsScreen extends React.Component {
     constructor(props) {
@@ -108,14 +111,7 @@ export default class CardsScreen extends React.Component {
         function deleteYes(index) {
             var user = firebase.auth().currentUser;
             if (that.cardCount < 2 || that.cardCount == 1 || that.cardCount === 1) {
-                Toast.show({
-                    text: t('minimalCard'),
-                    buttonText: t('close'),
-                    duration: 3000,
-                    position: 'bottom',
-                    type: 'warning',
-                    textStyle: {color: '#fff'},
-                });
+                that.dropDownAlertRef.alertWithType('error', t('minimalCard'));
             } else {
                 firebase
                     .database()
@@ -124,11 +120,11 @@ export default class CardsScreen extends React.Component {
                     .then(
                         () => {
                             that.setState({cards: null, cardCount: 1, refreshing: true});
-                            alert(t('deleted'));
+                            that.dropDownAlertRef.alertWithType('success', t('deleted'));
                             that.handleRefresh();
                         },
                         (err) => {
-                            alert(err.message)
+                            that.dropDownAlertRef.alertWithType('error', err.message);
                             that.handleRefresh();
                         }
                     );
@@ -267,11 +263,11 @@ export default class CardsScreen extends React.Component {
                             pinCode: null,
                             refreshing: true,
                         });
-                        alert(t('added'));
+                        this.dropDownAlertRef.alertWithType('success', t('added'));
                         this.handleRefresh();
                     },
                     (err) => {
-                        alert(err.message);
+                        this.dropDownAlertRef.alertWithType('error', err.message);
                         this.handleRefresh();
                     }
                 );
@@ -315,6 +311,19 @@ export default class CardsScreen extends React.Component {
     render() {
         return (
             <View>
+                <StatusBar backgroundColor="#fff" style="dark"/>
+                <DropdownAlert
+                    ref={ref => this.dropDownAlertRef = ref}
+                    useNativeDriver={true}
+                    closeInterval={1000}
+                    zIndex={5000}
+                    updateStatusBar={true}
+                    tapToCloseEnabled={true}
+                    showCancel={true}
+                    elevation={10}
+                    isInteraction={true}
+                    successImageSrc={succesImage}
+                />
                 <ScreensStandart {...this.props} name={t('cards')}/>
                 <View style={styles.f1}>
                     <View style={styles.f1}>
@@ -355,8 +364,9 @@ export default class CardsScreen extends React.Component {
                                     height: height,
                                 }}>
                                 <Modal
+                                    style={{width: width, height: height, backgroundColor: "#fff"}}
                                     animationType="fade"
-                                    transparent={true}
+                                    transparent={false}
                                     visible={this.state.active}
                                     onRequestClose={() => {
                                         Alert.alert('Modal has been closed.');

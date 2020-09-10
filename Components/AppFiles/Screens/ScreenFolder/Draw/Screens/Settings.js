@@ -27,10 +27,13 @@ import {
 import ScreensStandart from '../Component/ScreensStandart';
 import * as Localization from 'expo-localization';
 
+const succesImage = require('../../../../../../assets/images/Alert/tick.png');
+
 var width = Dimensions.get('window').width;
 var height = Dimensions.get('window').height;
 import {setLang, t} from '../../../../Lang';
 import {StatusBar} from "expo-status-bar";
+import DropdownAlert from "react-native-dropdownalert";
 
 export default class Settings extends React.Component {
     constructor(props) {
@@ -42,18 +45,30 @@ export default class Settings extends React.Component {
     }
 
     onValueChange(sel) {
+        this.dropDownAlertRef.alertWithType('success', t('changedLang'));
         setLang(sel);
-        this.props.navigation.navigate('Settings');
         this.setState({selected: sel});
         Restart();
     }
 
     render() {
         return (
-            <View style={{backgroundColor:"#fff"}}>
+            <View style={{backgroundColor: "#fff"}}>
+                <StatusBar backgroundColor="#fff" style="dark"/>
+                <DropdownAlert
+                    ref={ref => this.dropDownAlertRef = ref}
+                    useNativeDriver={true}
+                    closeInterval={1000}
+                    zIndex={5000}
+                    updateStatusBar={true}
+                    tapToCloseEnabled={true}
+                    showCancel={true}
+                    elevation={10}
+                    isInteraction={true}
+                    successImageSrc={succesImage}
+                />
                 <View style={{marginTop: -22}}>
                     <ScreensStandart {...this.props} name={t('setting')}/>
-                    <StatusBar backgroundColor="#fff" style="dark" />
                 </View>
                 <ScrollView>
                     <View style={[styles.content, styles.ptop]}>

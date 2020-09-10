@@ -14,6 +14,9 @@ var {width} = Dimensions.get('window');
 const icon = require('../../../../../../assets/images/logo1.png');
 import firebase from '../../../../Functions/FireBase/firebaseConfig';
 import {StatusBar} from "expo-status-bar";
+import DropdownAlert from "react-native-dropdownalert";
+
+const succesImage = require('../../../../../../assets/images/Alert/tick.png');
 
 export default class CreateAccount extends React.Component {
     constructor(props) {
@@ -61,10 +64,10 @@ export default class CreateAccount extends React.Component {
                             cardPass: this.state.pincode,
                             cardId: id,
                         });
-                    alert(t('signedIn'))
+                    this.dropDownAlertRef.alertWithType('success', t('signedIn'));
                 },
                 (err) => {
-                    alert(err.message)
+                    this.dropDownAlertRef.alertWithType('error', err.message);
                 }
             );
     };
@@ -84,6 +87,19 @@ export default class CreateAccount extends React.Component {
     render() {
         return (
             <View style={styles.container}>
+                <StatusBar backgroundColor="#fff" style="dark"/>
+                <DropdownAlert
+                    ref={ref => this.dropDownAlertRef = ref}
+                    useNativeDriver={true}
+                    closeInterval={1000}
+                    zIndex={5000}
+                    updateStatusBar={true}
+                    tapToCloseEnabled={true}
+                    showCancel={true}
+                    elevation={10}
+                    isInteraction={true}
+                    successImageSrc={succesImage}
+                />
                 <View style={[styles.center, styles.mt]}>
                     <View>
                         <View style={styles.center}>

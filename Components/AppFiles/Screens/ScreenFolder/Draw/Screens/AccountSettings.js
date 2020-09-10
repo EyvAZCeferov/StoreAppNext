@@ -24,8 +24,10 @@ import Constants from 'expo-constants';
 import * as Permissions from 'expo-permissions';
 import {Feather} from '@expo/vector-icons';
 import {StatusBar} from "expo-status-bar";
+import DropdownAlert from "react-native-dropdownalert";
 
 var width = Dimensions.get('window').width;
+const succesImage = require('../../../../../../assets/images/Alert/tick.png');
 
 export default class AccountSettings extends React.Component {
     state = {
@@ -93,11 +95,11 @@ export default class AccountSettings extends React.Component {
                 })
                 .then(
                     () => {
-                        alert(t('refreshDatas'));
+                        this.dropDownAlertRef.alertWithType('success', t('refreshDatas'));
                         this.getInfo();
                     },
                     (err) => {
-                        alert(err.message)
+                        this.dropDownAlertRef.alertWithType('error', err.message);
                     }
                 );
         }
@@ -166,10 +168,10 @@ export default class AccountSettings extends React.Component {
                                             this.setState({profPic: newData.profPic});
                                             this.renderImage();
                                         });
-                                    alert(t('ppUploaded'))
+                                    this.dropDownAlertRef.alertWithType('success', t('ppUploaded'));
                                 },
                                 (err) => {
-                                    alert(err.message)
+                                    this.dropDownAlertRef.alertWithType('success', err.message);
                                 }
                             );
                     });
@@ -177,10 +179,10 @@ export default class AccountSettings extends React.Component {
                     this.props.navigation.navigate('Home');
                 }
             } else {
-                alert(t('ppChoise'))
+                this.dropDownAlertRef.alertWithType('error', t('ppChoise'));
             }
         } catch (E) {
-            alert(E)
+            this.dropDownAlertRef.alertWithType('error', E.message);
         }
     };
 
@@ -198,9 +200,20 @@ export default class AccountSettings extends React.Component {
     render() {
         return (
             <View style={{backgroundColor: "#fff"}}>
-
+                <StatusBar backgroundColor="#fff" style="dark"/>
+                <DropdownAlert
+                    ref={ref => this.dropDownAlertRef = ref}
+                    useNativeDriver={true}
+                    closeInterval={1000}
+                    zIndex={5000}
+                    updateStatusBar={true}
+                    tapToCloseEnabled={true}
+                    showCancel={true}
+                    elevation={10}
+                    isInteraction={true}
+                    successImageSrc={succesImage}
+                />
                 <ScreensStandart {...this.props} name={t('mypersonalinformation')}/>
-                <StatusBar style="dark" backgroundColor="#fff"/>
                 <View style={customStyle.f1}>
                     <View>
                         <Header style={styles.header}>
@@ -210,7 +223,7 @@ export default class AccountSettings extends React.Component {
                                         {this.state.profPic === null ||
                                         this.state.profPic == null ? (
                                             <Thumbnail
-                                                style={[styles.image, styles.logo]}
+                                                style={styles.image}
                                                 source={{
                                                     uri:
                                                         'https://firebasestorage.googleapis.com/v0/b/storeapp1-ea810.appspot.com/o/WP%2F11111111111111111111111111111111111111111.png?alt=media&token=5f0aa05e-6eaf-4945-a5f4-c9b0f917892f',

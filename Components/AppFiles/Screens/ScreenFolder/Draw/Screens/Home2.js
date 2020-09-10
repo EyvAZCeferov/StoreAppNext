@@ -15,7 +15,6 @@ const heights = Dimensions.get('window').height;
 import {Ionicons} from "@expo/vector-icons";
 import RecentOperations from "../Component/Home/RecentOperations";
 import SliderCards from '../Component/Home/SliderCards';
-import ShimmerPlaceholder from "react-native-shimmer-placeholder";
 
 const icon = require('../../../../../../assets/images/logo1.png');
 
@@ -29,7 +28,7 @@ export default class Home2 extends React.Component {
 
     render() {
         return (
-            <Container>
+            <Container style={{backgroundColor:"#fff"}}>
                 <Header style={styles.header}>
                     <Left style={[styles.height, styles.iconArena]}>
                         <Thumbnail source={icon} style={styles.icon}/>
@@ -45,12 +44,12 @@ export default class Home2 extends React.Component {
                     </Right>
                 </Header>
                 <View style={styles.contentArena}>
-                    <View style={{backgroundColor:"#fff",flex:1}}>
+                    <View>
                         <SafeAreaView>
                             <SliderCards/>
                         </SafeAreaView>
                     </View>
-                    <View style={{marginTop: 250}}>
+                    <View>
                         <SafeAreaView>
                             <RecentOperations/>
                         </SafeAreaView>
@@ -92,11 +91,10 @@ const
             height: 45,
             ...StyleSheet.absoluteFill,
             padding: 5,
-
         },
         contentArena: {
             width: widths,
-            height: heights - 200,
+            height: heights
         },
         f1: {
             flex: 1,
