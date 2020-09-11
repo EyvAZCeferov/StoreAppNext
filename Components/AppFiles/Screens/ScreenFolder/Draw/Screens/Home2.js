@@ -15,20 +15,39 @@ const heights = Dimensions.get('window').height;
 import {Ionicons} from "@expo/vector-icons";
 import RecentOperations from "../Component/Home/RecentOperations";
 import SliderCards from '../Component/Home/SliderCards';
+import {StatusBar} from "expo-status-bar";
 
 const icon = require('../../../../../../assets/images/logo1.png');
 
 export default class Home2 extends React.Component {
     constructor(props) {
         super(props);
-        this.state = {
-            activeIndex: 0,
-        }
+    }
+
+    componentDidMount() {
+        this.renderElement();
+    }
+
+    renderElement() {
+        return (
+            <View style={styles.contentArena}>
+                <View>
+                    <SafeAreaView>
+                        <SliderCards/>
+                    </SafeAreaView>
+                </View>
+                <View>
+                    <SafeAreaView>
+                        <RecentOperations/>
+                    </SafeAreaView>
+                </View>
+            </View>
+        )
     }
 
     render() {
         return (
-            <Container style={{backgroundColor:"#fff"}}>
+            <Container style={{backgroundColor: "#fff"}}>
                 <Header style={styles.header}>
                     <Left style={[styles.height, styles.iconArena]}>
                         <Thumbnail source={icon} style={styles.icon}/>
@@ -43,18 +62,7 @@ export default class Home2 extends React.Component {
                         </Button>
                     </Right>
                 </Header>
-                <View style={styles.contentArena}>
-                    <View>
-                        <SafeAreaView>
-                            <SliderCards/>
-                        </SafeAreaView>
-                    </View>
-                    <View>
-                        <SafeAreaView>
-                            <RecentOperations/>
-                        </SafeAreaView>
-                    </View>
-                </View>
+                {this.renderElement()}
             </Container>
         )
     }

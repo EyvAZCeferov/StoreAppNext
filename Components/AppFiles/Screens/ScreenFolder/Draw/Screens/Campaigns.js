@@ -6,7 +6,6 @@ import {
     Dimensions,
     FlatList,
     ImageBackground,
-    Image,
     Text,
     TouchableOpacity
 } from 'react-native';
@@ -95,7 +94,12 @@ export default class Campaigns extends React.Component {
 
         return (
             <View style={{backgroundColor: "transparent", marginHorizontal: 5, width: 90, height: 90}} key={index}>
-                <TouchableOpacity onPress={() => alert('Hi')}>
+                <TouchableOpacity onPress={() => that.props.navigation.navigate("OtherPages", {
+                    screen: 'OneService',
+                    params: {
+                        uid: item.id,
+                    }
+                })}>
                     <ImageBackground
                         style={{
                             width: '100%',
@@ -242,7 +246,7 @@ export default class Campaigns extends React.Component {
                             <View style={styles.services}>
                                 <FlatList
                                     data={this.state.serviceData}
-                                    renderItem={this.renderService}
+                                    renderItem={this.renderService.bind(this)}
                                     keyExtractor={(index) => index}
                                     horizontal={true}
                                 />

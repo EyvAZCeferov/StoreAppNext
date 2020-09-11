@@ -12,31 +12,29 @@ var height = Dimensions.get('window').height;
 export default class Maps extends React.Component {
     render() {
         return (
-            <View>
+            <View style={styles.f1}>
                 <ScreensStandart {...this.props} name={t('map')}/>
-                <View style={styles.f1}>
-                    <Tabs style={styles.tabsBg} tabStyle={styles.tabsBg} activeTabStyle={styles.activeTab}
-                          containerStyle={styles.tabsBg}>
-                        <Tab
-                            style={styles.tabsBg}
-                            heading={t('mapList')}
-                            tabStyle={styles.tabsBg}
-                            containerStyle={styles.tabsBg}
-                            activeTabStyle={styles.activeTab}
-                        >
-                            <TabMapsLists/>
-                        </Tab>
-                        <Tab
-                            tabStyle={styles.tabsBg}
-                            containerStyle={styles.tabsBg}
-                            style={styles.tabsBg}
-                            heading={t('mapView')}
-                            activeTabStyle={styles.activeTab}
-                        >
-                            <TabMapsView/>
-                        </Tab>
-                    </Tabs>
-                </View>
+                <Tabs style={styles.tabsBg} tabStyle={styles.tabsBg} activeTabStyle={styles.activeTab}
+                      containerStyle={styles.tabsBg}>
+                    <Tab
+                        style={styles.tabsBg}
+                        heading={t('mapList')}
+                        tabStyle={styles.tabsBg}
+                        containerStyle={styles.tabsBg}
+                        activeTabStyle={styles.activeTab}
+                    >
+                        <TabMapsLists/>
+                    </Tab>
+                    <Tab
+                        tabStyle={styles.tabsBg}
+                        containerStyle={styles.tabsBg}
+                        style={styles.tabsBg}
+                        heading={t('mapView')}
+                        activeTabStyle={styles.activeTab}
+                    >
+                        <TabMapsView/>
+                    </Tab>
+                </Tabs>
             </View>
         );
     }

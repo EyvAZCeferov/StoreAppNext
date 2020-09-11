@@ -28,36 +28,48 @@ function Simple() {
     );
 }
 
-export default class PayThanks extends React.Component {
+export default class OneCheck extends React.Component {
 
     render() {
         const params = this.props.route.params;
         const ficSalId = params ? params.ficsalId : null;
         const title = params ? params.title : null;
         return (
-            <View style={{width: width, height: height}}>
+            <View style={
+                {
+                    width: width,
+                    height: height,
+                    flexDirection: "column",
+                    alignItems: "center",
+                    alignContent: "center",
+                    textAlign: "center"
+                }}>
                 <StatusBar style="dark" backgroundColor="#fff"/>
                 <View
                     style={{
-                        height: 70,
-                        paddingVertical: 15,
-                        paddingHorizontal: 7,
+                        height: 50,
+                        paddingVertical: 1,
+                        paddingHorizontal: 0,
                         borderColor: "#fff",
-                        backgroundColor: "#fff",
                         width: width,
                         flexDirection: "row",
                         justifyContent: "space-between",
+                        backgroundColor: "#fff"
+                    }}>
+                    <View style={{
+                        height: 40,
+                        width: 50,
                         alignItems: "center",
                         alignContent: "center",
                         textAlign: "center",
+                        justifyContent: "center",
+                        backgroundColor: "#fff",
                     }}>
-                    <View style={{width: width / 5}}>
                         <Button style={{
-                            alignItems: "center",
-                            alignContent: "center",
-                            textAlign: "center",
-                            justifyContent: "center"
-                        }} transparent iconLeft large onPress={() => this.props.navigation.goBack()}>
+                            backgroundColor: "#fff",
+                            marginLeft: 15,
+                            marginTop: 10
+                        }} transparent small onPress={() => this.props.navigation.goBack()}>
                             <AntDesign name="back" size={24} color="#7c9d32"/>
                         </Button>
                     </View>
@@ -66,11 +78,20 @@ export default class PayThanks extends React.Component {
                         alignContent: "center",
                         textAlign: "center",
                         justifyContent: "center",
-                        width: width / 1.5,
+                        height: 40,
+                        width: width - 160,
+                        backgroundColor: "#fff"
                     }}>
-                        <Text style={{color: "#7c9d32", fontSize: 18, fontWeight: 'bold'}}>{title}</Text>
+                        <Text
+                            style={{
+                                color: "#7c9d32",
+                                fontSize: 18,
+                                fontWeight: 'bold',
+                                paddingTop: 10,
+                                paddingLeft: -15
+                            }}>{title}</Text>
                     </View>
-                    <View style={{width: width / 3}}/>
+                    <View/>
                 </View>
                 <View style={[styles.f1, styles.bgWhite, styles.center]}>
                     <ScrollView style={[styles.f1, styles.mt, styles.check]}>
@@ -502,6 +523,7 @@ const styles = StyleSheet.create({
     f1: {
         width: width,
         height: height,
+        backgroundColor: "#fff",
     },
     center: {
         justifyContent: 'center',

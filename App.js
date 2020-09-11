@@ -31,7 +31,8 @@ import {
     Cards,
     TermUses,
     ProfileSection,
-    BarcodeScanDo
+    BarcodeScanDo,
+    Service
 } from "./Components/AppFiles/Screens/CallScreen";
 
 const AuthStack = createStackNavigator();
@@ -97,6 +98,7 @@ const OtherScreen = () => (
         <OtherStacks.Screen name="Settings" component={Setting}/>
         <OtherStacks.Screen name="TermOfUses" component={TermUses}/>
         <OtherStacks.Screen name="OneCampaign" component={Campaign}/>
+        <OtherStacks.Screen name="OneService" component={Service}/>
         <OtherStacks.Screen name="PayPre" component={Paying}/>
         <OtherStacks.Screen name="PayThanks" component={PayEnd}/>
         <OtherStacks.Screen name="OneCheck" component={Check}/>

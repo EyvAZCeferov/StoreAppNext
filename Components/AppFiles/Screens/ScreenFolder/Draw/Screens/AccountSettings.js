@@ -199,7 +199,7 @@ export default class AccountSettings extends React.Component {
 
     render() {
         return (
-            <View style={{backgroundColor: "#fff"}}>
+            <View style={[customStyle.f1, {backgroundColor: "#fff"}]}>
                 <StatusBar backgroundColor="#fff" style="dark"/>
                 <DropdownAlert
                     ref={ref => this.dropDownAlertRef = ref}
@@ -214,95 +214,94 @@ export default class AccountSettings extends React.Component {
                     successImageSrc={succesImage}
                 />
                 <ScreensStandart {...this.props} name={t('mypersonalinformation')}/>
-                <View style={customStyle.f1}>
-                    <View>
-                        <Header style={styles.header}>
-                            <View style={customStyle.headerArena}>
-                                <View style={styles.imagePickerArena}>
-                                    <View style={styles.imageArena}>
-                                        {this.state.profPic === null ||
-                                        this.state.profPic == null ? (
-                                            <Thumbnail
-                                                style={styles.image}
-                                                source={{
-                                                    uri:
-                                                        'https://firebasestorage.googleapis.com/v0/b/storeapp1-ea810.appspot.com/o/WP%2F11111111111111111111111111111111111111111.png?alt=media&token=5f0aa05e-6eaf-4945-a5f4-c9b0f917892f',
-                                                }}
-                                            />
-                                        ) : (
-                                            this.renderImage()
-                                        )}
-                                    </View>
-                                    <View style={styles.pickerArena}>
-                                        <Button danger rounded small onPress={this._pickImage}>
-                                            <Feather name="edit" size={18} color="#fff"/>
-                                        </Button>
-                                    </View>
+                <View>
+                    <View style={styles.header}>
+                        <View style={customStyle.headerArena}>
+                            <View style={styles.imagePickerArena}>
+                                <View style={styles.imageArena}>
+                                    {this.state.profPic === null ||
+                                    this.state.profPic == null ? (
+                                        <Thumbnail
+                                            style={styles.image}
+                                            source={{
+                                                uri:
+                                                    'https://firebasestorage.googleapis.com/v0/b/storeapp1-ea810.appspot.com/o/WP%2F11111111111111111111111111111111111111111.png?alt=media&token=5f0aa05e-6eaf-4945-a5f4-c9b0f917892f',
+                                            }}
+                                        />
+                                    ) : (
+                                        this.renderImage()
+                                    )}
                                 </View>
-                                <Text style={styles.nameSurname}>
-                                    {this.state.nameSurname != null
-                                        ? this.state.nameSurname
-                                        : t('namesurname')}
-                                </Text>
+                                <View style={styles.pickerArena}>
+                                    <Button style={{padding: 10, marginLeft: 10}} danger rounded small
+                                            onPress={this._pickImage}>
+                                        <Feather name="edit" size={18} color="#fff"/>
+                                    </Button>
+                                </View>
                             </View>
-                        </Header>
-                        <View style={customStyle.f1}>
-                            <Content style={styles.content}>
-                                <Form style={[customStyle.m0p0, customStyle.centerItems]}>
-                                    <Item style={styles.itemStyle}>
-                                        <Input
-                                            style={styles.inputstyle}
-                                            keyboardType="numeric"
-                                            placeholder={t('phoneNumb')}
-                                            keyboardShouldPersistTaps="handled"
-                                            onChangeText={(text) =>
-                                                this.setState({telephoneNumb: text})
-                                            }
-                                            value={
-                                                this.state.telephoneNumb != null
-                                                    ? this.state.telephoneNumb
-                                                    : t('phoneNumb')
-                                            }
-                                            defaultValue={
-                                                this.state.telephoneNumb != null
-                                                    ? this.state.telephoneNumb
-                                                    : t('phoneNumb')
-                                            }
-                                        />
-                                    </Item>
-                                    <Item style={styles.itemStyle}>
-                                        <Input
-                                            style={styles.inputstyle}
-                                            keyboardType="email"
-                                            keyboardShouldPersistTaps="handled"
-                                            placeholder={t('email')}
-                                            onChangeText={(text) => this.setState({email: text})}
-                                            value={
-                                                this.state.email != null
-                                                    ? this.state.email
-                                                    : t('email')
-                                            }
-                                            defaultValue={
-                                                this.state.email != null
-                                                    ? this.state.email
-                                                    : t('email')
-                                            }
-                                        />
-                                    </Item>
-                                    <Item style={styles.itemStyle}>
-                                        <Button
-                                            rounded
-                                            style={styles.buttonStyle}
-                                            onPress={this.updateAccount}
-                                            success>
-                                            <Text style={styles.buttonText}>
-                                                {t('refreshButton')}
-                                            </Text>
-                                        </Button>
-                                    </Item>
-                                </Form>
-                            </Content>
+                            <Text style={styles.nameSurname}>
+                                {this.state.nameSurname != null
+                                    ? this.state.nameSurname
+                                    : t('namesurname')}
+                            </Text>
                         </View>
+                    </View>
+                    <View style={customStyle.f1}>
+                        <Content style={styles.content}>
+                            <Form style={[customStyle.m0p0, customStyle.centerItems]}>
+                                <Item style={styles.itemStyle}>
+                                    <Input
+                                        style={styles.inputstyle}
+                                        keyboardType="numeric"
+                                        placeholder={t('phoneNumb')}
+                                        keyboardShouldPersistTaps="handled"
+                                        onChangeText={(text) =>
+                                            this.setState({telephoneNumb: text})
+                                        }
+                                        value={
+                                            this.state.telephoneNumb != null
+                                                ? this.state.telephoneNumb
+                                                : t('phoneNumb')
+                                        }
+                                        defaultValue={
+                                            this.state.telephoneNumb != null
+                                                ? this.state.telephoneNumb
+                                                : t('phoneNumb')
+                                        }
+                                    />
+                                </Item>
+                                <Item style={styles.itemStyle}>
+                                    <Input
+                                        style={styles.inputstyle}
+                                        keyboardType="email"
+                                        keyboardShouldPersistTaps="handled"
+                                        placeholder={t('email')}
+                                        onChangeText={(text) => this.setState({email: text})}
+                                        value={
+                                            this.state.email != null
+                                                ? this.state.email
+                                                : t('email')
+                                        }
+                                        defaultValue={
+                                            this.state.email != null
+                                                ? this.state.email
+                                                : t('email')
+                                        }
+                                    />
+                                </Item>
+                                <Item style={styles.itemStyle}>
+                                    <Button
+                                        rounded
+                                        style={styles.buttonStyle}
+                                        onPress={this.updateAccount}
+                                        success>
+                                        <Text style={styles.buttonText}>
+                                            {t('refreshButton')}
+                                        </Text>
+                                    </Button>
+                                </Item>
+                            </Form>
+                        </Content>
                     </View>
                 </View>
             </View>
@@ -350,8 +349,8 @@ const styles = StyleSheet.create({
     },
     pickerArena: {
         position: 'absolute',
-        bottom: 3,
-        right: 2,
+        bottom: 0,
+        right: 0,
         backgroundColor: "transparent",
     },
     nameSurname: {

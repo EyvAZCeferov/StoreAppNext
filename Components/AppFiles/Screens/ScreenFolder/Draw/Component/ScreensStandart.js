@@ -30,10 +30,9 @@ const styles = StyleSheet.create({
     header: {
         backgroundColor: '#fff',
         borderColor: '#fff',
-        minHeight: 20,
+        minHeight: 60,
         maxHeight: 100,
         width: width,
-        marginTop: 80,
         flexDirection: "row",
         justifyContent: "center",
         alignContent: "center",

@@ -336,6 +336,7 @@ export default class Notifications extends React.Component {
     render() {
         return (
             <View style={styles.f1}>
+                <StatusBar backgroundColor="#fff" style="dark"/>
                 <Container style={styles.f1}>
                     <Header
                         style={{

@@ -1,5 +1,5 @@
 import * as React from 'react';
-import {StyleSheet, Dimensions, Text, SafeAreaView, View, FlatList, Animated} from 'react-native';
+import {StyleSheet, Dimensions, Text, View, Animated} from 'react-native';
 import {Right, Left} from 'native-base';
 import {Col, Grid} from 'react-native-easy-grid';
 import {LinearGradient} from 'expo-linear-gradient';
@@ -89,8 +89,9 @@ export default function CardOne({index, y, item}) {
                 <View style={styles.rightSec}>
                     <Left style={styles.left}>
                         <View style={[styles.leftPattern, styles.bigPattern]}/>
-                        <View style={[styles.leftPattern, styles.littlePattern]}/>
-                        <Text style={styles.priceText}>120 ₼</Text>
+                        <View
+                            style={[styles.leftPattern, styles.littlePattern, {backgroundColor: cardBgColors[index][1]}]}/>
+                        <Text style={styles.priceText}>{item.cardInfo.cvc} ₼</Text>
                     </Left>
                     <Right style={styles.right}>
                         <Text style={styles.rightText}>{item.cardInfo.type}</Text>
@@ -175,7 +176,7 @@ const styles = StyleSheet.create({
     bigPattern: {
         width: '70%',
         height: '90%',
-        backgroundColor: "rgb(255,255,255)",
+        backgroundColor: "#fff",
         zIndex: 2
     },
     littlePattern: {
@@ -183,7 +184,6 @@ const styles = StyleSheet.create({
         top: '15%',
         width: '55%',
         height: '45%',
-        backgroundColor: "rgba(255,255,255,.8)",
         zIndex: 3,
     },
     priceText: {
@@ -193,7 +193,7 @@ const styles = StyleSheet.create({
         height: '45%',
         zIndex: 4,
         fontSize: 20,
-        color: "#000",
+        color: "#fff",
         fontWeight: "bold",
         alignContent: "center",
         alignItems: "center",

@@ -310,7 +310,7 @@ export default class CardsScreen extends React.Component {
 
     render() {
         return (
-            <View>
+            <View style={styles.f1}>
                 <StatusBar backgroundColor="#fff" style="dark"/>
                 <DropdownAlert
                     ref={ref => this.dropDownAlertRef = ref}
@@ -326,108 +326,113 @@ export default class CardsScreen extends React.Component {
                 />
                 <ScreensStandart {...this.props} name={t('cards')}/>
                 <View style={styles.f1}>
-                    <View style={styles.f1}>
-                        {this.renderRefreshLists()}
-                        {this.state.cardCount == 0 ||
-                        this.state.cards == null ? (
+                    {this.renderRefreshLists()}
+                    {this.state.cardCount == 0 ||
+                    this.state.cards == null ? (
+                        <List style={styles.w100}>
+                            <Text style={styles.nullObject}>{t('noResult')}</Text>
+                        </List>
+                    ) : (
+                        <ScrollView>
                             <List style={styles.w100}>
-                                <Text style={styles.nullObject}>{t('noResult')}</Text>
+                                {this.listComponent()}
                             </List>
-                        ) : (
-                            <ScrollView>
-                                <List style={styles.w100}>
-                                    {this.listComponent()}
-                                </List>
-                            </ScrollView>
-                        )}
-                        <View style={{flex: 1}}>
-                            <Fab
-                                active={this.state.active}
-                                direction="up"
-                                style={{backgroundColor: '#7c9d32'}}
-                                position="bottomRight"
-                                containerStyle={{marginBottom: 50, marginRight: 10}}
-                                onPress={() => this.setState({active: !this.state.active})}>
-                                <AntDesign name="plus" size={24} color="#fff"/>
-                            </Fab>
-                        </View>
+                        </ScrollView>
+                    )}
+                    <View style={{flex: 1}}>
+                        <Fab
+                            active={this.state.active}
+                            direction="up"
+                            style={{backgroundColor: '#7c9d32'}}
+                            position="bottomRight"
+                            containerStyle={{marginBottom: 50, marginRight: 10}}
+                            onPress={() => this.setState({active: !this.state.active})}>
+                            <AntDesign name="plus" size={24} color="#fff"/>
+                        </Fab>
+                    </View>
 
-                        <View>
-                            <View
-                                style={{
-                                    flex: 1,
-                                    justifyContent: 'center',
-                                    alignItems: 'center',
-                                    alignContent: 'center',
-                                    marginTop: 22,
+                    <View>
+                        <View
+                            style={{
+                                flex: 1,
+                                justifyContent: 'center',
+                                alignItems: 'center',
+                                alignContent: 'center',
+                                marginTop: 22,
+                                width: width,
+                                height: height,
+                            }}>
+                            <Modal
+                                style={{width: width, height: height, backgroundColor: "#fff"}}
+                                animationType="fade"
+                                transparent={false}
+                                visible={this.state.active}
+                                onRequestClose={() => {
+                                    Alert.alert('Modal has been closed.');
+                                }}>
+                                <Card style={{
                                     width: width,
                                     height: height,
+                                    backgroundColor: "#fff",
+                                    justifyContent: "center",
+                                    alignContent: "center",
+                                    alignItems: "center"
                                 }}>
-                                <Modal
-                                    style={{width: width, height: height, backgroundColor: "#fff"}}
-                                    animationType="fade"
-                                    transparent={false}
-                                    visible={this.state.active}
-                                    onRequestClose={() => {
-                                        Alert.alert('Modal has been closed.');
-                                    }}>
-                                    <Card style={{marginTop: 30}}>
-                                        <CardItem header>
-                                            <Body>
-                                                <Text>{t('addNewCard')}</Text>
-                                            </Body>
-                                            <Right>
-                                                <Button
-                                                    transparent
-                                                    onPress={() => this.setState({active: false})}>
-                                                    <AntDesign name="close" size={24} color="#D50000"/>
-                                                </Button>
-                                            </Right>
-                                        </CardItem>
-                                        <CardItem>
-                                            <Form>
-                                                <Item style={styles.itemStyle}>
-                                                    <View style={[styles.inputstyle, styles.cardInput]}>
-                                                        <LiteCreditCardInput
-                                                            keyboardShouldPersistTaps="handled"
-                                                            keyboardType="number-pad"
-                                                            onChange={this._onChange}
-                                                        />
-                                                    </View>
-                                                </Item>
-                                                <Item style={styles.itemStyle}>
-                                                    <Input
-                                                        style={styles.inputstyle}
-                                                        keyboardType="number-pad"
+                                    <CardItem header>
+                                        <Body>
+                                            <Text>{t('addNewCard')}</Text>
+                                        </Body>
+                                        <Right>
+                                            <Button
+                                                transparent
+                                                onPress={() => this.setState({active: false})}>
+                                                <AntDesign name="close" size={24} color="#D50000"/>
+                                            </Button>
+                                        </Right>
+                                    </CardItem>
+                                    <CardItem>
+                                        <Form>
+                                            <Item style={styles.itemStyle}>
+                                                <View style={[styles.inputstyle, styles.cardInput]}>
+                                                    <LiteCreditCardInput
                                                         keyboardShouldPersistTaps="handled"
-                                                        placeholder={t('pincode')}
-                                                        maxLength={4}
-                                                        secureTextEntry={true}
-                                                        onChangeText={(text) =>
-                                                            this.setState({pinCode: text})
-                                                        }
+                                                        keyboardType="number-pad"
+                                                        onChange={this._onChange}
                                                     />
-                                                </Item>
-                                            </Form>
-                                        </CardItem>
-                                        <CardItem footer>
-                                            <View>
-                                                <Item style={styles.itemStyle}>
-                                                    <Button
-                                                        rounded
-                                                        style={styles.buttonStyle}
-                                                        onPress={this.addCard}
-                                                        success>
-                                                        <Text style={styles.buttonText}>
-                                                            {t('addCard')}
-                                                        </Text>
-                                                    </Button>
-                                                </Item>
-                                            </View>
-                                        </CardItem>
-                                    </Card>
-                                </Modal>
-                            </View>
+                                                </View>
+                                            </Item>
+                                            <Item style={styles.itemStyle}>
+                                                <Input
+                                                    style={styles.inputstyle}
+                                                    keyboardType="number-pad"
+                                                    keyboardShouldPersistTaps="handled"
+                                                    placeholder={t('pincode')}
+                                                    maxLength={4}
+                                                    secureTextEntry={true}
+                                                    onChangeText={(text) =>
+                                                        this.setState({pinCode: text})
+                                                    }
+                                                />
+                                            </Item>
+                                        </Form>
+                                    </CardItem>
+                                    <CardItem footer>
+                                        <View>
+                                            <Item style={styles.itemStyle}>
+                                                <Button
+                                                    rounded
+                                                    style={styles.buttonStyle}
+                                                    onPress={this.addCard}
+                                                    success>
+                                                    <Text style={styles.buttonText}>
+                                                        {t('addCard')}
+                                                    </Text>
+                                                </Button>
+                                            </Item>
+                                        </View>
+                                    </CardItem>
+                                </Card>
+                            </Modal>
                         </View>
                     </View>
                 </View>

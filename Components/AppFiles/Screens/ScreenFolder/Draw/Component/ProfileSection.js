@@ -1,5 +1,5 @@
 import React, {useState, useEffect} from 'react';
-import {View, StyleSheet, Text, Dimensions, ScrollView} from 'react-native';
+import {View, StyleSheet, Text, ScrollView} from 'react-native';
 import {Thumbnail, List, ListItem, Left, Right, Body} from 'native-base';
 import {
     MaterialCommunityIcons,
@@ -11,9 +11,7 @@ import {
 import {Col, Grid} from 'react-native-easy-grid';
 import {t} from '../../../../Lang';
 
-const {width, height} = Dimensions.get('window')
 import firebase from '../../../../Functions/FireBase/firebaseConfig';
-import {StatusBar} from "expo-status-bar";
 import ShimmerPlaceholder from 'react-native-shimmer-placeholder'
 
 export default function ProfileSection(props) {
@@ -96,47 +94,7 @@ export default function ProfileSection(props) {
                     </Grid>
                 </ListItem>
             </View>
-            {refresh ? (
-                <List style={{position: "absolute", top: 100}}>
-                    <ScrollView>
-                        <ShimmerPlaceholder
-                            visible={false}
-                            isInteraction={true}
-                            style={{width: width, height: 50, marginBottom: 15}}
-                        />
-                        <ShimmerPlaceholder
-                            visible={false}
-                            isInteraction={true}
-                            style={{width: width, height: 50, marginBottom: 15}}
-                        />
-                        <ShimmerPlaceholder
-                            visible={false}
-                            isInteraction={true}
-                            style={{width: width, height: 50, marginBottom: 15}}
-                        />
-                        <ShimmerPlaceholder
-                            visible={false}
-                            isInteraction={true}
-                            style={{width: width, height: 50, marginBottom: 15}}
-                        />
-                        <ShimmerPlaceholder
-                            visible={false}
-                            isInteraction={true}
-                            style={{width: width, height: 50, marginBottom: 15}}
-                        />
-                        <ShimmerPlaceholder
-                            visible={false}
-                            isInteraction={true}
-                            style={{width: width, height: 50, marginBottom: 15}}
-                        />
-                        <ShimmerPlaceholder
-                            visible={false}
-                            isInteraction={true}
-                            style={{width: width, height: 50, marginBottom: 15}}
-                        />
-                    </ScrollView>
-                </List>
-            ) : (
+            <ScrollView style={styles.drawerSection}>
                 <List style={styles.drawerSection}>
                     <ListItem style={styles.listItem}
                               onPress={() => props.navigation.navigate('OtherPages', {screen: 'Cards'})}>
@@ -222,7 +180,7 @@ export default function ProfileSection(props) {
                         <Right style={styles.headerRight}/>
                     </ListItem>
                 </List>
-            )}
+            </ScrollView>
         </View>
     );
 }
@@ -233,9 +191,11 @@ const styles = StyleSheet.create({
         backgroundColor: '#fff'
     },
     userInfoSection: {
-        paddingVertical: 2,
+        paddingTop: 1,
         paddingHorizontal: 9,
         flexDirection: 'column',
+        backgroundColor: "transparent",
+        maxHeight: 100
     },
     listItem: {
         borderColor: 'transparent',
@@ -262,7 +222,7 @@ const styles = StyleSheet.create({
         marginTop: '15%',
     },
     drawerSection: {
-        marginTop: -15,
+        marginTop: 0,
     },
     logo: {
         width: 80,

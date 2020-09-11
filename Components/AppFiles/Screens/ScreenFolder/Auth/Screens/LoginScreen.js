@@ -15,7 +15,6 @@ import {
     Container,
     Body,
     Thumbnail,
-    Toast,
 } from 'native-base';
 import customStyle from '../../../../../../assets/Theme';
 import {t} from '../../../../Lang';

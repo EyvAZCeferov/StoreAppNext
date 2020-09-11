@@ -18,6 +18,7 @@ import BarCodeReader from "../ScreenFolder/Bread/Screens/BarcodeReader";
 import BarCodes from "../ScreenFolder/Bread/Screens/BarCodes";
 import Notifications from "../ScreenFolder/Bread/Screens/Notifications";
 import OneCampaign from "../ScreenFolder/Bread/Screens/OneCampaign";
+import OneService from "../ScreenFolder/Bread/Screens/OneService";
 import OneCheck from "../ScreenFolder/Bread/Screens/OneCheck";
 import PayPre from "../ScreenFolder/Bread/Screens/PayPre";
 import PayThanks from "../ScreenFolder/Bread/Screens/PayThanks";
@@ -28,8 +29,7 @@ import {StatusBar} from "expo-status-bar";
 //ScreenContainer
 const ScreenContainer = ({children}) => (
     <View style={styles.container}>
-        <StatusBar backgroundColor="#fff" style="dark" networkActivityIndicatorVisible={true} animated={true}
-                   translucent={true}/>
+        <StatusBar style="dark" backgroundColor="#fff"/>
         {children}
     </View>
 );
@@ -136,6 +136,12 @@ export const Notify = (props) => (
 export const Campaign = (props) => (
     <ScreenContainer>
         <OneCampaign {...props} />
+    </ScreenContainer>
+);
+
+export const Service = (props) => (
+    <ScreenContainer>
+        <OneService {...props} />
     </ScreenContainer>
 );
 

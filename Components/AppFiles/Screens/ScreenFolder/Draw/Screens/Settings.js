@@ -67,11 +67,11 @@ export default class Settings extends React.Component {
                     isInteraction={true}
                     successImageSrc={succesImage}
                 />
-                <View style={{marginTop: -22}}>
+                <View style={{marginTop: '10%'}}>
                     <ScreensStandart {...this.props} name={t('setting')}/>
                 </View>
                 <ScrollView>
-                    <View style={[styles.content, styles.ptop]}>
+                    <View style={styles.content}>
                         <List style={styles.lists}>
                             <ListItem style={styles.listitemDivider} itemDivider>
                                 <Text style={styles.listitemDividerText}>{t('general')}</Text>

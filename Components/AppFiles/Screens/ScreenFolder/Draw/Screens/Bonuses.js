@@ -32,6 +32,8 @@ var width = Dimensions.get('window').width;
 var height = Dimensions.get('window').height;
 import {t} from '../../../../Lang';
 import ShimmerPlaceholder from "react-native-shimmer-placeholder";
+import {StatusBar} from "expo-status-bar";
+
 const succesImage = require('../../../../../../assets/images/Alert/tick.png');
 
 export default class Bonuses extends React.Component {
@@ -66,7 +68,6 @@ export default class Bonuses extends React.Component {
                         refreshing: false,
                         cardCount: data.numChildren(),
                     });
-
                     this.listComponent();
                 });
         } else {
@@ -203,7 +204,6 @@ export default class Bonuses extends React.Component {
         )
     }
 
-
     async handleRefresh() {
         this.setState(
             {
@@ -259,10 +259,10 @@ export default class Bonuses extends React.Component {
                     () => {
                         this.setState({active: false, cardCode: null, refreshing: true});
                         this.handleRefresh();
-                        alert(t('added'));
+                        this.dropDownAlertRef.alertWithType('success', t('added'));
                     },
                     (err) => {
-                        alert(err.message);
+                        this.dropDownAlertRef.alertWithType('success', err.message);
                         this.handleRefresh();
                     }
                 );
@@ -294,96 +294,100 @@ export default class Bonuses extends React.Component {
 
     render() {
         return (
-            <View>
+            <View style={styles.f1}>
+                <StatusBar backgroundColor="#fff" style="dark"/>
                 <ScreensStandart {...this.props} name={t('mybonuses')}/>
-                <View>
-                    <View style={styles.f1}>
-                        {this.renderRefreshLists()}
-                        {this.state.cardCount == 0 ||
-                        this.state.bonuses == null ? (
-                            <List style={styles.w100}>
-                                <Text style={styles.nullObject}>{t('noResult')}</Text>
-                            </List>
-                        ) : (
-                            this.listComponent()
-                        )}
-                        <View style={{flex: 1}}>
-                            <Fab
-                                active={this.state.active}
-                                direction="up"
-                                style={{backgroundColor: '#7c9d32'}}
-                                position="bottomRight"
-                                containerStyle={{marginBottom: 50, marginRight: 10}}
-                                onPress={() => this.setState({active: !this.state.active})}>
-                                <AntDesign name="plus" size={24} color="#fff"/>
-                            </Fab>
-                        </View>
+                {this.renderRefreshLists()}
+                {this.state.cardCount == 0 ||
+                this.state.bonuses == null ? (
+                    <List style={styles.w100}>
+                        <Text style={styles.nullObject}>{t('noResult')}</Text>
+                    </List>
+                ) : (
+                    this.listComponent()
+                )}
+                <View style={{flex: 1}}>
+                    <Fab
+                        active={this.state.active}
+                        direction="up"
+                        style={{backgroundColor: '#7c9d32'}}
+                        position="bottomRight"
+                        containerStyle={{marginBottom: 50, marginRight: 10}}
+                        onPress={() => this.setState({active: !this.state.active})}>
+                        <AntDesign name="plus" size={24} color="#fff"/>
+                    </Fab>
+                </View>
 
-                        <View>
-                            <View
-                                style={{
-                                    flex: 1,
-                                    justifyContent: 'center',
-                                    alignItems: 'center',
-                                    alignContent: 'center',
-                                    marginTop: 22,
-                                    width: width,
-                                    height: height,
-                                }}>
-                                <Modal
-                                    animationType="fade"
-                                    transparent={true}
-                                    visible={this.state.active}
-                                    onRequestClose={() => {
-                                        Alert.alert('Modal has been closed.');
-                                    }}>
-                                    <Card style={{marginTop: 30}}>
-                                        <CardItem header>
-                                            <Body>
-                                                <Text>{t('addNewCard')}</Text>
-                                            </Body>
-                                            <Right>
-                                                <Button
-                                                    transparent
-                                                    onPress={() => this.setState({active: false})}>
-                                                    <AntDesign name="close" size={24} color="#D50000"/>
-                                                </Button>
-                                            </Right>
-                                        </CardItem>
-                                        <CardItem>
-                                            <Form>
-                                                <Item style={styles.itemStyle}>
-                                                    <Input
-                                                        style={styles.inputstyle}
-                                                        keyboardType="number-pad"
-                                                        keyboardShouldPersistTaps="handled"
-                                                        placeholder={t('cardCode')}
-                                                        onChangeText={(text) =>
-                                                            this.setState({cardCode: text})
-                                                        }
-                                                    />
-                                                </Item>
-                                            </Form>
-                                        </CardItem>
-                                        <CardItem footer>
-                                            <View>
-                                                <Item style={styles.itemStyle}>
-                                                    <Button
-                                                        rounded
-                                                        style={styles.buttonStyle}
-                                                        onPress={this.addCard}
-                                                        success>
-                                                        <Text style={styles.buttonText}>
-                                                            {t('addCard')}
-                                                        </Text>
-                                                    </Button>
-                                                </Item>
-                                            </View>
-                                        </CardItem>
-                                    </Card>
-                                </Modal>
-                            </View>
-                        </View>
+                <View>
+                    <View
+                        style={{
+                            flex: 1,
+                            justifyContent: 'center',
+                            alignItems: 'center',
+                            alignContent: 'center',
+                            marginTop: 22,
+                            width: width,
+                            height: height,
+                        }}>
+                        <Modal
+                            animationType="fade"
+                            transparent={false}
+                            visible={this.state.active}
+                            onRequestClose={() => {
+                                Alert.alert('Modal has been closed.');
+                            }}>
+                            <Card style={{
+                                width: width,
+                                height: height,
+                                backgroundColor: "#fff",
+                                justifyContent: "center",
+                                alignContent: "center",
+                                alignItems: "center"
+                            }}>
+                                <CardItem header>
+                                    <Body>
+                                        <Text>{t('addNewCard')}</Text>
+                                    </Body>
+                                    <Right>
+                                        <Button
+                                            transparent
+                                            onPress={() => this.setState({active: false})}>
+                                            <AntDesign name="close" size={24} color="#D50000"/>
+                                        </Button>
+                                    </Right>
+                                </CardItem>
+                                <CardItem>
+                                    <Form>
+                                        <Item style={styles.itemStyle}>
+                                            <Input
+                                                style={styles.inputstyle}
+                                                keyboardType="number-pad"
+                                                keyboardShouldPersistTaps="handled"
+                                                placeholder={t('cardCode')}
+                                                onChangeText={(text) =>
+                                                    this.setState({cardCode: text})
+                                                }
+                                            />
+                                        </Item>
+                                    </Form>
+                                </CardItem>
+                                <CardItem footer>
+                                    <View>
+                                        <Item style={styles.itemStyle}>
+                                            <Button
+                                                rounded
+                                                style={styles.buttonStyle}
+                                                onPress={this.addCard}
+                                                success>
+                                                <Text style={styles.buttonText}>
+                                                    {t('addCard')}
+                                                </Text>
+                                            </Button>
+                                        </Item>
+                                    </View>
+                                </CardItem>
+                            </Card>
+                        </Modal>
                     </View>
                 </View>
             </View>
@@ -445,7 +449,7 @@ const styles = StyleSheet.create({
         },
         shadowOpacity: 0.5,
         shadowRadius: 12.35,
-        elevation: 19,
+        elevation: 10,
     },
     buttonStyle: {
         paddingHorizontal: 40,
