@@ -25,6 +25,7 @@ import PayThanks from "../ScreenFolder/Bread/Screens/PayThanks";
 import TermOfUses from "../ScreenFolder/Bread/Screens/TermOfUses";
 import ProfileSectionArena from "../ScreenFolder/Draw/Component/ProfileSection";
 import {StatusBar} from "expo-status-bar";
+import ProgramLock from "../ScreenFolder/Auth/Screens/LocalAuth/ProgramLock";
 //Keyboard Aware ScrollView
 //ScreenContainer
 const ScreenContainer = ({children}) => (
@@ -56,6 +57,12 @@ export const Register = (props) => (
 export const ForgotPass = (props) => (
     <ScreenContainer>
         <ForgotPassword {...props} />
+    </ScreenContainer>
+);
+
+export const ProgramLocker = (props) => (
+    <ScreenContainer>
+        <ProgramLock {...props} />
     </ScreenContainer>
 );
 
@@ -174,6 +181,7 @@ export const ProfileSection = (props) => (
         <ProfileSectionArena {...props} />
     </ScreenContainer>
 );
+
 
 //Style
 const styles = StyleSheet.create({

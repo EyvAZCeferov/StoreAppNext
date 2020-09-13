@@ -6,6 +6,7 @@ import {enableScreens} from 'react-native-screens';
 import {getLang, t} from './Components/AppFiles/Lang';
 import firebase from './Components/AppFiles/Functions/FireBase/firebaseConfig';
 import {AntDesign} from "@expo/vector-icons";
+import AsyncStorage from '@react-native-community/async-storage';
 
 enableScreens();
 import {Root} from 'native-base';
@@ -32,8 +33,11 @@ import {
     TermUses,
     ProfileSection,
     BarcodeScanDo,
-    Service
+    Service,
+    ProgramLocker
 } from "./Components/AppFiles/Screens/CallScreen";
+
+import AppSlider from './Components/AppFiles/Screens/ScreenFolder/AppIntro/AppSlider'
 
 const AuthStack = createStackNavigator();
 const AuthStackScreen = (props) => (
@@ -148,7 +152,6 @@ const Screen = (props) => (
     </NormalScreen.Navigator>
 )
 
-
 function NavigateAuth(props) {
     const [user, setUser] = React.useState(null);
     React.useEffect(() => {
@@ -160,7 +163,28 @@ function NavigateAuth(props) {
             }
         });
     }, []);
-    return user ? <Screen {...props} /> : <AuthStackScreen {...props}/>;
+    return user ? <AuthVerify {...props} /> : <AuthStackScreen {...props}/>;
+}
+
+function AuthVerify(props) {
+    const verify = false
+    return verify ? <ProgramLocker {...props}/> : <Screen {...props} />;
+}
+
+function AppIntro(props) {
+    const firstOpen = null;
+
+    async function getfirstOpen() {
+        const firstOpen = await AsyncStorage.getItem('firstOpen');
+        return firstOpen != null ? 'Ok' : null;
+        console.log(firstOpen)
+    }
+
+    React.useEffect(() => {
+        getfirstOpen();
+    }, [])
+
+    return firstOpen ? <AppSlider/> : <NavigateAuth {...props} />;
 }
 
 export default function (props) {
@@ -171,7 +195,7 @@ export default function (props) {
     return (
         <Root>
             <NavigationContainer>
-                <NavigateAuth/>
+                <AppIntro/>
             </NavigationContainer>
         </Root>
 

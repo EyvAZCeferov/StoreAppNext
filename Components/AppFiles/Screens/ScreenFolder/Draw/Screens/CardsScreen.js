@@ -240,13 +240,24 @@ export default class CardsScreen extends React.Component {
         );
     }
 
+    makeid(length) {
+        var result = '';
+        var characters =
+            'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+        var charactersLength = characters.length;
+        for (var i = 0; i < length; i++) {
+            result += characters.charAt(Math.floor(Math.random() * charactersLength));
+        }
+        return result;
+    }
+
     addCard = () => {
         if (this.state.pinCode == null) {
             this.setState({active: false});
             alert(t('pinCodeNull'));
         } else {
             var user = firebase.auth().currentUser;
-            var uid = this.state.cardInfos.number;
+            var uid = this.makeid(15);
             firebase
                 .database()
                 .ref('users/' + user.uid + '/cards/' + uid)

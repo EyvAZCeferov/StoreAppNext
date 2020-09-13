@@ -16,6 +16,7 @@ import {Entypo, AntDesign} from '@expo/vector-icons';
 import {Tooltip} from 'react-native-elements';
 import {t} from "../../../../Lang";
 import DropdownAlert from "react-native-dropdownalert";
+
 const succesImage = require('../../../../../../assets/images/Alert/tick.png');
 
 const {width, height} = Dimensions.get("window");
@@ -34,14 +35,14 @@ export default class BarCodeReader extends React.Component {
         firebase.database().goOnline();
         var user = firebase.auth().currentUser;
         if (user) {
-            var datas = [];
+            var datas = []
             firebase
                 .database()
                 .ref('users/' + user.uid + '/cards')
                 .on('value', (data) => {
-                    data.forEach((e) => {
-                        datas.push(e.val());
-                    });
+                    data.forEach(element => {
+                        datas.push(element.val())
+                    })
                     this.setState({
                         allCards: datas
                     });
@@ -81,11 +82,11 @@ export default class BarCodeReader extends React.Component {
         }
         if (this.state.allCards != null) {
             return this.state.allCards.map(element => {
-                var label=this.hideNumb(element.cardInfo.number);
+                var label = this.hideNumb(element.cardInfo.number);
                 return (
                     <Picker.Item
                         label={label}
-                        value={element.cardInfo.number}
+                        value={element.cardId}
                         color="#7c9d32"/>
                 )
             })

@@ -8,7 +8,6 @@ import {
 } from 'react-native';
 import {
     Thumbnail,
-    Header,
     Content,
     Form,
     Input,

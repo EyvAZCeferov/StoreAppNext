@@ -54,11 +54,11 @@ export default function SliderCards({props}) {
                 }}>
                 <AnimatedFlatlist
                     vertical={true}
-                    scrollEventThrottle={18}
+                    scrollEventThrottle={19}
                     windowSize={width}
                     bounces={false}
                     showsVerticalScrollIndicator={false}
-                    loop={true}
+                    loop={false}
                     refreshing={refreshing}
                     onRefresh={onHandleRefresh}
                     backgroundColor="#fff"

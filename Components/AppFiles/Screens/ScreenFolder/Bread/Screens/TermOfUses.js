@@ -75,7 +75,7 @@ export default class TermOfUses extends React.Component {
                     </View>
                     <View/>
                 </Header>
-                <ScrollView>
+                <ScrollView style={{marginBottom: 50}}>
                     <View style={styles.justify}>
                         <Thumbnail
                             source={{uri: this.state.datas.icon}}
@@ -86,7 +86,9 @@ export default class TermOfUses extends React.Component {
                             fontWeight: "bold",
                             color: '#010101',
                             width: width,
-                            height: 20
+                            height: 20,
+                            textAlign: "center",
+                            marginBottom: 10
                         }}>
                             Pay And Way
                         </Text>

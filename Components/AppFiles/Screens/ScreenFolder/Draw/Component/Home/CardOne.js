@@ -135,6 +135,7 @@ const styles = StyleSheet.create({
     container: {
         width: width,
         height: 201,
+        backgroundColor: "red"
     },
     slide: {
         width: width,

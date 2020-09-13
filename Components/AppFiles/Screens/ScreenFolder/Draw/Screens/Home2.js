@@ -17,7 +17,7 @@ import RecentOperations from "../Component/Home/RecentOperations";
 import SliderCards from '../Component/Home/SliderCards';
 import {StatusBar} from "expo-status-bar";
 
-const icon = require('../../../../../../assets/images/logo1.png');
+const icon = require('../../../../../../assets/icon.png');
 
 export default class Home2 extends React.Component {
     constructor(props) {
@@ -48,6 +48,7 @@ export default class Home2 extends React.Component {
     render() {
         return (
             <Container style={{backgroundColor: "#fff"}}>
+                <StatusBar style="dark" backgroundColor="#fff"/>
                 <Header style={styles.header}>
                     <Left style={[styles.height, styles.iconArena]}>
                         <Thumbnail source={icon} style={styles.icon}/>

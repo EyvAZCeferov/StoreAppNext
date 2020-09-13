@@ -10,6 +10,7 @@ import {
 } from '@expo/vector-icons';
 import {Col, Grid} from 'react-native-easy-grid';
 import {t} from '../../../../Lang';
+const icon = require('../../../../../../assets/icon.png');
 
 import firebase from '../../../../Functions/FireBase/firebaseConfig';
 import ShimmerPlaceholder from 'react-native-shimmer-placeholder'
@@ -79,10 +80,7 @@ export default function ProfileSection(props) {
                             <Col>
                                 <Thumbnail
                                     style={styles.logo}
-                                    source={{
-                                        uri:
-                                            'https://firebasestorage.googleapis.com/v0/b/storeapp1-ea810.appspot.com/o/WP%2F11111111111111111111111111111111111111111.png?alt=media&token=5f0aa05e-6eaf-4945-a5f4-c9b0f917892f',
-                                    }}
+                                    source={icon}
                                 />
                             </Col>
                         ) : (
