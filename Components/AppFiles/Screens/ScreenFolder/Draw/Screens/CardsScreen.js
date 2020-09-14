@@ -6,7 +6,10 @@ import {
     View,
     FlatList,
     Modal,
-    Alert, ScrollView, StatusBar,
+    TouchableOpacity,
+    Alert,
+    ScrollView,
+    StatusBar,
 } from 'react-native';
 import {
     Button,
@@ -22,14 +25,13 @@ import {
     Form,
     Item,
     Input,
-    Toast,
 } from 'native-base';
 
 const succesImage = require('../../../../../../assets/images/Alert/tick.png');
 
 import {LiteCreditCardInput} from 'react-native-credit-card-input';
 import ScreensStandart from '../Component/ScreensStandart';
-import {AntDesign, EvilIcons} from '@expo/vector-icons';
+import {AntDesign, EvilIcons, MaterialCommunityIcons} from '@expo/vector-icons';
 import firebase from '../../../../Functions/FireBase/firebaseConfig';
 
 const {width, height} = Dimensions.get('window');
@@ -254,8 +256,9 @@ export default class CardsScreen extends React.Component {
     addCard = () => {
         if (this.state.pinCode == null) {
             this.setState({active: false});
-            alert(t('pinCodeNull'));
+            this.dropDownAlertRef.alertWithType('info', t('pinCodeNull'));
         } else {
+            this.setState({active: false});
             var user = firebase.auth().currentUser;
             var uid = this.makeid(15);
             firebase
@@ -373,9 +376,21 @@ export default class CardsScreen extends React.Component {
                                 width: width,
                                 height: height,
                             }}>
+                            <DropdownAlert
+                                ref={ref => this.dropDownAlertRef = ref}
+                                useNativeDriver={true}
+                                closeInterval={1000}
+                                zIndex={5000}
+                                updateStatusBar={true}
+                                tapToCloseEnabled={true}
+                                showCancel={true}
+                                elevation={10}
+                                isInteraction={true}
+                                successImageSrc={succesImage}
+                            />
                             <Modal
                                 style={{width: width, height: height, backgroundColor: "#fff"}}
-                                animationType="fade"
+                                animationType="slide"
                                 transparent={false}
                                 visible={this.state.active}
                                 onRequestClose={() => {
@@ -389,16 +404,16 @@ export default class CardsScreen extends React.Component {
                                     alignContent: "center",
                                     alignItems: "center"
                                 }}>
-                                    <CardItem header>
+                                    <CardItem header style={styles.cardItemheader}>
                                         <Body>
-                                            <Text>{t('addNewCard')}</Text>
+                                            <Text style={styles.modalTitle}>{t('addNewCard')}</Text>
                                         </Body>
                                         <Right>
-                                            <Button
-                                                transparent
+                                            <TouchableOpacity
+                                                style={styles.cardItemRightButton}
                                                 onPress={() => this.setState({active: false})}>
-                                                <AntDesign name="close" size={24} color="#D50000"/>
-                                            </Button>
+                                                <MaterialCommunityIcons name="window-close" size={24} color="#D50000"/>
+                                            </TouchableOpacity>
                                         </Right>
                                     </CardItem>
                                     <CardItem>
@@ -474,14 +489,28 @@ const styles = StyleSheet.create({
     right: {
         marginLeft: -40,
     },
+    cardItemheader: {
+        backgroundColor: "#fff",
+        width: width - 30
+    },
+    modalTitle: {
+        fontSize: 23,
+        color: "#010101",
+        fontWeight: "bold",
+    },
+    cardItemRightButton: {
+        backgroundColor: "transparent",
+        paddingHorizontal: 10,
+        paddingVertical: 5,
+    },
     itemStyle: {
-        width: width - 80,
+        width: width - 50,
         justifyContent: 'center',
         alignContent: 'center',
         alignItems: 'center',
         margin: 0,
         padding: 0,
-        marginVertical: 10,
+        marginVertical: 2,
         borderColor: 'transparent',
     },
     inputstyle: {
@@ -503,19 +532,30 @@ const styles = StyleSheet.create({
         },
         shadowOpacity: 0.5,
         shadowRadius: 12.35,
-        elevation: 19,
-    },
-    cardInput: {
-        width: width - 70,
+        elevation: 4,
     },
     buttonStyle: {
-        paddingHorizontal: 40,
-        marginTop: 15,
+        width: width - 75,
+        marginTop: 0,
+        textAlign: "center",
+        justifyContent: "center",
+        alignItems: "center",
+        alignContent: "center",
+        borderRadius: 8
     },
     buttonText: {
         fontWeight: 'bold',
         fontSize: 17,
         color: '#fff',
+        textAlign: "center",
+        justifyContent: "center",
+        alignItems: "center",
+        alignContent: "center",
+        paddingVertical: 5,
+        paddingHorizontal: 0
+    },
+    cardInput: {
+        width: width - 50,
     },
     nullObject: {
         color: '#D50000',

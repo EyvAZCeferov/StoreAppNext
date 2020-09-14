@@ -10,6 +10,7 @@ import {
 } from '@expo/vector-icons';
 import {Col, Grid} from 'react-native-easy-grid';
 import {t} from '../../../../Lang';
+
 const icon = require('../../../../../../assets/icon.png');
 
 import firebase from '../../../../Functions/FireBase/firebaseConfig';
@@ -21,6 +22,9 @@ export default function ProfileSection(props) {
     const [profPic, setprofPic] = useState(null);
     useEffect(() => {
         getInfo();
+        setInterval(() => {
+            getInfo()
+        }, 1000)
     }, []);
 
     function getInfo() {

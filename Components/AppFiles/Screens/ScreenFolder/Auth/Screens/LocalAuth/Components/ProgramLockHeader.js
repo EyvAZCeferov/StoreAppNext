@@ -76,7 +76,7 @@ export default class ProgramLockHeader extends React.Component {
 const styles = StyleSheet.create({
     container: {
         width: width,
-        height: 160,
+        height: 140,
         justifyContent: 'center',
         alignContent: 'center',
         alignItems: 'center',
@@ -86,7 +86,7 @@ const styles = StyleSheet.create({
     },
     header: {
         width: width,
-        height: 150,
+        height: 130,
         backgroundColor: 'transparent',
         borderColor: "transparent",
         justifyContent: 'center',

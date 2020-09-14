@@ -6,7 +6,9 @@ import {
     View,
     FlatList,
     Modal,
-    Alert, ScrollView,
+    Alert,
+    ScrollView,
+    TouchableOpacity
 } from 'react-native';
 import {
     Button,
@@ -25,7 +27,7 @@ import {
 } from 'native-base';
 
 import ScreensStandart from '../Component/ScreensStandart';
-import {AntDesign, EvilIcons} from '@expo/vector-icons';
+import {AntDesign, EvilIcons, MaterialCommunityIcons} from '@expo/vector-icons';
 import firebase from '../../../../Functions/FireBase/firebaseConfig';
 
 var width = Dimensions.get('window').width;
@@ -33,6 +35,7 @@ var height = Dimensions.get('window').height;
 import {t} from '../../../../Lang';
 import ShimmerPlaceholder from "react-native-shimmer-placeholder";
 import {StatusBar} from "expo-status-bar";
+import DropdownAlert from "react-native-dropdownalert";
 
 const succesImage = require('../../../../../../assets/images/Alert/tick.png');
 
@@ -243,8 +246,9 @@ export default class Bonuses extends React.Component {
 
     addCard = () => {
         if (this.state.cardCode == null) {
-            Alert.alert('Kart kodu boşdur');
+            this.dropDownAlertRef.alertWithType('info', t('pinCodeNull'));
         } else {
+            this.setState({active: false})
             var user = firebase.auth().currentUser;
             var uid = this.makeid(15);
             firebase
@@ -262,7 +266,7 @@ export default class Bonuses extends React.Component {
                         this.dropDownAlertRef.alertWithType('success', t('added'));
                     },
                     (err) => {
-                        this.dropDownAlertRef.alertWithType('success', err.message);
+                        this.dropDownAlertRef.alertWithType('error', err.message);
                         this.handleRefresh();
                     }
                 );
@@ -297,6 +301,18 @@ export default class Bonuses extends React.Component {
             <View style={styles.f1}>
                 <StatusBar backgroundColor="#fff" style="dark"/>
                 <ScreensStandart {...this.props} name={t('mybonuses')}/>
+                <DropdownAlert
+                    ref={ref => this.dropDownAlertRef = ref}
+                    useNativeDriver={true}
+                    closeInterval={1000}
+                    zIndex={5000}
+                    updateStatusBar={true}
+                    tapToCloseEnabled={true}
+                    showCancel={true}
+                    elevation={10}
+                    isInteraction={true}
+                    successImageSrc={succesImage}
+                />
                 {this.renderRefreshLists()}
                 {this.state.cardCount == 0 ||
                 this.state.bonuses == null ? (
@@ -329,8 +345,20 @@ export default class Bonuses extends React.Component {
                             width: width,
                             height: height,
                         }}>
+                        <DropdownAlert
+                            ref={ref => this.dropDownAlertRef = ref}
+                            useNativeDriver={true}
+                            closeInterval={1000}
+                            zIndex={5000}
+                            updateStatusBar={true}
+                            tapToCloseEnabled={true}
+                            showCancel={true}
+                            elevation={10}
+                            isInteraction={true}
+                            successImageSrc={succesImage}
+                        />
                         <Modal
-                            animationType="fade"
+                            animationType="slide"
                             transparent={false}
                             visible={this.state.active}
                             onRequestClose={() => {
@@ -344,16 +372,16 @@ export default class Bonuses extends React.Component {
                                 alignContent: "center",
                                 alignItems: "center"
                             }}>
-                                <CardItem header>
+                                <CardItem header style={styles.cardItemheader}>
                                     <Body>
-                                        <Text>{t('addNewCard')}</Text>
+                                        <Text style={styles.modalTitle}>{t('addNewCard')}</Text>
                                     </Body>
                                     <Right>
-                                        <Button
-                                            transparent
+                                        <TouchableOpacity
+                                            style={styles.cardItemRightButton}
                                             onPress={() => this.setState({active: false})}>
-                                            <AntDesign name="close" size={24} color="#D50000"/>
-                                        </Button>
+                                            <MaterialCommunityIcons name="window-close" size={24} color="#D50000"/>
+                                        </TouchableOpacity>
                                     </Right>
                                 </CardItem>
                                 <CardItem>
@@ -375,7 +403,6 @@ export default class Bonuses extends React.Component {
                                     <View>
                                         <Item style={styles.itemStyle}>
                                             <Button
-                                                rounded
                                                 style={styles.buttonStyle}
                                                 onPress={this.addCard}
                                                 success>
@@ -420,14 +447,28 @@ const styles = StyleSheet.create({
     right: {
         marginLeft: -40,
     },
+    cardItemheader: {
+        backgroundColor: "#fff",
+        width: width - 30
+    },
+    modalTitle: {
+        fontSize: 23,
+        color: "#010101",
+        fontWeight: "bold",
+    },
+    cardItemRightButton: {
+        backgroundColor: "transparent",
+        paddingHorizontal: 10,
+        paddingVertical: 5,
+    },
     itemStyle: {
-        width: width - 80,
+        width: width - 50,
         justifyContent: 'center',
         alignContent: 'center',
         alignItems: 'center',
         margin: 0,
         padding: 0,
-        marginVertical: 10,
+        marginVertical: 2,
         borderColor: 'transparent',
     },
     inputstyle: {
@@ -449,16 +490,27 @@ const styles = StyleSheet.create({
         },
         shadowOpacity: 0.5,
         shadowRadius: 12.35,
-        elevation: 10,
+        elevation: 4,
     },
     buttonStyle: {
-        paddingHorizontal: 40,
-        marginTop: 15,
+        width: width - 75,
+        marginTop: 0,
+        textAlign: "center",
+        justifyContent: "center",
+        alignItems: "center",
+        alignContent: "center",
+        borderRadius: 8
     },
     buttonText: {
         fontWeight: 'bold',
         fontSize: 17,
         color: '#fff',
+        textAlign: "center",
+        justifyContent: "center",
+        alignItems: "center",
+        alignContent: "center",
+        paddingVertical: 5,
+        paddingHorizontal: 0
     },
     nullObject: {
         color: '#D50000',

@@ -152,6 +152,17 @@ const Screen = (props) => (
     </NormalScreen.Navigator>
 )
 
+const ProgramLockStack = createStackNavigator();
+
+const ProgramLockScreens = (props) => (
+    <ProgramLockStack.Navigator headerMode="none" initialRouteName="ProgramLock">
+        <ProgramLockStack.Screen {...props} name="ProgramLock"
+                                 component={ProgramLocker}/>
+        <ProgramLockStack.Screen {...props} name="Fp" component={ForgotPass}/>
+    </ProgramLockStack.Navigator>
+)
+
+
 function NavigateAuth(props) {
     const [user, setUser] = React.useState(null);
     React.useEffect(() => {
@@ -167,8 +178,10 @@ function NavigateAuth(props) {
 }
 
 function AuthVerify(props) {
-    const verify = false
-    return verify ? <ProgramLocker {...props}/> : <Screen {...props} />;
+    const [verify, setVerify] = React.useState(true)
+
+
+    return verify ? <ProgramLockScreens {...props}/> : <Screen {...props} />;
 }
 
 function AppIntro(props) {
@@ -177,7 +190,6 @@ function AppIntro(props) {
     async function getfirstOpen() {
         const firstOpen = await AsyncStorage.getItem('firstOpen');
         return firstOpen != null ? 'Ok' : null;
-        console.log(firstOpen)
     }
 
     React.useEffect(() => {

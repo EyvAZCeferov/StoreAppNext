@@ -1,11 +1,12 @@
 import React, {useState} from 'react';
-import {View, StyleSheet, Dimensions, Text, TouchableOpacity} from 'react-native';
+import {View, StyleSheet, Dimensions, Text, TouchableOpacity,BackHandler} from 'react-native';
 import {Col, Grid, Row} from 'react-native-easy-grid';
 
 var width = Dimensions.get('window').width;
 import {MaterialCommunityIcons} from '@expo/vector-icons';
 
 import customStyle from '../../../../../../../../assets/Theme';
+import {t} from "../../../../../../Lang";
 
 export default function NumberButton(props) {
     const [val, setVal] = useState(null);
@@ -78,9 +79,9 @@ export default function NumberButton(props) {
                                         style={styles.btn}
                                         rounded
                                         light
-                                        onPress={() => alert('Hi')}>
+                                        onPress={() => BackHandler.exitApp()}>
                                         <Text style={[styles.btnText, styles.cancText]}>
-                                            Cancel
+                                            {t('cancel')}
                                         </Text>
                                     </TouchableOpacity>
                                 </Col>
