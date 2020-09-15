@@ -184,18 +184,27 @@ function AuthVerify(props) {
 }
 
 function AppIntro(props) {
-    const firstOpen = null;
+    var firstOpen = true;
+    
 
-    async function getfirstOpen() {
-        const firstOpen = await AsyncStorage.getItem('firstOpen');
-        return firstOpen != null ? 'Ok' : null;
+    function getfirstOpen() {
+        AsyncStorage.getItem('firstOpen').then((a) => {
+            firstOpen=a
+         });
+         console.log(firstOpen)     
+         return firstOpen != null ? false : true;
+        
     }
 
     React.useEffect(() => {
         getfirstOpen();
     }, [])
 
-    return firstOpen ? <AppSlider/> : <NavigateAuth {...props} />;
+    function changeStat(){
+        AsyncStorage.setItem('firstOpen','Ok');
+    }
+
+    return firstOpen ? <AppSlider callfunc={()=>changeStat()} {...props} /> : <NavigateAuth {...props} />;
 }
 
 export default function (props) {

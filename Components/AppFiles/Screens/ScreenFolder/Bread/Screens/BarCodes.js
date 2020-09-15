@@ -14,8 +14,8 @@ export default function BarCodes(props) {
     const [flashMode, setFlashMode] = useState("off");
     const [barcode, setbarcode] = useState("off");
     const [modalState, setModalState] = useState(false);
-    const params=props.route.params;
-    const checkid=params.uid;
+    const params = props.route.params;
+    const checkid = params.uid;
     console.log(checkid);
     useEffect(() => {
         (async () => {
@@ -55,38 +55,36 @@ export default function BarCodes(props) {
 
     function barcodeWrited() {
         Keyboard.dismiss();
-        if(barcode !=null){
-            barcodeScanned({data:barcode});
+        if (barcode != null) {
+            barcodeScanned({data: barcode});
             setModalState(false);
-        }else{
-        alert('Barcode Null');
+        } else {
+            alert('Barcode Null');
         }
     }
 
-      
 
     function barcodeScanned(item) {
         console.log(item);
-         firebase
-                .database()
-                .ref('allChecks/' + item.data)
-                .on('value', (data) => {
-                    var element=data.toJSON();
-                    var user = firebase.auth().currentUser;
-                    if(element !=null){
-                    firebase.
-                        database()
-                        .ref('users/'+user.uid+'/checks/'+checkid+'/'+element.barcode).set({
+        firebase
+            .database()
+            .ref('allChecks/' + item.data)
+            .on('value', (data) => {
+                var element = data.toJSON();
+                var user = firebase.auth().currentUser;
+                if (element != null) {
+                    firebase.database()
+                        .ref('users/' + user.uid + '/checks/' + checkid + '/' + element.barcode).set({
                         barcode: element.barcode,
                         name: element.name,
-                        price:element.price,
-                        checkId:checkid,
-                        qty:1
+                        price: element.price,
+                        checkId: checkid,
+                        qty: 1
                     })
-                    }else{
-                        alert('Məhsul Tapılmadı');
-                    }
-                });
+                } else {
+                    alert('Məhsul Tapılmadı');
+                }
+            });
         props.navigation.goBack()
     }
 
@@ -105,8 +103,7 @@ export default function BarCodes(props) {
                     edgeBorderWidth={5}
                     animatedLineColor="#DD2C00"
                     animatedLineHeight={2}
-                    showAnimatedLine={true}
-                    lineAnimationDuration={1400}
+                    showAnimatedLine={false}
                     animatedLineWidth={'90%'}
                 />
             </Camera>
@@ -253,13 +250,13 @@ export default function BarCodes(props) {
                                         borderWidth: 3,
                                         width: "100%",
                                         height: 80,
-                                    }} 
-                                    autoCapitalize="none"
-                                     placeholder="Type BarCode"
+                                    }}
+                                           autoCapitalize="none"
+                                           placeholder="Type BarCode"
                                            placeholderTextColor="rgba(0,0,0,.5)"
                                            keyboardType="numeric"
-onChangeText={(text)=>setbarcode(text)}
-                                           />
+                                           onChangeText={(text) => setbarcode(text)}
+                                    />
                                     <TouchableOpacity onPress={() => barcodeWrited()} style={{
                                         backgroundColor: "#7c9d32",
                                         width: width - 50,

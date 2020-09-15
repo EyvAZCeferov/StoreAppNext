@@ -10,7 +10,6 @@ export default class AppSlider extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            first: null,
             slides: [
                 {
                     title: "Pay and Win tətbiqinə xoş gəlmisiniz",
@@ -41,10 +40,8 @@ export default class AppSlider extends React.Component {
         }
     }
 
-    async _onDone() {
-        this.setState({first: 'Ok'})
-        alert('Done');
-        await AsyncStorage.setItem('firstOpen', 'Ok');
+     _onDone() {
+        this.props.callfunc()
     }
 
     _renderNextButton() {

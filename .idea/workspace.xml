@@ -19,17 +19,11 @@
     <list default="true" id="64eff0f2-a29f-4a6e-8bcc-bb9791a422d7" name="Default Changelist" comment="ProgramLock Added">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/App.js" beforeDir="false" afterPath="$PROJECT_DIR$/App.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Components/AppFiles/Lang/az.json" beforeDir="false" afterPath="$PROJECT_DIR$/Components/AppFiles/Lang/az.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Components/AppFiles/Screens/ScreenFolder/Auth/Screens/LocalAuth/Components/FooterBar.js" beforeDir="false" afterPath="$PROJECT_DIR$/Components/AppFiles/Screens/ScreenFolder/Auth/Screens/LocalAuth/Components/FooterBar.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Components/AppFiles/Screens/ScreenFolder/Auth/Screens/LocalAuth/Components/NumberButtons.js" beforeDir="false" afterPath="$PROJECT_DIR$/Components/AppFiles/Screens/ScreenFolder/Auth/Screens/LocalAuth/Components/NumberButtons.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Components/AppFiles/Screens/ScreenFolder/Auth/Screens/LocalAuth/Components/ProgramLockHeader.js" beforeDir="false" afterPath="$PROJECT_DIR$/Components/AppFiles/Screens/ScreenFolder/Auth/Screens/LocalAuth/Components/ProgramLockHeader.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Components/AppFiles/Screens/ScreenFolder/Auth/Screens/LocalAuth/ProgramLock.js" beforeDir="false" afterPath="$PROJECT_DIR$/Components/AppFiles/Screens/ScreenFolder/Auth/Screens/LocalAuth/ProgramLock.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Components/AppFiles/Screens/ScreenFolder/Draw/Component/ProfileSection.js" beforeDir="false" afterPath="$PROJECT_DIR$/Components/AppFiles/Screens/ScreenFolder/Draw/Component/ProfileSection.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Components/AppFiles/Screens/ScreenFolder/Draw/Screens/AccountSettings.js" beforeDir="false" afterPath="$PROJECT_DIR$/Components/AppFiles/Screens/ScreenFolder/Draw/Screens/AccountSettings.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Components/AppFiles/Screens/ScreenFolder/Draw/Screens/Bonuses.js" beforeDir="false" afterPath="$PROJECT_DIR$/Components/AppFiles/Screens/ScreenFolder/Draw/Screens/Bonuses.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Components/AppFiles/Screens/ScreenFolder/Draw/Screens/CardsScreen.js" beforeDir="false" afterPath="$PROJECT_DIR$/Components/AppFiles/Screens/ScreenFolder/Draw/Screens/CardsScreen.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/package.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/yarn.lock" beforeDir="false" afterPath="$PROJECT_DIR$/yarn.lock" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Components/AppFiles/Screens/ScreenFolder/AppIntro/AppSlider.js" beforeDir="false" afterPath="$PROJECT_DIR$/Components/AppFiles/Screens/ScreenFolder/AppIntro/AppSlider.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Components/AppFiles/Screens/ScreenFolder/Bread/Components/PayStart/Paying.js" beforeDir="false" afterPath="$PROJECT_DIR$/Components/AppFiles/Screens/ScreenFolder/Bread/Components/PayStart/Paying.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Components/AppFiles/Screens/ScreenFolder/Bread/Components/PayStart/RecentOperation.js" beforeDir="false" afterPath="$PROJECT_DIR$/Components/AppFiles/Screens/ScreenFolder/Bread/Components/PayStart/RecentOperation.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Components/AppFiles/Screens/ScreenFolder/Bread/Screens/BarCodes.js" beforeDir="false" afterPath="$PROJECT_DIR$/Components/AppFiles/Screens/ScreenFolder/Bread/Screens/BarCodes.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Components/AppFiles/Screens/ScreenFolder/Bread/Screens/BarcodeReader.js" beforeDir="false" afterPath="$PROJECT_DIR$/Components/AppFiles/Screens/ScreenFolder/Bread/Screens/BarcodeReader.js" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -145,6 +139,7 @@
       <workItem from="1599982007535" duration="10037000" />
       <workItem from="1600021948196" duration="7014000" />
       <workItem from="1600070099880" duration="15105000" />
+      <workItem from="1600195918773" duration="3187000" />
     </task>
     <task id="LOCAL-00001" summary="Fles">
       <created>1599058921979</created>

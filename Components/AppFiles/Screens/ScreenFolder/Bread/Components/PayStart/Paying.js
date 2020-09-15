@@ -1,8 +1,6 @@
 import React from 'react';
-import {View, Text, StyleSheet, Dimensions, ImageBackground, ScrollView, FlatList} from 'react-native';
-import {AntDesign, Feather, Ionicons, FontAwesome} from '@expo/vector-icons';
+import {View, Text, StyleSheet, Dimensions} from 'react-native';
 import firebase from "../../../../../Functions/FireBase/firebaseConfig";
-import {Tooltip} from 'react-native-elements';
 
 const {width, height} = Dimensions.get('window')
 
@@ -11,6 +9,7 @@ export default function PayCards(props) {
     const [refresh, setRefresh] = React.useState(true);
     const [selectedCard, setSelectedCard] = React.useState(props.cardNumb);
     const [cards, setCards] = React.useState(null);
+    const [checks, setChecks] = React.useState(null);
     const [priceAll, setPriceAll] = React.useState(15)
 
     function getInfo() {
@@ -40,8 +39,31 @@ export default function PayCards(props) {
         this.setState({refresh: false})
     }
 
+    function priceCollector() {
+        var user = firebase.auth().currentUser;
+        if (user) {
+            var datas = [];
+            firebase
+                .database()
+                .ref('users/' + user.uid + '/checks/' + props.checkid)
+                .on('value', (data) => {
+                    data.forEach((data) => {
+                        datas.push(data.val());
+                    });
+                    setChecks(datas);
+                });
+        } else {
+            alert('Connection Problem');
+        }
+    }
+
     function price() {
-        return '0.00'
+        priceCollector();
+        let result = 0;
+        checks.map(element => {
+            result += element.price;
+        })
+        return result;
     }
 
     function renderCardDatas() {
@@ -118,8 +140,18 @@ export default function PayCards(props) {
                         marginLeft: 5,
                         marginTop: 2,
                     }}>{price()} ₼</Text>
-                <View style={{marginTop: 40, marginLeft: 5}}>
+                <View style={{marginTop: 5, marginLeft: 5}}>
                     <Text style={{color: "#fff", fontSize: 20, fontWeight: "bold"}}>Qalan Məbləğ</Text>
+                    <Text
+                        style={{
+                            color: "rgba(255,255,255,.5)",
+                            fontSize: 17,
+                            marginLeft: 5,
+                            marginTop: 2,
+                        }}>{cards != null ? parseInt(cards.cardInfo.cvc) - parseInt(priceAll) : 0} ₼</Text>
+                </View>
+                <View style={{marginTop: 5, marginLeft: 5}}>
+                    <Text style={{color: "#fff", fontSize: 20, fontWeight: "bold"}}>Ədv %</Text>
                     <Text
                         style={{
                             color: "rgba(255,255,255,.5)",

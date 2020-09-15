@@ -12,7 +12,7 @@ export default class RecentOperation extends React.Component {
         this.state = {
             checks: null,
             refresh: true,
-            checkid:this.props.checkid,
+            checkid: this.props.checkid,
         }
     }
 
@@ -22,12 +22,12 @@ export default class RecentOperation extends React.Component {
             var datas = [];
             firebase
                 .database()
-                .ref('users/'+user.uid+'/checks/'+this.props.checkid)
+                .ref('users/' + user.uid + '/checks/' + this.props.checkid)
                 .on('value', (data) => {
                     data.forEach((data) => {
                         datas.push(data.val());
                     });
-                    this.setState({checks:datas,refresh:false});
+                    this.setState({checks: datas, refresh: false});
                 });
         } else {
             alert('Connection Problem');
@@ -79,8 +79,8 @@ export default class RecentOperation extends React.Component {
                         <Button
                             onPress={() => this.props.navigation.navigate('OtherPages', {
                                 screen: "Barcode",
-                                params:{
-                                    uid:this.state.checkid
+                                params: {
+                                    uid: this.state.checkid
                                 }
                             })}
                             style={[styles.buttonBarcode, {
@@ -102,13 +102,13 @@ export default class RecentOperation extends React.Component {
     renderFullList() {
         return (
             <List style={styles.w100}>
-                <View style={{backgroundColor:"transparent",position : 'absolute',right:30,top:0,zIndex :15}}>
-                    <View style={{justifyContent: "flex-end", marginLeft: "auto",marginRight:15,marginVertical:2}}>
+                <View style={{backgroundColor: "transparent", position: 'absolute', right: 30, top: 0, zIndex: 15}}>
+                    <View style={{justifyContent: "flex-end", marginLeft: "auto", marginRight: 15, marginVertical: 2}}>
                         <Button
                             onPress={() => this.props.navigation.navigate('OtherPages', {
                                 screen: "Barcode",
-                                 params:{
-                                    uid:this.state.checkid
+                                params: {
+                                    uid: this.state.checkid
                                 }
                             })}
                             style={[styles.buttonBarcode, {
@@ -146,18 +146,19 @@ export default class RecentOperation extends React.Component {
                 <FlatList
                     data={this.state.checks}
                     renderItem={this.renderItems.bind(this)}
-                    keyExtractor={(item,index) => index.toString()}
+                    keyExtractor={(item, index) => index.toString()}
                     refreshing={this.state.refresh}
                     onRefresh={this.handleRefresh}
-                />  
+                />
             </List>
         )
     }
 
-    renderItems({item,index}) {
-        var that=this;
+    renderItems({item, index}) {
+        var that = this;
+
         function deleteItem(index) {
-           Alert.alert(
+            Alert.alert(
                 t('wantDelete'),
                 t('neverRecover'),
                 [
@@ -180,7 +181,7 @@ export default class RecentOperation extends React.Component {
             var user = firebase.auth().currentUser;
             firebase
                 .database()
-                .ref('users/' + user.uid + '/checks/' +that.state.checkid+'/'+index )
+                .ref('users/' + user.uid + '/checks/' + that.state.checkid + '/' + index)
                 .remove()
                 .then(
                     () => {
@@ -202,7 +203,7 @@ export default class RecentOperation extends React.Component {
                     <View style={styles.listNameCount}>
                         <Text style={styles.listTitle}>{item.name}</Text>
                         <Text style={styles.listSubtitle}>
-                           &nbsp;&nbsp;&nbsp;&nbsp; {t('qty')} - {item.qty ? item.qty : 1} 
+                            &nbsp;&nbsp;&nbsp;&nbsp; {t('qty')} - {item.qty ? item.qty : 1}
                         </Text>
                     </View>
                     <Text note numberOfLines={1}>

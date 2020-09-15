@@ -28,7 +28,7 @@ export default class BarCodeReader extends React.Component {
             selectedCard: null,
             refresh: true,
             okay: false,
-            checkid:null,
+            checkid: null,
         }
     }
 
@@ -71,8 +71,8 @@ export default class BarCodeReader extends React.Component {
 
     componentDidMount() {
         this.getInfo();
-        let id=this.makeid(15);
-        this.setState({checkid:id})
+        let id = this.makeid(15);
+        this.setState({checkid: id})
     }
 
     componentWillUnmount() {
@@ -84,7 +84,7 @@ export default class BarCodeReader extends React.Component {
             okay: false,
         });
         this.renderSelectedCard();
-        this.setState({checkid:null})
+        this.setState({checkid: null})
     }
 
     renderCards() {
@@ -118,8 +118,6 @@ export default class BarCodeReader extends React.Component {
         let hiddenNumbers = numb.slice(0, 4) + first12 + numb.slice(numb.length - 4);
         //return
         return hiddenNumbers;
-        this.dropDownAlertRef.alertWithType('success', t('cardSelected'));
-
     }
 
     goBack() {
@@ -128,7 +126,7 @@ export default class BarCodeReader extends React.Component {
             selectedCard: null,
             refresh: true,
             okay: false,
-            checkid:null,
+            checkid: null,
         })
         this.props.navigation.navigate('Home');
     }
@@ -151,7 +149,7 @@ export default class BarCodeReader extends React.Component {
                         successImageSrc={succesImage}
                     />
                     <View style={styles.upperView}>
-                        <PayCards cardNumb={this.state.selectedCard}/>
+                        <PayCards  checkid={this.state.checkid} cardNumb={this.state.selectedCard}/>
                     </View>
                     <View style={styles.downerView}>
                         <RecentOperation checkid={this.state.checkid} {...this.props} />
@@ -175,7 +173,7 @@ export default class BarCodeReader extends React.Component {
                         }}>
                             <View style={{marginTop: -20, marginBottom: 30}}>
                                 <TouchableOpacity onPress={() => this.goBack()}>
-                                    <AntDesign name="back" size={30} color="black"/>
+                                    <AntDesign name="leftcircleo" size={30} color="black"/>
                                 </TouchableOpacity>
                             </View>
                             <View style={{
@@ -185,9 +183,7 @@ export default class BarCodeReader extends React.Component {
                                 flexDirection: "row"
                             }}>
                                 <Text style={{fontSize: 20, color: "#010101"}}>Alışverişə kart seçərək başlayın</Text>
-                                <Tooltip popover={<Text>Info here</Text>}>
-                                    <Entypo name="help-with-circle" size={27} color="#7c9d32"/>
-                                </Tooltip>
+                                <Text style={{fontSize: 15, color: "rgba(0,0,0,.5)"}}>Silinmə olacaq kartı seçin</Text>
                             </View>
                             <View style={{width: 300, height: 120}}>
                                 <Item picker>
