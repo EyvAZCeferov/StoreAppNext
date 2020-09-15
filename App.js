@@ -178,8 +178,7 @@ function NavigateAuth(props) {
 }
 
 function AuthVerify(props) {
-    const [verify, setVerify] = React.useState(true)
-
+    const [verify, setVerify] = React.useState(false)
 
     return verify ? <ProgramLockScreens {...props}/> : <Screen {...props} />;
 }

@@ -11,27 +11,8 @@ export default class RecentOperation extends React.Component {
         super(props);
         this.state = {
             checks: null,
-            onCheck: [
-                {
-                    id: 1,
-                    title: "Eyvaz",
-                    qty: 1,
-                    price: 50,
-                },
-                {
-                    id: 2,
-                    title: "Konul",
-                    qty: 2,
-                    price: 60,
-                },
-                {
-                    id: 3,
-                    title: "Shehla",
-                    qty: 3,
-                    price: 1.5,
-                }
-            ],
             refresh: true,
+            checkid:this.props.checkid,
         }
     }
 
@@ -41,12 +22,12 @@ export default class RecentOperation extends React.Component {
             var datas = [];
             firebase
                 .database()
-                .ref('users')
+                .ref('users/'+user.uid+'/checks/'+this.props.checkid)
                 .on('value', (data) => {
                     data.forEach((data) => {
                         datas.push(data.val());
                     });
-                    this.setState({checks: datas})
+                    this.setState({checks:datas,refresh:false});
                 });
         } else {
             alert('Connection Problem');
@@ -62,7 +43,7 @@ export default class RecentOperation extends React.Component {
     }
 
     renderStateList() {
-        if (this.state.check != null) {
+        if (this.state.checks != null) {
             return this.renderFullList();
         } else {
             return this.renderNullList();
@@ -97,7 +78,38 @@ export default class RecentOperation extends React.Component {
                     <View style={{justifyContent: "flex-end", marginLeft: "auto", marginRight: 10, marginVertical: 15}}>
                         <Button
                             onPress={() => this.props.navigation.navigate('OtherPages', {
-                                screen: "Barcode"
+                                screen: "Barcode",
+                                params:{
+                                    uid:this.state.checkid
+                                }
+                            })}
+                            style={[styles.buttonBarcode, {
+                                backgroundColor: "#fff",
+                                borderColor: "#7c9d32",
+                                borderWidth: 2,
+                                width: 50,
+                                height: 50,
+                            }]}
+                        >
+                            <AntDesign name="plus" size={24} color="#7c9d32"/>
+                        </Button>
+                    </View>
+                </View>
+            </List>
+        )
+    }
+
+    renderFullList() {
+        return (
+            <List style={styles.w100}>
+                <View style={{backgroundColor:"transparent",position : 'absolute',right:30,top:0,zIndex :15}}>
+                    <View style={{justifyContent: "flex-end", marginLeft: "auto",marginRight:15,marginVertical:2}}>
+                        <Button
+                            onPress={() => this.props.navigation.navigate('OtherPages', {
+                                screen: "Barcode",
+                                 params:{
+                                    uid:this.state.checkid
+                                }
                             })}
                             style={[styles.buttonBarcode, {
                                 backgroundColor: "#fff",
@@ -131,45 +143,21 @@ export default class RecentOperation extends React.Component {
                         </Button>
                     </View>
                 </View>
-            </List>
-        )
-    }
-
-    renderFullList() {
-        return (
-            <List style={styles.w100}>
-                <View>
-                    <View style={{flex: 1, justifyContent: "flex-end", marginLeft: "auto"}}>
-                        <Button
-                            onPress={() => this.props.navigation.navigate('OtherPages', {
-                                screen: "Barcode"
-                            })}
-                            style={[styles.buttonBarcode, {
-                                backgroundColor: "#fff",
-                                borderColor: "#7c9d32",
-                                borderWidth: 2,
-                                width: 50,
-                                height: 50,
-                            }]}
-                        >
-                            <AntDesign name="plus" size={24} color="#7c9d32"/>
-                        </Button>
-                    </View>
-                </View>
                 <FlatList
-                    data={this.state.onCheck}
-                    renderItem={this.renderElements}
-                    keyExtractor={(index) => index}
+                    data={this.state.checks}
+                    renderItem={this.renderItems.bind(this)}
+                    keyExtractor={(item,index) => index.toString()}
                     refreshing={this.state.refresh}
-                    onRefresh={this.handleRefresh()}
-                />
+                    onRefresh={this.handleRefresh}
+                />  
             </List>
         )
     }
 
-    renderElements() {
+    renderItems({item,index}) {
+        var that=this;
         function deleteItem(index) {
-            Alert.alert(
+           Alert.alert(
                 t('wantDelete'),
                 t('neverRecover'),
                 [
@@ -192,7 +180,7 @@ export default class RecentOperation extends React.Component {
             var user = firebase.auth().currentUser;
             firebase
                 .database()
-                .ref('users/' + user.uid + '/checks/' + index)
+                .ref('users/' + user.uid + '/checks/' +that.state.checkid+'/'+index )
                 .remove()
                 .then(
                     () => {
@@ -212,17 +200,17 @@ export default class RecentOperation extends React.Component {
                 </Left>
                 <Body>
                     <View style={styles.listNameCount}>
-                        <Text style={styles.listTitle}>{element.title}</Text>
+                        <Text style={styles.listTitle}>{item.name}</Text>
                         <Text style={styles.listSubtitle}>
-                            {element.qyt} {t('qty')}
+                           &nbsp;&nbsp;&nbsp;&nbsp; {t('qty')} - {item.qty ? item.qty : 1} 
                         </Text>
                     </View>
                     <Text note numberOfLines={1}>
-                        {element.price} Azn
+                        {item.price} Azn
                     </Text>
                 </Body>
                 <Right>
-                    <Button transparent onPress={() => deleteItem(element.id)}>
+                    <Button transparent onPress={() => deleteItem(item.barcode)}>
                         <Feather name="trash-2" size={24} color="#BF360C"/>
                     </Button>
                 </Right>

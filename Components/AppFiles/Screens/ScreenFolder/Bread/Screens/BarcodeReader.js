@@ -28,6 +28,7 @@ export default class BarCodeReader extends React.Component {
             selectedCard: null,
             refresh: true,
             okay: false,
+            checkid:null,
         }
     }
 
@@ -57,12 +58,21 @@ export default class BarCodeReader extends React.Component {
         }
     }
 
-    componentDidMount() {
-        this.getInfo();
+    makeid(length) {
+        var result = '';
+        var characters =
+            'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+        var charactersLength = characters.length;
+        for (var i = 0; i < length; i++) {
+            result += characters.charAt(Math.floor(Math.random() * charactersLength));
+        }
+        return result;
     }
 
-    UNSAFE_componentWillMount() {
+    componentDidMount() {
         this.getInfo();
+        let id=this.makeid(15);
+        this.setState({checkid:id})
     }
 
     componentWillUnmount() {
@@ -74,6 +84,7 @@ export default class BarCodeReader extends React.Component {
             okay: false,
         });
         this.renderSelectedCard();
+        this.setState({checkid:null})
     }
 
     renderCards() {
@@ -117,6 +128,7 @@ export default class BarCodeReader extends React.Component {
             selectedCard: null,
             refresh: true,
             okay: false,
+            checkid:null,
         })
         this.props.navigation.navigate('Home');
     }
@@ -142,7 +154,7 @@ export default class BarCodeReader extends React.Component {
                         <PayCards cardNumb={this.state.selectedCard}/>
                     </View>
                     <View style={styles.downerView}>
-                        <RecentOperation {...this.props} />
+                        <RecentOperation checkid={this.state.checkid} {...this.props} />
                     </View>
                 </View>
             )
