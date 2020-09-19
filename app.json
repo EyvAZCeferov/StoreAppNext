@@ -4,7 +4,7 @@
     "slug": "pay-and-win",
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./assets/icon-ios.png",
+    "icon": "./assets/icon.png",
     "splash": {
       "image": "./assets/splash.png",
       "resizeMode": "contain",
@@ -24,6 +24,7 @@
       "buildNumber": "1.0.0"
     },
     "android": {
+      "icon": "./assets/icon.png",
       "package": "com.alov.payandway",
       "versionCode": 1
     },

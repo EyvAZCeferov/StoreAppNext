@@ -81,8 +81,8 @@ export default class TabMapsLists extends React.Component {
         var that = this;
 
         function getKilom(longis, latis) {
-            var hesablaLong = that.state.longitude - longis;
-            var hesablaLat = that.state.latitude - latis;
+            var hesablaLong = that.state.longitude / longis;
+            var hesablaLat = that.state.latitude / latis;
             var result = hesablaLat + hesablaLong;
             return Math.ceil(result);
         }
@@ -137,7 +137,7 @@ export default class TabMapsLists extends React.Component {
                         )
                         :
                         (
-                            <ListItem first style={styles.firstList} thumbnail key={index}>
+                            <ListItem style={styles.firstList} thumbnail key={index}>
                                 <Left>
                                     <Thumbnail
                                         square
@@ -170,12 +170,32 @@ export default class TabMapsLists extends React.Component {
                     <ShimmerPlaceholder
                         visible={false}
                         isInteraction={true}
-                        style={{width: width, height: 150, marginBottom: 15}}
+                        style={{width: width, height: 90, marginBottom: 15}}
                     />
                     <ShimmerPlaceholder
                         visible={false}
                         isInteraction={true}
-                        style={{width: width, height: 150, marginBottom: 15}}
+                        style={{width: width, height: 90, marginBottom: 15}}
+                    />
+                     <ShimmerPlaceholder
+                        visible={false}
+                        isInteraction={true}
+                        style={{width: width, height: 90, marginBottom: 15}}
+                    />
+                     <ShimmerPlaceholder
+                        visible={false}
+                        isInteraction={true}
+                        style={{width: width, height: 90, marginBottom: 15}}
+                    />
+                     <ShimmerPlaceholder
+                        visible={false}
+                        isInteraction={true}
+                        style={{width: width, height: 90, marginBottom: 15}}
+                    />
+                     <ShimmerPlaceholder
+                        visible={false}
+                        isInteraction={true}
+                        style={{width: width, height: 90, marginBottom: 15}}
                     />
                 </ScrollView>
             )
@@ -193,6 +213,7 @@ export default class TabMapsLists extends React.Component {
                                 style={styles.w100}
                                 data={this.state.maps}
                                 renderItem={this.renderLoc.bind(this)}
+                                keyExtractor={(item,index)=>index.toString()}
                             />
                         </List>
                     </ScrollView>

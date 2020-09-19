@@ -5,6 +5,7 @@ import {
     Dimensions,
     View,
     Keyboard,
+    ActivityIndicator
 } from 'react-native';
 import {
     Thumbnail,
@@ -70,9 +71,10 @@ export default class AccountSettings extends React.Component {
                     if (newData.profPic != null) {
                         this.setState({
                             profPic: newData.profPic,
+                            isReady:true
                         });
                     } else {
-                        this.setState({profPic: null});
+                        this.setState({profPic: null,isReady:true});
                     }
                     this.renderImage();
                     this.setState({email: newData.email});
@@ -110,12 +112,13 @@ export default class AccountSettings extends React.Component {
                 mediaTypes: ImagePicker.MediaTypeOptions.Images,
                 allowsEditing: true,
                 aspect: [3, 4],
-                quality: 0.75,
+                quality: 0.70,
             });
             if (!result.cancelled) {
-                this.setState({image: result.uri});
+                this.dropDownAlertRef.alertWithType('info', t('ppNotChoised'));
             }
             if (result.type == 'image') {
+                this.setState({isReady:false});
                 var user = firebase.auth().currentUser;
                 if (user) {
                     const response = await fetch(result.uri);
@@ -178,7 +181,7 @@ export default class AccountSettings extends React.Component {
                     this.props.navigation.navigate('Home');
                 }
             } else {
-                this.dropDownAlertRef.alertWithType('error', t('ppChoise'));
+                this.dropDownAlertRef.alertWithType('info', t('ppChoise'));
             }
         } catch (E) {
             this.dropDownAlertRef.alertWithType('error', E.message);
@@ -213,7 +216,8 @@ export default class AccountSettings extends React.Component {
                     successImageSrc={succesImage}
                 />
                 <ScreensStandart {...this.props} name={t('mypersonalinformation')}/>
-                <View>
+                {this.state.isReady ? (
+ <View>
                     <View style={styles.header}>
                         <View style={customStyle.headerArena}>
                             <View style={styles.imagePickerArena}>
@@ -303,6 +307,13 @@ export default class AccountSettings extends React.Component {
                         </Content>
                     </View>
                 </View>
+                ):(
+                    <View style={{flex:1,justifyContent:'center',alignContent:'center' ,alignItems:'center',textAlign:'center' }}>
+                        <ActivityIndicator size="large" color="#7c9d32" />
+                    </View>
+
+                ) }
+               
             </View>
         );
     }

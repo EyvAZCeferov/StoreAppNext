@@ -3,19 +3,23 @@ import {
     View,
     StyleSheet,
     Dimensions,
+    ActivityIndicator,
+    FlatList
 } from 'react-native';
 import MapView, {Marker} from 'react-native-maps';
 import * as Permissions from "expo-permissions";
 import firebase from '../../../../../Functions/FireBase/firebaseConfig'
+import Constants from 'expo-constants';
 
-const locations = require('../../../../../../../assets/locations.json');
 export default class TabMapsView extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
             latitude: null,
             longitude: null,
-            markers: locations
+            markers: null,
+            markerCount:0,
+            ready:false,
         }
     }
 
@@ -24,22 +28,64 @@ export default class TabMapsView extends React.Component {
 
         if (status !== 'granted') {
             const response = await Permissions.askAsync(Permissions.LOCATION);
+            this.setState({ready:true});
         }
         navigator.geolocation.getCurrentPosition(
             ({coords: {latitude, longitude}}) =>
-                this.setState({latitude, longitude}),
+                this.setState({latitude:latitude, longitude:longitude,ready:true}),
             (error) => console.log('Error:', error)
         );
     }
 
-    componentDidMount() {
-        this.getPerm();
+    async getInfo() {
+        firebase.database().goOnline()
+        var user = firebase.auth().currentUser;
+        if (user) {
+            var datas = [];
+            firebase
+                .database()
+                .ref('maps')
+                .on('value', (data) => {
+                    data.forEach((data) => {
+                        datas.push(data.val());
+                    });
+                    this.setState({
+                        markers: datas,
+                        markerCount:data.numChildren(),
+                        ready: true,
+                    });
+                });
+        } else {
+            this.props.navigation.navigate('Home');
+        }
     }
 
-    render() {
-        return (
-            <View style={styles.container}>
-                <MapView
+    componentDidMount() {
+        this.getPerm();
+        this.getInfo();
+    }
+
+
+    renderMarker(){
+        return this.state.markers.map((element,index) => {
+            const {lat,lng}=element.coords;
+            return(
+                    <Marker
+                        key={index}
+                        title={element.name}
+                        coordinate={{latitude:parseFloat(lat), longitude:parseFloat(lng)}}
+                        description={element.address}
+                        image={require('../../../../../../../assets/images/Map/marker.png')}
+                    />
+                )
+        })
+    }
+
+
+    renderMap(){
+        if(this.state.latitude!=null || this.state.longitude!=null ){
+            return(
+            <MapView
                     style={styles.mapStyle}
                     followsUserLocation={true}
                     cacheEnabled={true}
@@ -47,7 +93,7 @@ export default class TabMapsView extends React.Component {
                     zoomControlEnabled={true}
                     zoomTapEnabled={true}
                     showsScale={true}
-                    userLocationAnnotationTitle={firebase.auth().currentUser.email}
+                    userLocationAnnotationTitle={firebase.auth().currentUser.name}
                     showsUserLocation={true}
                     showsTraffic={false}
                     showsPointsOfInterest={false}
@@ -70,16 +116,24 @@ export default class TabMapsView extends React.Component {
                         latitudeDelta: 0.0922,
                         longitudeDelta: 0.0421,
                     }}
-                >
-                    {this.state.markers.map(marker => (
-                        <Marker
-                            coordinate={marker.coords}
-                            title={marker.name}
-                            description={marker.address}
-                        />
-                    ))}
-
+                    >
+                    {this.state.markerCount>0 ? this.renderMarker() : null }
                 </MapView>
+            )
+        }
+    }
+
+    render() {
+        return (
+            <View style={styles.container}>
+            {this.state.ready  ? 
+                 this.renderMap()
+                 : (
+                <View style={styles.container}>
+                    <ActivityIndicator size="large" color="#7c9d32" />
+                </View>
+                ) }
+              
             </View>
         );
     }
@@ -95,5 +149,6 @@ const styles = StyleSheet.create({
     mapStyle: {
         width: Dimensions.get('window').width,
         height: Dimensions.get('window').height,
+        marginTop: Constants.statusBarHeight*4,
     },
 });

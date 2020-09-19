@@ -6,7 +6,7 @@ import {
     Linking,
 } from 'react-native';
 import {Button, Footer, FooterTab} from 'native-base';
-import {Feather} from '@expo/vector-icons';
+import {Feather,Entypo} from '@expo/vector-icons';
 
 var width = Dimensions.get('window').width;
 
@@ -17,9 +17,9 @@ export default class ContactUsFooter extends React.Component {
                 <FooterTab style={styles.footerTab}>
                     <Button
                         transparent
-                        onPress={() => Linking.openURL('http://twitter.com')}>
-                        <View style={[styles.btn, styles.btnTwit]}>
-                            <Feather name="twitter" size={22} color="#fff"/>
+                        onPress={() => Linking.openURL('https://payandwin.az')}>
+                        <View style={[styles.btn, styles.btnSite]}>
+                            <Entypo name="link" size={22} color="#fff"/>
                         </View>
                     </Button>
                     <Button
@@ -31,7 +31,7 @@ export default class ContactUsFooter extends React.Component {
                     </Button>
                     <Button
                         transparent
-                        onPress={() => Linking.openURL('http://facebook.com')}>
+                        onPress={() => Linking.openURL('https://www.facebook.com/PayandWin1/')}>
                         <View style={[styles.btn, styles.btnFace]}>
                             <Feather name="facebook" size={22} color="#fff"/>
                         </View>
@@ -45,7 +45,7 @@ export default class ContactUsFooter extends React.Component {
                     </Button>
                     <Button
                         transparent
-                        onPress={() => Linking.openURL('http://instagram.com')}>
+                        onPress={() => Linking.openURL('https://www.instagram.com/payandwin.az/')}>
                         <View style={[styles.btn, styles.btnInsda]}>
                             <Feather name="instagram" size={24} color="#fff"/>
                         </View>
@@ -82,8 +82,8 @@ const styles = StyleSheet.create({
         padding: 0,
         marginHorizontal: 5,
     },
-    btnTwit: {
-        backgroundColor: '#00B0FF',
+    btnSite: {
+        backgroundColor: '#7c9d32',
     },
     btnyoutube: {
         backgroundColor: '#DD2C00',

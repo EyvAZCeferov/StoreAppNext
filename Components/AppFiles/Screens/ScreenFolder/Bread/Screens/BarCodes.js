@@ -16,7 +16,6 @@ export default function BarCodes(props) {
     const [modalState, setModalState] = useState(false);
     const params = props.route.params;
     const checkid = params.uid;
-    console.log(checkid);
     useEffect(() => {
         (async () => {
             const {status} = await Camera.requestPermissionsAsync();
@@ -65,7 +64,6 @@ export default function BarCodes(props) {
 
 
     function barcodeScanned(item) {
-        console.log(item);
         firebase
             .database()
             .ref('allChecks/' + item.data)
@@ -98,14 +96,17 @@ export default function BarCodes(props) {
                     onBarCodeScanned={(item) => barcodeScanned(item)}>
                 <BarcodeMask
                     outerMaskOpacity={0.6}
-                    edgeBorderWidth={1}
+                    edgeBorderWidth={3}
                     edgeColor={'#7c9d32'}
-                    edgeBorderWidth={5}
                     animatedLineColor="#DD2C00"
                     animatedLineHeight={2}
-                    showAnimatedLine={false}
+                    showAnimatedLine={true}
+                    animated={false}
                     animatedLineWidth={'90%'}
-                />
+                    lineAnimationDuration={1400}
+                    useNativeDriver={true}
+                    style={{justifyContent:  'center' ,alignItems:  'center' ,alignContent:  'center' ,textAlign:  'center', margin:"auto",padding:"auto" }}
+               />               
             </Camera>
             <View
                 style={{

@@ -206,6 +206,9 @@ export default class History extends React.Component {
     }
 
     render() {
+        const thisDay=new Date();
+        const minDateCount=thisDay.getTime()-2592000;
+        const minDate = new Date(minDateCount * 1000);
         return (
             <View style={styles.f1}>
                 <StatusBar style="dark" backgroundColor="white"/>
@@ -218,9 +221,10 @@ export default class History extends React.Component {
                                     <MaterialIcons name="date-range" size={24} color="#7c9d32"/>
                                     <DatePicker
                                         androidMode="calendar"
-                                        defaultDate={new Date()}
+                                        defaultDate={thisDay}
                                         locale='az'
-                                        maximumDate={new Date()}
+                                        maximumDate={thisDay}
+                                        minimumDate={minDate}
                                         placeHolderText="Zamanı seç"
                                         placeHolderTextStyle={{color: "#7c9d32"}}
                                         textStyle={{color: "#7c9d32", fontSize: 20}}
@@ -232,9 +236,9 @@ export default class History extends React.Component {
                                     <MaterialIcons name="date-range" size={24} color="#7c9d32"/>
                                     <DatePicker
                                         androidMode="calendar"
-                                        defaultDate={new Date()}
+                                        defaultDate={thisDay}
                                         locale='az'
-                                        maximumDate={new Date()}
+                                        maximumDate={thisDay}
                                         placeHolderText="Zamanı seç"
                                         placeHolderTextStyle={{color: "#7c9d32"}}
                                         textStyle={{color: "#7c9d32", fontSize: 20}}

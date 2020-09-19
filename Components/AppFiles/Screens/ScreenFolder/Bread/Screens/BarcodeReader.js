@@ -5,7 +5,8 @@ import {
     StyleSheet,
     Dimensions,
     Modal,
-    TouchableOpacity
+    TouchableOpacity,
+    ActivityIndicator
 } from 'react-native';
 import {Picker, Item} from 'native-base'
 import RecentOperation from '../Components/PayStart/RecentOperation';
@@ -89,7 +90,9 @@ export default class BarCodeReader extends React.Component {
 
     renderCards() {
         if (this.state.refresh) {
-            //
+            <View style={{flex:1,justifyContent:"center",alignItems:"center",alignContent:"center"}}>
+                <ActivityIndicator size="large" color="#7c9d32" />
+            </View>
         }
         if (this.state.allCards != null) {
             return this.state.allCards.map(element => {
@@ -135,7 +138,7 @@ export default class BarCodeReader extends React.Component {
         if (this.state.okay == true && this.state.selectedCard != null) {
             return (
                 <View>
-                    <StatusBar backgroundColor="#fff" style="dark"/>
+                    <StatusBar backgroundColor="#7c9d32" style="light"/>
                     <DropdownAlert
                         ref={ref => this.dropDownAlertRef = ref}
                         useNativeDriver={true}
@@ -149,7 +152,7 @@ export default class BarCodeReader extends React.Component {
                         successImageSrc={succesImage}
                     />
                     <View style={styles.upperView}>
-                        <PayCards  checkid={this.state.checkid} cardNumb={this.state.selectedCard}/>
+                        <PayCards checkid={this.state.checkid} cardNumb={this.state.selectedCard}/>
                     </View>
                     <View style={styles.downerView}>
                         <RecentOperation checkid={this.state.checkid} {...this.props} />
@@ -173,17 +176,17 @@ export default class BarCodeReader extends React.Component {
                         }}>
                             <View style={{marginTop: -20, marginBottom: 30}}>
                                 <TouchableOpacity onPress={() => this.goBack()}>
-                                    <AntDesign name="leftcircleo" size={30} color="black"/>
+                                    <AntDesign name="leftcircleo" size={30} color="#7c9d32"/>
                                 </TouchableOpacity>
                             </View>
                             <View style={{
                                 justifyContent: "space-around",
-                                width: width,
-                                height: 80,
-                                flexDirection: "row"
+                                width: width-100,
+                                height: 60,
+                                flexDirection: "column"
                             }}>
                                 <Text style={{fontSize: 20, color: "#010101"}}>Alışverişə kart seçərək başlayın</Text>
-                                <Text style={{fontSize: 15, color: "rgba(0,0,0,.5)"}}>Silinmə olacaq kartı seçin</Text>
+                                <Text style={{fontSize: 15,marginTop:-8, color: "rgba(0,0,0,.4)"}}>Silinmə olacaq kartı seçin</Text>
                             </View>
                             <View style={{width: 300, height: 120}}>
                                 <Item picker>

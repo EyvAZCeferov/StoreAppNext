@@ -1,7 +1,7 @@
 import React from 'react';
-import {View, Text, StyleSheet, Dimensions} from 'react-native';
+import {View, Text, StyleSheet, Dimensions,Animated} from 'react-native';
 import firebase from "../../../../../Functions/FireBase/firebaseConfig";
-
+import {StatusBar} from 'expo-status-bar';
 const {width, height} = Dimensions.get('window')
 
 export default function PayCards(props) {
@@ -10,7 +10,9 @@ export default function PayCards(props) {
     const [selectedCard, setSelectedCard] = React.useState(props.cardNumb);
     const [cards, setCards] = React.useState(null);
     const [checks, setChecks] = React.useState(null);
-    const [priceAll, setPriceAll] = React.useState(15)
+    const [checksCount, setChecksCount] = React.useState(null);
+    const [priceAll, setPriceAll] = React.useState(0)
+    const [edv, setEdv] = React.useState(0)
 
     function getInfo() {
         firebase.database().goOnline();
@@ -25,6 +27,7 @@ export default function PayCards(props) {
                         setRefresh(false)
                     }
                 );
+                  countEDV();
         } else {
             props.navigation.goBack();
         }
@@ -35,8 +38,8 @@ export default function PayCards(props) {
     }, [])
 
     async function handleRefresh() {
-        this.getInfo();
-        this.setState({refresh: false})
+        getInfo();
+        setRefresh(false)
     }
 
     function priceCollector() {
@@ -47,10 +50,16 @@ export default function PayCards(props) {
                 .database()
                 .ref('users/' + user.uid + '/checks/' + props.checkid)
                 .on('value', (data) => {
+                  if(data.numChildren() >0 && data!=null){
                     data.forEach((data) => {
                         datas.push(data.val());
                     });
                     setChecks(datas);
+                    setChecksCount(data.numChildren())
+                  }else{
+                    setChecks(null);
+                    setChecksCount(0)
+                  }
                 });
         } else {
             alert('Connection Problem');
@@ -60,10 +69,27 @@ export default function PayCards(props) {
     function price() {
         priceCollector();
         let result = 0;
-        checks.map(element => {
-            result += element.price;
-        })
+        if(checks !=null && checksCount>0){
+          checks.map(element => {
+              result += parseFloat(element.price);
+          })
+          setPriceAll(parseFloat(result))
+        }else{
+          setPriceAll(0)
+        }
         return result;
+    }
+
+    function countEDV(){
+      price();
+      let edv=0;
+        if(parseFloat(priceAll)>0){
+            edv=(parseFloat(priceAll)*18)/100;
+            setEdv(edv);
+        }else{
+            setEdv(edv);
+        }
+      return edv;
     }
 
     function renderCardDatas() {
@@ -133,13 +159,13 @@ export default function PayCards(props) {
             }}>
                 <Text style={{fontSize: 20, fontWeight: "bold", color: "#fff", marginTop: 20}}>Yekun
                     Məbləğ</Text>
-                <Text
+                  <Text
                     style={{
                         color: "rgba(255,255,255,.5)",
                         fontSize: 17,
                         marginLeft: 5,
                         marginTop: 2,
-                    }}>{price()} ₼</Text>
+                    }}>{priceAll} ₼</Text>
                 <View style={{marginTop: 5, marginLeft: 5}}>
                     <Text style={{color: "#fff", fontSize: 20, fontWeight: "bold"}}>Qalan Məbləğ</Text>
                     <Text
@@ -148,7 +174,7 @@ export default function PayCards(props) {
                             fontSize: 17,
                             marginLeft: 5,
                             marginTop: 2,
-                        }}>{cards != null ? parseInt(cards.cardInfo.cvc) - parseInt(priceAll) : 0} ₼</Text>
+                        }}>{checks != null && checksCount>0 ? parseFloat(cards.cardInfo.cvc) - parseFloat(priceAll) : 0} ₼</Text>
                 </View>
                 <View style={{marginTop: 5, marginLeft: 5}}>
                     <Text style={{color: "#fff", fontSize: 20, fontWeight: "bold"}}>Ədv %</Text>
@@ -158,7 +184,7 @@ export default function PayCards(props) {
                             fontSize: 17,
                             marginLeft: 5,
                             marginTop: 2,
-                        }}>{cards != null ? parseInt(cards.cardInfo.cvc) - parseInt(priceAll) : 0} ₼</Text>
+                        }}>{edv} ₼</Text>
                 </View>
             </View>
         )
@@ -180,14 +206,21 @@ export default function PayCards(props) {
         return hiddenNumbers;
     }
 
+    function renderTopPanel(){
+        return(
+            <View style={styles.cardCotnent}>
+                {renderCardDatas()}
+                {renderRight()}
+            </View>
+        )
+    }
+
     return (
         <View style={styles.container}>
+          <StatusBar backgroundColor="#7c9d32" style='light' />
             <View style={styles.cardArea}>
                 <View style={styles.card}>
-                    <View style={styles.cardCotnent}>
-                        {renderCardDatas()}
-                        {renderRight()}
-                    </View>
+                    {renderTopPanel()}
                 </View>
             </View>
         </View>

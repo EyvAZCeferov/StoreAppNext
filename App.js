@@ -184,16 +184,12 @@ function AuthVerify(props) {
 }
 
 function AppIntro(props) {
-    var firstOpen = true;
-    
+    const [firstOpenSlider,setfirstOpenSlider] = React.useState(null);
 
-    function getfirstOpen() {
-        AsyncStorage.getItem('firstOpen').then((a) => {
-            firstOpen=a
+  async function getfirstOpen() {
+        AsyncStorage.getItem('firstOpenSlider').then((a) => {
+            setfirstOpenSlider(a)
          });
-         console.log(firstOpen)     
-         return firstOpen != null ? false : true;
-        
     }
 
     React.useEffect(() => {
@@ -201,10 +197,13 @@ function AppIntro(props) {
     }, [])
 
     function changeStat(){
-        AsyncStorage.setItem('firstOpen','Ok');
+        AsyncStorage.setItem('firstOpenSlider','Ok');
+        AsyncStorage.getItem('firstOpenSlider').then((a) => {
+            setfirstOpenSlider(a)
+         });
     }
 
-    return firstOpen ? <AppSlider callfunc={()=>changeStat()} {...props} /> : <NavigateAuth {...props} />;
+    return firstOpenSlider ==null ? <AppSlider callfunc={()=>changeStat()} {...props} /> : <NavigateAuth {...props} />;
 }
 
 export default function (props) {

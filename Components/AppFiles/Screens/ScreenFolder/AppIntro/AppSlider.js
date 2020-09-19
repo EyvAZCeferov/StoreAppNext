@@ -40,7 +40,7 @@ export default class AppSlider extends React.Component {
         }
     }
 
-     _onDone() {
+  async _onDone() {
         this.props.callfunc()
     }
 

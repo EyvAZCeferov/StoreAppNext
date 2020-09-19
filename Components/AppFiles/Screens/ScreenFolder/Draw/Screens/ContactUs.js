@@ -6,6 +6,7 @@ import {
     View,
     Keyboard,
     TouchableOpacity,
+    Linking
 } from 'react-native';
 import {
     Button,
@@ -16,6 +17,7 @@ import {
 import ScreensStandart from '../Component/ScreensStandart';
 import {Col, Grid, Row} from 'react-native-easy-grid';
 import ContactUsFooter from '../Component/ContactUsFooter';
+import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view'
 
 const succesImage = require('../../../../../../assets/images/Alert/tick.png');
 
@@ -48,6 +50,7 @@ export default class ContactUs extends React.Component {
     }
 
     sendMessage = () => {
+        firebase.database().goOnline();
         Keyboard.dismiss();
         this.setState({isSender: true});
         if (this.state.subject === null && this.state.message === null) {
@@ -61,6 +64,7 @@ export default class ContactUs extends React.Component {
                 .ref('contactus/' + id)
                 .set({
                     userId: user.uid,
+                    id:id,
                     userEmail: user.email,
                     subject: this.state.subject,
                     message: this.state.message,
@@ -74,7 +78,7 @@ export default class ContactUs extends React.Component {
                     },
                     (err) => {
                         this.setState({isSender: false});
-                        this.dropDownAlertRef.alertWithType('success', err.message);
+                        this.dropDownAlertRef.alertWithType('error', err.message);
                     }
                 );
         }
@@ -101,9 +105,11 @@ export default class ContactUs extends React.Component {
                     <View style={styles.row}>
                         <Grid style={{width: width, height: 50}}>
                             <Col style={styles.colCenter}>
-                                <Button
+                                <TouchableOpacity
                                     style={[styles.button, styles.colCenter]}
-                                    transparent>
+                                    transparent 
+                                    onPress={()=>Linking.openURL('mailto:payandwin.az@gmail.com')}
+                                    >
                                     <Grid style={styles.colCenter}>
                                         <Row>
                                             <MaterialCommunityIcons
@@ -116,7 +122,7 @@ export default class ContactUs extends React.Component {
                                             <Text style={styles.text}>G-Mail</Text>
                                         </Row>
                                     </Grid>
-                                </Button>
+                                </TouchableOpacity>
                             </Col>
                             <Col style={styles.colCenter}>
                                 <Button
@@ -144,63 +150,65 @@ export default class ContactUs extends React.Component {
                                 <Spinner color="#7c9d32" size={36}/>
                             ) : (
                                 <View>
-                                    <View style={{
-                                        width: width,
-                                        height: 90,
-                                        backgroundColor: "transparent",
-                                        justifyContent: "center",
-                                        alignItems: "center",
-                                        alignContent: "center"
-                                    }}>
-                                        <Input
-                                            style={styles.inputstyle}
-                                            placeholder={t('subject')}
-                                            placeholderTextColor="rgba(0,0,0,.5)"
-                                            autoCorrect={false}
-                                            autoCapitalize={false}
-                                            keyboardAppearance="dark"
-                                            keyboardType="default"
-                                            autoFocus={false}
-                                            onChangeText={(val) => {
-                                                this.setState({subject: val});
-                                            }}
-                                        />
-                                    </View>
-                                    <View style={{
-                                        width: width,
-                                        height: 110,
-                                        backgroundColor: "transparent",
-                                        justifyContent: "center",
-                                        alignItems: "center",
-                                        alignContent: "center"
-                                    }}>
-                                        <Textarea
-                                            focusable={true}
-                                            keyboardType="normal"
-                                            keyboardAppearance="default"
-                                            style={[styles.inputstyle, styles.textArea]}
-                                            placeholder={t('message')}
-                                            placeholderTextColor="rgba(0,0,0,.5)"
-                                            autoCorrect={false}
-                                            autoCapitalize={false}
-                                            autoFocus={false}
-                                            onChangeText={(val) => {
-                                                this.setState({message: val});
-                                            }}
-                                        />
-                                    </View>
-                                    <View style={{
-                                        width: width,
-                                        height: 70,
-                                        backgroundColor: "transparent",
-                                        justifyContent: "center",
-                                        alignItems: "center",
-                                        alignContent: "center"
-                                    }}>
-                                        <TouchableOpacity style={styles.buttonStyle}
-                                                          onPress={() => this.sendMessage()}><Text
-                                            style={styles.buttonText}>{t('sendMessageButton')}</Text></TouchableOpacity>
-                                    </View>
+                                    <KeyboardAwareScrollView style={{backgroundColor: 'transparent',height:600,marginTop: 15}}>
+                                        <View style={{
+                                            width: width,
+                                            height: 90,
+                                            backgroundColor: "transparent",
+                                            justifyContent: "center",
+                                            alignItems: "center",
+                                            alignContent: "center"
+                                        }}>
+                                            <Input
+                                                style={styles.inputstyle}
+                                                placeholder={t('subject')}
+                                                placeholderTextColor="rgba(0,0,0,.5)"
+                                                autoCorrect={false}
+                                                autoCapitalize={false}
+                                                keyboardAppearance="dark"
+                                                keyboardType="default"
+                                                autoFocus={false}
+                                                onChangeText={(val) => {
+                                                    this.setState({subject: val});
+                                                }}
+                                            />
+                                        </View>
+                                        <View style={{
+                                            width: width,
+                                            height: 110,
+                                            backgroundColor: "transparent",
+                                            justifyContent: "center",
+                                            alignItems: "center",
+                                            alignContent: "center"
+                                        }}>
+                                            <Textarea
+                                                focusable={true}
+                                                keyboardType="normal"
+                                                keyboardAppearance="default"
+                                                style={[styles.inputstyle, styles.textArea]}
+                                                placeholder={t('message')}
+                                                placeholderTextColor="rgba(0,0,0,.5)"
+                                                autoCorrect={false}
+                                                autoCapitalize={false}
+                                                autoFocus={false}
+                                                onChangeText={(val) => {
+                                                    this.setState({message: val});
+                                                }}
+                                            />
+                                        </View>
+                                        <View style={{
+                                            width: width,
+                                            height: 70,
+                                            backgroundColor: "transparent",
+                                            justifyContent: "center",
+                                            alignItems: "center",
+                                            alignContent: "center"
+                                        }}>
+                                            <TouchableOpacity style={styles.buttonStyle}
+                                                              onPress={() => this.sendMessage()}><Text
+                                                style={styles.buttonText}>{t('sendMessageButton')}</Text></TouchableOpacity>
+                                        </View>
+                                    </KeyboardAwareScrollView>
                                 </View>
                             )}
                         </View>

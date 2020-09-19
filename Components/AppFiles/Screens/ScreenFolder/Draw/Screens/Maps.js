@@ -14,10 +14,9 @@ export default class Maps extends React.Component {
         return (
             <View style={styles.f1}>
                 <ScreensStandart {...this.props} name={t('map')}/>
-                <Tabs style={styles.tabsBg} tabStyle={styles.tabsBg} activeTabStyle={styles.activeTab}
+                <Tabs tabStyle={styles.tabsBg} activeTabStyle={styles.activeTab}
                       containerStyle={styles.tabsBg}>
                     <Tab
-                        style={styles.tabsBg}
                         heading={t('mapList')}
                         tabStyle={styles.tabsBg}
                         containerStyle={styles.tabsBg}
@@ -28,7 +27,6 @@ export default class Maps extends React.Component {
                     <Tab
                         tabStyle={styles.tabsBg}
                         containerStyle={styles.tabsBg}
-                        style={styles.tabsBg}
                         heading={t('mapView')}
                         activeTabStyle={styles.activeTab}
                     >

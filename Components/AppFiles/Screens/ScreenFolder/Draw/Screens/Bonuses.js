@@ -180,8 +180,8 @@ export default class Bonuses extends React.Component {
                         )
                         :
                         (
-                            <ListItem style={styles.firstList} key={index}>
-                                <Left style={styles.left}>
+                            <ListItem thumbnail style={styles.firstList} key={index}>
+                                <Left>
                                     <Thumbnail
                                         square
                                         source={{
@@ -191,13 +191,13 @@ export default class Bonuses extends React.Component {
                                         style={styles.thumbImage}
                                     />
                                 </Left>
-                                <Body style={styles.body}>
+                                <Body>
                                     <Text style={styles.cardNumbText}>{item.number}</Text>
                                     <Text>{item.price} Azn</Text>
                                 </Body>
-                                <Right style={styles.right}>
+                                <Right>
                                     <Button transparent onPress={() => deleteItem(item.cardId)}>
-                                        <EvilIcons name="trash" size={24} color="#BF360C"/>
+                                        <EvilIcons name="trash" size={30} color="#BF360C"/>
                                     </Button>
                                 </Right>
                             </ListItem>
@@ -285,6 +285,41 @@ export default class Bonuses extends React.Component {
                         style={{width: width, height: 50, marginBottom: 15}}
                     />
                     <ShimmerPlaceholder
+                        visible={false}
+                        delay={1000}
+                        duration={1000}
+                        isInteraction={true}
+                        style={{width: width, height: 50, marginBottom: 15}}
+                    />
+                     <ShimmerPlaceholder
+                        visible={false}
+                        delay={1000}
+                        duration={1000}
+                        isInteraction={true}
+                        style={{width: width, height: 50, marginBottom: 15}}
+                    />
+                     <ShimmerPlaceholder
+                        visible={false}
+                        delay={1000}
+                        duration={1000}
+                        isInteraction={true}
+                        style={{width: width, height: 50, marginBottom: 15}}
+                    />
+                     <ShimmerPlaceholder
+                        visible={false}
+                        delay={1000}
+                        duration={1000}
+                        isInteraction={true}
+                        style={{width: width, height: 50, marginBottom: 15}}
+                    />
+                     <ShimmerPlaceholder
+                        visible={false}
+                        delay={1000}
+                        duration={1000}
+                        isInteraction={true}
+                        style={{width: width, height: 50, marginBottom: 15}}
+                    />
+                     <ShimmerPlaceholder
                         visible={false}
                         delay={1000}
                         duration={1000}
@@ -430,9 +465,6 @@ const styles = StyleSheet.create({
     w100: {
         width: width,
     },
-    body: {
-        marginLeft: -100,
-    },
     firstList: {
         marginTop: 15,
     },
@@ -443,9 +475,6 @@ const styles = StyleSheet.create({
     },
     thumbImage: {
         borderRadius: 100,
-    },
-    right: {
-        marginLeft: -40,
     },
     cardItemheader: {
         backgroundColor: "#fff",

@@ -17,13 +17,29 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="64eff0f2-a29f-4a6e-8bcc-bb9791a422d7" name="Default Changelist" comment="ProgramLock Added">
+      <change afterPath="$PROJECT_DIR$/.idea/jsLibraryMappings.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/rcc.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Components/AppFiles/Screens/ScreenFolder/Bread/Components/PayStart/ScannedResult.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/assets/images/Map/marker.png" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/App.js" beforeDir="false" afterPath="$PROJECT_DIR$/App.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Components/AppFiles/Lang/az.json" beforeDir="false" afterPath="$PROJECT_DIR$/Components/AppFiles/Lang/az.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Components/AppFiles/Lang/en.json" beforeDir="false" afterPath="$PROJECT_DIR$/Components/AppFiles/Lang/en.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Components/AppFiles/Lang/ru.json" beforeDir="false" afterPath="$PROJECT_DIR$/Components/AppFiles/Lang/ru.json" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Components/AppFiles/Screens/ScreenFolder/AppIntro/AppSlider.js" beforeDir="false" afterPath="$PROJECT_DIR$/Components/AppFiles/Screens/ScreenFolder/AppIntro/AppSlider.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Components/AppFiles/Screens/ScreenFolder/Bread/Components/PayStart/Paying.js" beforeDir="false" afterPath="$PROJECT_DIR$/Components/AppFiles/Screens/ScreenFolder/Bread/Components/PayStart/Paying.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Components/AppFiles/Screens/ScreenFolder/Bread/Components/PayStart/RecentOperation.js" beforeDir="false" afterPath="$PROJECT_DIR$/Components/AppFiles/Screens/ScreenFolder/Bread/Components/PayStart/RecentOperation.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Components/AppFiles/Screens/ScreenFolder/Bread/Screens/BarCodes.js" beforeDir="false" afterPath="$PROJECT_DIR$/Components/AppFiles/Screens/ScreenFolder/Bread/Screens/BarCodes.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Components/AppFiles/Screens/ScreenFolder/Bread/Screens/BarcodeReader.js" beforeDir="false" afterPath="$PROJECT_DIR$/Components/AppFiles/Screens/ScreenFolder/Bread/Screens/BarcodeReader.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Components/AppFiles/Screens/ScreenFolder/Draw/Component/ContactUsFooter.js" beforeDir="false" afterPath="$PROJECT_DIR$/Components/AppFiles/Screens/ScreenFolder/Draw/Component/ContactUsFooter.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Components/AppFiles/Screens/ScreenFolder/Draw/Component/Maps/TabMapsLists.js" beforeDir="false" afterPath="$PROJECT_DIR$/Components/AppFiles/Screens/ScreenFolder/Draw/Component/Maps/TabMapsLists.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Components/AppFiles/Screens/ScreenFolder/Draw/Component/Maps/TabMapsView.js" beforeDir="false" afterPath="$PROJECT_DIR$/Components/AppFiles/Screens/ScreenFolder/Draw/Component/Maps/TabMapsView.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Components/AppFiles/Screens/ScreenFolder/Draw/Screens/AccountSettings.js" beforeDir="false" afterPath="$PROJECT_DIR$/Components/AppFiles/Screens/ScreenFolder/Draw/Screens/AccountSettings.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Components/AppFiles/Screens/ScreenFolder/Draw/Screens/Bonuses.js" beforeDir="false" afterPath="$PROJECT_DIR$/Components/AppFiles/Screens/ScreenFolder/Draw/Screens/Bonuses.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Components/AppFiles/Screens/ScreenFolder/Draw/Screens/ContactUs.js" beforeDir="false" afterPath="$PROJECT_DIR$/Components/AppFiles/Screens/ScreenFolder/Draw/Screens/ContactUs.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Components/AppFiles/Screens/ScreenFolder/Draw/Screens/History.js" beforeDir="false" afterPath="$PROJECT_DIR$/Components/AppFiles/Screens/ScreenFolder/Draw/Screens/History.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Components/AppFiles/Screens/ScreenFolder/Draw/Screens/Maps.js" beforeDir="false" afterPath="$PROJECT_DIR$/Components/AppFiles/Screens/ScreenFolder/Draw/Screens/Maps.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app.json" beforeDir="false" afterPath="$PROJECT_DIR$/app.json" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -70,6 +86,12 @@
       </RecentBranches>
     </option>
   </component>
+  <component name="JsFlowSettings">
+    <service-enabled>true</service-enabled>
+    <exe-path />
+    <other-services-enabled>true</other-services-enabled>
+    <auto-save>true</auto-save>
+  </component>
   <component name="ProjectId" id="1gSOdMbKV40u4j4yRZiT0W4prcS" />
   <component name="ProjectLevelVcsManager">
     <ConfirmationsSetting value="2" id="Add" />
@@ -87,7 +109,7 @@
     <property name="dart.analysis.tool.window.visible" value="false" />
     <property name="last_opened_file_path" value="$PROJECT_DIR$/Components/AppFiles/Screens/ScreenFolder/Auth/Screens/LocalAuth/Components" />
     <property name="nodejs_package_manager_path" value="yarn" />
-    <property name="settings.editor.selected.configurable" value="preferences.pluginManager" />
+    <property name="settings.editor.selected.configurable" value="Errors" />
     <property name="ts.external.directory.path" value="C:\Program Files\JetBrains\WebStorm 2020.1.2\plugins\JavaScriptLanguage\jsLanguageServicesImpl\external" />
   </component>
   <component name="RecentsManager">
@@ -140,6 +162,10 @@
       <workItem from="1600021948196" duration="7014000" />
       <workItem from="1600070099880" duration="15105000" />
       <workItem from="1600195918773" duration="3187000" />
+      <workItem from="1600340568197" duration="1208000" />
+      <workItem from="1600497518034" duration="1311000" />
+      <workItem from="1600509045290" duration="165000" />
+      <workItem from="1600513990147" duration="402000" />
     </task>
     <task id="LOCAL-00001" summary="Fles">
       <created>1599058921979</created>
@@ -210,6 +236,10 @@
       <screen x="0" y="0" width="1366" height="738" />
     </state>
     <state x="570" y="204" key="#Notifications/0.0.1366.738@0.0.1366.738" timestamp="1598798096992" />
+    <state x="488" y="76" key="#Web_Browsers" timestamp="1600514323266">
+      <screen x="0" y="0" width="1366" height="738" />
+    </state>
+    <state x="488" y="76" key="#Web_Browsers/0.0.1366.738@0.0.1366.738" timestamp="1600514323266" />
     <state x="415" y="158" key="#com.intellij.fileTypes.FileTypeChooser" timestamp="1598110384967">
       <screen x="0" y="0" width="1366" height="738" />
     </state>
@@ -234,10 +264,10 @@
       <screen x="0" y="0" width="1366" height="738" />
     </state>
     <state x="312" y="0" key="RollbackChangesDialog/0.0.1366.738@0.0.1366.738" timestamp="1599059344454" />
-    <state x="184" y="0" key="SettingsEditor" timestamp="1599743937371">
+    <state x="184" y="0" key="SettingsEditor" timestamp="1600514495412">
       <screen x="0" y="0" width="1366" height="738" />
     </state>
-    <state x="184" y="0" key="SettingsEditor/0.0.1366.738@0.0.1366.738" timestamp="1599743937371" />
+    <state x="184" y="0" key="SettingsEditor/0.0.1366.738@0.0.1366.738" timestamp="1600514495412" />
     <state x="275" y="82" key="Vcs.Push.Dialog.v2" timestamp="1599060084855">
       <screen x="0" y="0" width="1366" height="738" />
     </state>
@@ -262,5 +292,14 @@
       <screen x="0" y="0" width="1366" height="738" />
     </state>
     <state x="346" y="59" width="672" height="678" key="search.everywhere.popup/0.0.1366.738@0.0.1366.738" timestamp="1600072781112" />
+  </component>
+  <component name="XSLT-Support.FileAssociations.UIState">
+    <expand>
+      <path>
+        <item name="StoreAPPnext" type="b2602c69:ProjectViewProjectNode" />
+        <item name="StoreAPPnext" type="462c0819:PsiDirectoryNode" />
+      </path>
+    </expand>
+    <select />
   </component>
 </project>
