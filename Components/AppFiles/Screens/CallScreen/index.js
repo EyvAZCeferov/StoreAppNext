@@ -27,6 +27,7 @@ import ProfileSectionArena from "../ScreenFolder/Draw/Component/ProfileSection";
 import {StatusBar} from "expo-status-bar";
 import ProgramLock from "../ScreenFolder/Auth/Screens/LocalAuth/ProgramLock";
 import SetFinger from '../ScreenFolder/Auth/Screens/LocalAuth/SetFinger'
+import Splash from "../ScreenFolder/Splash/Splash";
 //Keyboard Aware ScrollView
 //ScreenContainer
 const ScreenContainer = ({children}) => (

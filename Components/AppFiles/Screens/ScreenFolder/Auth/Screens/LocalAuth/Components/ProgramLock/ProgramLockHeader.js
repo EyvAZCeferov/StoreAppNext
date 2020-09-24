@@ -3,10 +3,10 @@ import {View, StyleSheet, Dimensions, Text} from 'react-native';
 import {Thumbnail} from 'native-base';
 
 var width = Dimensions.get('window').width;
-const icon = require('../../../../../../../../assets/icon.png');
-import customStyle from '../../../../../../../../assets/Theme';
+const icon = require('../../../../../../../../../assets/icon.png');
+import customStyle from '../../../../../../../../../assets/Theme';
 import {StatusBar} from "expo-status-bar";
-import {t} from "../../../../../../Lang";
+import {t} from "../../../../../../../Lang";
 
 export default class ProgramLockHeader extends React.Component {
     constructor(props) {

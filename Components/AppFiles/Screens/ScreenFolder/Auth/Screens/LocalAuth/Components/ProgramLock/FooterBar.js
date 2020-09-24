@@ -4,7 +4,7 @@ import {Button, Footer, FooterTab} from 'native-base';
 
 var width = Dimensions.get('window').width;
 import {Entypo, FontAwesome5} from '@expo/vector-icons';
-import {t} from "../../../../../../Lang";
+import {t} from "../../../../../../../Lang";
 
 export default class FooterBar extends React.Component {
     constructor(props) {

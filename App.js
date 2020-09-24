@@ -8,6 +8,7 @@ import firebase from './Components/AppFiles/Functions/FireBase/firebaseConfig';
 import {AntDesign} from "@expo/vector-icons";
 import AsyncStorage from '@react-native-community/async-storage';
 import * as Network from 'expo-network'
+import {ProgramLockContext} from './Components/AppFiles/Functions/Hooks/Authentication/Lock/ProgramLockContext';
 
 enableScreens();
 import {Alert} from 'react-native'
@@ -37,7 +38,8 @@ import {
     BarcodeScanDo,
     Service,
     ProgramLocker,
-    SetFing
+    SetFing,
+    SplashScreen
 } from "./Components/AppFiles/Screens/CallScreen";
 
 import AppSlider from './Components/AppFiles/Screens/ScreenFolder/AppIntro/AppSlider'
@@ -159,67 +161,20 @@ const ProgramLockStack = createStackNavigator();
 
 const ProgramLockScreens = (props) => (
     <ProgramLockStack.Navigator headerMode="none" initialRouteName="ProgramLock">
-        <ProgramLockStack.Screen {...props} name="ProgramLock"
-                                 component={ProgramLocker}/>
+        <ProgramLockStack.Screen   {...props} name="ProgramLock"
+                                   component={ProgramLocker}/>
         <ProgramLockStack.Screen {...props} name="Fp" component={ForgotPass}/>
     </ProgramLockStack.Navigator>
 )
 
-
-function NavigateAuth(props) {
-    const [user, setUser] = React.useState(null);
-    React.useEffect(() => {
-        firebase.auth().onAuthStateChanged(function (user) {
-            if (user) {
-                setUser(user.uid);
-            } else {
-                setUser(null);
-            }
-        });
-    }, []);
-    return user ? <AuthVerify {...props} /> : <AuthStackScreen {...props}/>;
-}
-
-function AuthVerify(props) {
-    const [verify, setVerify] = React.useState(true)
-
-    return verify ? <ProgramLockScreens {...props}/> : <Screen {...props} />;
-}
-
-function AppIntro(props) {
-    const [firstOpenSlider, setfirstOpenSlider] = React.useState(null);
-
-    async function getfirstOpen() {
-        AsyncStorage.getItem('firstOp').then((a) => {
-            setfirstOpenSlider(a)
-        });
-    }
-
-    React.useEffect(() => {
-        getfirstOpen();
-    }, [])
-
-    function changeStat() {
-        AsyncStorage.setItem('firstOp', 'Ok');
-        AsyncStorage.getItem('firstOp').then((a) => {
-            setfirstOpenSlider(a)
-        });
-    }
-
-    return firstOpenSlider == null ? <AppSlider callfunc={() => changeStat()} {...props} /> :
-        <NavigateAuth {...props} />;
-}
 
 function PreView(props) {
     return <SetFing/>
 }
 
 export default function (props) {
-    React.useEffect(() => {
-        getLang();
-        getNetStat()
-        console.disableYellowBox = true;
-    }, [])
+    const [firstOpenSlider, setfirstOpenSlider] = React.useState(null);
+    const [user, setUser] = React.useState(null);
 
     async function getNetStat() {
         let status = await Network.getNetworkStateAsync();
@@ -239,10 +194,71 @@ export default function (props) {
         }
     }
 
+    async function getfirstOpen() {
+        AsyncStorage.getItem('firstOp').then((a) => {
+            setfirstOpenSlider(a)
+        });
+    }
+
+    function changeStat() {
+        AsyncStorage.setItem('firstOp', 'Ok');
+        AsyncStorage.getItem('firstOp').then((a) => {
+            setfirstOpenSlider(a)
+        });
+    }
+
+    function getFirstOpened() {
+        return firstOpenSlider == null ? <AppSlider callfunc={() => changeStat()} {...props} /> :
+            <NavigateAuth {...props} />;
+    }
+
+    function AuthVerify(props) {
+        const [notOpen, setNotOpen] = React.useState(true)
+
+        function doorOpen() {
+            setNotOpen(false)
+        }
+
+        return notOpen ? (
+                <ProgramLockContext.Provider value={{notOpen,setNotOpen}}>
+                    <ProgramLockScreens {...props}
+                                        changeDoor={() => doorOpen()}/></ProgramLockContext.Provider>) :
+            <Screen {...props} />;
+    }
+
+    function NavigateAuth(props) {
+        return user ? <AuthVerify {...props} /> : <AuthStackScreen {...props}/>;
+    }
+
+    React.useEffect(() => {
+        console.disableYellowBox = true;
+        getLang()
+        getfirstOpen()
+        getNetStat()
+        getFirstOpened()
+        firebase.auth().onAuthStateChanged(function (user) {
+            if (user) {
+                setUser(user.uid);
+            } else {
+                setUser(null);
+            }
+        });
+    }, [])
+
+    function SystemOpen(props) {
+        const [isready, setisReady] = React.useState(false)
+        React.useEffect(() => {
+            setTimeout(() => {
+                setisReady(true)
+            }, 1500)
+        }, [])
+        return isready ? <NavigateAuth {...props} /> : <SplashScreen/>
+    }
+
     return (
         <Root>
             <NavigationContainer>
-                <AppIntro/>
+                <SystemOpen {...props}/>
             </NavigationContainer>
         </Root>
 

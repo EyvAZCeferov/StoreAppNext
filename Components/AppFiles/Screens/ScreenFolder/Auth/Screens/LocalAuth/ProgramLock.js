@@ -5,20 +5,26 @@ import {
     Dimensions,
 } from 'react-native';
 import NumberButtons from './Components/NumberButtons';
-import ProgramLockHeader from './Components/ProgramLockHeader';
-import FooterBar from './Components/FooterBar';
+import ProgramLockHeader from './Components/ProgramLock/ProgramLockHeader';
+import FooterBar from './Components/ProgramLock/FooterBar';
 import CodeFieldInput from './Components/CodeField';
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view'
 import * as LocalAuthentication from 'expo-local-authentication';
+
+const succesImage = require('../../../../../../../assets/images/Alert/tick.png');
 
 var width = Dimensions.get('window').width;
 var height = Dimensions.get('window').height;
 import firebase from "../../../../../Functions/FireBase/firebaseConfig";
 import {t} from "../../../../../Lang";
 import AsyncStorage from '@react-native-community/async-storage';
+import DropdownAlert from "react-native-dropdownalert";
+import {ProgramLockContext} from "../../../../../Functions/Hooks/Authentication/Lock/ProgramLockContext";
 
 var reqems = '';
 export default class ProgramLock extends React.Component {
+    static contextType = ProgramLockContext
+
     constructor(props) {
         super(props);
         this.state = {
@@ -80,9 +86,13 @@ export default class ProgramLock extends React.Component {
     }
 
     completed() {
+        const {notOpen, setNotOpen} = this.context
+
+        this.dropDownAlertRef.alertWithType('success', t('signedIn'));
         this.setState({
             userLogined: true,
         })
+        setNotOpen(false)
     }
 
     async callFinger() {
@@ -96,9 +106,8 @@ export default class ProgramLock extends React.Component {
             });
             if (authenticate != null) {
                 if (authenticate.success) {
-                    this.props.changeVerify();
-                } else {
-                    alert('Error');
+                    this.dropDownAlertRef.alertWithType('success', t('signedIn'));
+                    this.completed()
                 }
             }
         }
@@ -118,13 +127,38 @@ export default class ProgramLock extends React.Component {
     }
 
     clearVal() {
-        this.setState({pass: null})
+        reqems = ''
+        this.setState({pass: ''})
     }
 
     renderContent() {
         return (
             <View style={styles.container}>
+                <DropdownAlert
+                    ref={ref => this.dropDownAlertRef = ref}
+                    useNativeDriver={true}
+                    closeInterval={1000}
+                    zIndex={5000}
+                    updateStatusBar={true}
+                    tapToCloseEnabled={true}
+                    showCancel={true}
+                    elevation={10}
+                    isInteraction={true}
+                    successImageSrc={succesImage}
+                />
                 <View style={styles.header}>
+                    <DropdownAlert
+                        ref={ref => this.dropDownAlertRef = ref}
+                        useNativeDriver={true}
+                        closeInterval={1000}
+                        zIndex={5000}
+                        updateStatusBar={true}
+                        tapToCloseEnabled={true}
+                        showCancel={true}
+                        elevation={10}
+                        isInteraction={true}
+                        successImageSrc={succesImage}
+                    />
                     <ProgramLockHeader
                         {...this.props}
                         userName={this.state.userName}
@@ -132,7 +166,7 @@ export default class ProgramLock extends React.Component {
                     />
                 </View>
                 <View style={styles.codefieldArena}>
-                    <CodeFieldInput value={this.state.pass} {...this.props} />
+                    <CodeFieldInput completed={() => this.completed()} value={this.state.pass} {...this.props} />
                 </View>
                 <View style={styles.buttons}>
                     <NumberButtons
@@ -150,7 +184,33 @@ export default class ProgramLock extends React.Component {
     render() {
         return (
             <View>
-                {this.renderContent()}
+                <DropdownAlert
+                    ref={ref => this.dropDownAlertRef = ref}
+                    useNativeDriver={true}
+                    closeInterval={1000}
+                    zIndex={5000}
+                    updateStatusBar={true}
+                    tapToCloseEnabled={true}
+                    showCancel={true}
+                    elevation={10}
+                    isInteraction={true}
+                    successImageSrc={succesImage}
+                />
+                <KeyboardAwareScrollView>
+                    <DropdownAlert
+                        ref={ref => this.dropDownAlertRef = ref}
+                        useNativeDriver={true}
+                        closeInterval={1000}
+                        zIndex={5000}
+                        updateStatusBar={true}
+                        tapToCloseEnabled={true}
+                        showCancel={true}
+                        elevation={10}
+                        isInteraction={true}
+                        successImageSrc={succesImage}
+                    />
+                    {this.renderContent()}
+                </KeyboardAwareScrollView>
             </View>
         );
     }

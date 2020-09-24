@@ -1,9 +1,8 @@
-import React, {useState} from 'react';
+import React from 'react';
 import {
     Animated,
     SafeAreaView,
     View,
-    Text
 } from 'react-native';
 import {
     CodeField,
@@ -18,14 +17,19 @@ import styles, {
     CELL_SIZE,
     NOT_EMPTY_CELL_BG_COLOR,
 } from './CodeFieldStyles';
+import AsyncStorage from "@react-native-community/async-storage";
 
 export default function CodeFieldInput(prop) {
     const {Value, Text: AnimatedText} = Animated;
 
     const CELL_COUNT = 4;
+    const val = prop.value;
 
     const animationsColor = [...new Array(CELL_COUNT)].map(() => new Value(0));
     const animationsScale = [...new Array(CELL_COUNT)].map(() => new Value(1));
+
+    const [value, setValue] = React.useState('');
+    const [localPass, setLocalPass] = React.useState(null);
 
     function animateCell({hasValue, index, isFocused}) {
         Animated.parallel([
@@ -42,12 +46,11 @@ export default function CodeFieldInput(prop) {
         ]).start();
     }
 
-    const [value, setValue] = useState(prop.value);
 
     const ref = useBlurOnFulfill({value, cellCount: CELL_COUNT});
     const [props, getCellOnLayoutHandler] = useClearByFocusCell({
         value,
-        setValue,
+        setValue
     });
 
     function renderCell({index, symbol, isFocused}) {
@@ -91,10 +94,23 @@ export default function CodeFieldInput(prop) {
     }
 
     React.useEffect(() => {
-        setInterval(() => {
-            renderCodefield()
-        }, 3000)
+        if (val != null) {
+            setValue(val)
+        } else {
+            setValue('')
+        }
+        renderCodefield()
+        checkPass()
     })
+
+    function checkPass() {
+        AsyncStorage.getItem('localAuthPass').then((a) => {
+            setLocalPass(a)
+        });
+        if (value == '1234') {
+            prop.completed()
+        }
+    }
 
     function renderCodefield() {
         return (
@@ -102,11 +118,9 @@ export default function CodeFieldInput(prop) {
                 ref={ref}
                 {...props}
                 value={value}
-                onChangeText={setValue}
+                onChangeText={(text) => setValue(text)}
                 cellCount={CELL_COUNT}
                 autoFocus={false}
-                autoCapitalize={true}
-                autoCorrect={true}
                 rootStyle={styles.codeFieldRoot}
                 keyboardType="numeric"
                 textContentType="oneTimeCode"
@@ -117,7 +131,6 @@ export default function CodeFieldInput(prop) {
 
     return (
         <View style={styles.codearea}>
-            <Text style={{color: "red", fontSize: 20, fontWeight: "bold"}}>{value}</Text>
             <SafeAreaView style={styles.root}>
                 {renderCodefield()}
             </SafeAreaView>
