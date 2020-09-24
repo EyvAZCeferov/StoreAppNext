@@ -4,7 +4,6 @@ import {
     StyleSheet,
     Dimensions,
     ActivityIndicator,
-    FlatList
 } from 'react-native';
 import MapView, {Marker} from 'react-native-maps';
 import * as Permissions from "expo-permissions";
@@ -18,8 +17,8 @@ export default class TabMapsView extends React.Component {
             latitude: null,
             longitude: null,
             markers: null,
-            markerCount:0,
-            ready:false,
+            markerCount: 0,
+            ready: false,
         }
     }
 
@@ -28,11 +27,11 @@ export default class TabMapsView extends React.Component {
 
         if (status !== 'granted') {
             const response = await Permissions.askAsync(Permissions.LOCATION);
-            this.setState({ready:true});
+            this.setState({ready: true});
         }
         navigator.geolocation.getCurrentPosition(
             ({coords: {latitude, longitude}}) =>
-                this.setState({latitude:latitude, longitude:longitude,ready:true}),
+                this.setState({latitude: latitude, longitude: longitude, ready: true}),
             (error) => console.log('Error:', error)
         );
     }
@@ -51,7 +50,7 @@ export default class TabMapsView extends React.Component {
                     });
                     this.setState({
                         markers: datas,
-                        markerCount:data.numChildren(),
+                        markerCount: data.numChildren(),
                         ready: true,
                     });
                 });
@@ -66,26 +65,26 @@ export default class TabMapsView extends React.Component {
     }
 
 
-    renderMarker(){
-        return this.state.markers.map((element,index) => {
-            const {lat,lng}=element.coords;
-            return(
-                    <Marker
-                        key={index}
-                        title={element.name}
-                        coordinate={{latitude:parseFloat(lat), longitude:parseFloat(lng)}}
-                        description={element.address}
-                        image={require('../../../../../../../assets/images/Map/marker.png')}
-                    />
-                )
+    renderMarker() {
+        return this.state.markers.map((element, index) => {
+            const {lat, lng} = element.coords;
+            return (
+                <Marker
+                    key={index}
+                    title={element.name}
+                    coordinate={{latitude: parseFloat(lat), longitude: parseFloat(lng)}}
+                    description={element.address}
+                    image={require('../../../../../../../assets/images/Map/marker.png')}
+                />
+            )
         })
     }
 
 
-    renderMap(){
-        if(this.state.latitude!=null || this.state.longitude!=null ){
-            return(
-            <MapView
+    renderMap() {
+        if (this.state.latitude != null || this.state.longitude != null) {
+            return (
+                <MapView
                     style={styles.mapStyle}
                     followsUserLocation={true}
                     cacheEnabled={true}
@@ -116,8 +115,8 @@ export default class TabMapsView extends React.Component {
                         latitudeDelta: 0.0922,
                         longitudeDelta: 0.0421,
                     }}
-                    >
-                    {this.state.markerCount>0 ? this.renderMarker() : null }
+                >
+                    {this.state.markerCount > 0 ? this.renderMarker() : null}
                 </MapView>
             )
         }
@@ -126,14 +125,14 @@ export default class TabMapsView extends React.Component {
     render() {
         return (
             <View style={styles.container}>
-            {this.state.ready  ? 
-                 this.renderMap()
-                 : (
-                <View style={styles.container}>
-                    <ActivityIndicator size="large" color="#7c9d32" />
-                </View>
-                ) }
-              
+                {this.state.ready ?
+                    this.renderMap()
+                    : (
+                        <View style={styles.container}>
+                            <ActivityIndicator size="large" color="#7c9d32"/>
+                        </View>
+                    )}
+
             </View>
         );
     }
@@ -149,6 +148,6 @@ const styles = StyleSheet.create({
     mapStyle: {
         width: Dimensions.get('window').width,
         height: Dimensions.get('window').height,
-        marginTop: Constants.statusBarHeight*4,
+        marginTop: Constants.statusBarHeight * 4,
     },
 });

@@ -26,6 +26,7 @@ import TermOfUses from "../ScreenFolder/Bread/Screens/TermOfUses";
 import ProfileSectionArena from "../ScreenFolder/Draw/Component/ProfileSection";
 import {StatusBar} from "expo-status-bar";
 import ProgramLock from "../ScreenFolder/Auth/Screens/LocalAuth/ProgramLock";
+import SetFinger from '../ScreenFolder/Auth/Screens/LocalAuth/SetFinger'
 //Keyboard Aware ScrollView
 //ScreenContainer
 const ScreenContainer = ({children}) => (
@@ -63,6 +64,12 @@ export const ForgotPass = (props) => (
 export const ProgramLocker = (props) => (
     <ScreenContainer>
         <ProgramLock {...props} />
+    </ScreenContainer>
+);
+
+export const SetFing = (props) => (
+    <ScreenContainer>
+        <SetFinger {...props} />
     </ScreenContainer>
 );
 
@@ -190,5 +197,6 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         alignContent: "center",
         textAlign: "center",
+        backgroundColor: "#fff"
     }
 });

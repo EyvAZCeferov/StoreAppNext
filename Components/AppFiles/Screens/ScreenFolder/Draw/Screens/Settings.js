@@ -68,9 +68,11 @@ export default class Settings extends React.Component {
                     successImageSrc={succesImage}
                 />
                 <View style={{marginTop: '10%'}}>
+                    <StatusBar backgroundColor="#fff" style="dark"/>
                     <ScreensStandart {...this.props} name={t('setting')}/>
                 </View>
                 <ScrollView>
+                    <StatusBar backgroundColor="#fff" style="dark"/>
                     <View style={styles.content}>
                         <List style={styles.lists}>
                             <ListItem style={styles.listitemDivider} itemDivider>

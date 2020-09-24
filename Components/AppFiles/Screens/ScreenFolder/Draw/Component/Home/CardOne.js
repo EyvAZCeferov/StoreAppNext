@@ -5,15 +5,16 @@ import {Col, Grid} from 'react-native-easy-grid';
 import {LinearGradient} from 'expo-linear-gradient';
 import customStyle from '../../../../../../../assets/Theme';
 import {t} from "../../../../../Lang";
+import firebase from "../../../../../Functions/FireBase/firebaseConfig";
 
 const {width, height} = Dimensions.get('window');
 export default function CardOne({index, y, item}) {
     const position = Animated.subtract(index * 200, y);
+    const [cardCount, setCardCount] = React.useState(null)
     const isDissappering = -200;
     const isTop = 0;
     const isBottom = height - 200;
     const isAppering = height;
-
     const translateY = Animated.add(
         y,
         y.interpolate({
@@ -22,6 +23,25 @@ export default function CardOne({index, y, item}) {
             extrapolateRight: 'clamp',
         })
     );
+
+    function getCount() {
+        var user = firebase.auth().currentUser;
+        if (user) {
+            firebase
+                .database()
+                .ref('users/' + user.uid + '/cards')
+                .on('value', (data) => {
+                    setCardCount(data.numChildren())
+                });
+            renderCards()
+        } else {
+            alert('Connect Error')
+        }
+    }
+
+    React.useEffect(() => {
+        getCount()
+    }, [])
 
     const scale = position.interpolate({
         inputRange: [isDissappering, isTop, isBottom, isAppering],
@@ -77,56 +97,120 @@ export default function CardOne({index, y, item}) {
         [
             'rgb(49,27,146)',
             'rgba(49,27,146,0.85)'
+        ],
+        [
+            'rgb(240,98,146)',
+            'rgba(240,98,146,0.85)'
+        ],
+        [
+            'rgb(130,119,23)',
+            'rgba(130,119,23,0.85)'
+        ],
+        [
+            'rgb(0,230,118)',
+            'rgba(0,230,118,0.85)'
+        ],
+        [
+            'rgb(255,213,79)',
+            'rgba(255,213,79,0.85)'
+        ],
+        [
+            'rgb(129,199,132)',
+            'rgba(129,199,132,0.85)'
         ]
     ]
 
+    function bounces() {
+        var elements = []
+        for (let i = 0; i < cardCount; i++) {
+            const clear = index == i ? {
+                width: 14.4,
+                backgroundColor: cardBgColors[i][1]
+            } : {backgroundColor: cardBgColors[i][1]}
+            elements.push(
+                <View key={i} style={[styles.cardCount, clear]}/>
+            )
+        }
+        return elements;
+    }
+
+    function cardCountBounces() {
+        return (
+            <View style={{
+                position: "absolute",
+                top: '50%',
+                width: 90,
+                height: 32,
+                flexDirection: "row",
+                justifyContent: "space-between",
+                backgroundColor: "transparent",
+                alignItems: "center",
+                alignContent: "center",
+                borderBottomRightRadius: 60,
+                zIndex: 4
+            }}>
+                {bounces()}
+            </View>
+        )
+    }
+
+    function renderCards() {
+        return (
+            <Animated.View
+                key={index}
+                style={[styles.slide, {opacity, transform: [{translateY}, {scale}]}]}>
+                <LinearGradient
+                    style={styles.cardBg}
+                    colors={cardBgColors[index]}>
+                    <View style={styles.rightSec}>
+                        <Left style={styles.left}>
+                            <View style={[styles.leftPattern, styles.bigPattern]}/>
+                            <View
+                                style={[styles.leftPattern, styles.littlePattern, {backgroundColor: cardBgColors[index][1]}]}/>
+                            <Text style={styles.priceText}>{item.cardInfo.cvc} ₼</Text>
+                            {cardCountBounces()}
+                        </Left>
+                        <Right style={styles.right}>
+                            <Text style={styles.rightText}>{item.cardInfo.type}</Text>
+                        </Right>
+                    </View>
+                    <View style={styles.centerCardNum}>
+                        <View>
+                            <Text style={styles.cardNumbText}>{hideNumb(item.cardInfo.number)}</Text>
+                        </View>
+                    </View>
+                    <View style={styles.cardInfos}>
+                        <View>
+                            <Grid>
+                                <Col style={customStyle.padding5}>
+                                    <Text style={styles.gridInfoNameSurnameDynamic}>
+                                        John Doe
+                                    </Text>
+                                    <Text style={[styles.gridInfoNameSurnameDynamic, styles.gridInfoNameSurnameStatic]}>
+                                        {t('namesurname')}
+                                    </Text>
+                                </Col>
+                                <Col style={styles.gridInfoMonthYear}>
+                                    <Text style={styles.monthYearText}>
+                                        {item.cardInfo.expiry}
+                                    </Text>
+                                    <Text
+                                        style={[styles.monthYearText, styles.monthYearUnderText]}>
+                                        {t('expiry')}
+                                    </Text>
+                                </Col>
+                            </Grid>
+                        </View>
+                    </View>
+                </LinearGradient>
+            </Animated.View>
+        )
+    }
+
     return (
-        <Animated.View key={index}
-                       style={[styles.slide, {opacity, transform: [{translateY}, {scale}]}]}>
-            <LinearGradient
-                style={styles.cardBg}
-                colors={cardBgColors[index]}>
-                <View style={styles.rightSec}>
-                    <Left style={styles.left}>
-                        <View style={[styles.leftPattern, styles.bigPattern]}/>
-                        <View
-                            style={[styles.leftPattern, styles.littlePattern, {backgroundColor: cardBgColors[index][1]}]}/>
-                        <Text style={styles.priceText}>{item.cardInfo.cvc} ₼</Text>
-                    </Left>
-                    <Right style={styles.right}>
-                        <Text style={styles.rightText}>{item.cardInfo.type}</Text>
-                    </Right>
-                </View>
-                <View style={styles.centerCardNum}>
-                    <View>
-                        <Text style={styles.cardNumbText}>{hideNumb(item.cardInfo.number)}</Text>
-                    </View>
-                </View>
-                <View style={styles.cardInfos}>
-                    <View>
-                        <Grid>
-                            <Col style={customStyle.padding5}>
-                                <Text style={styles.gridInfoNameSurnameDynamic}>
-                                    John Doe
-                                </Text>
-                                <Text style={[styles.gridInfoNameSurnameDynamic, styles.gridInfoNameSurnameStatic]}>
-                                    {t('namesurname')}
-                                </Text>
-                            </Col>
-                            <Col style={styles.gridInfoMonthYear}>
-                                <Text style={styles.monthYearText}>
-                                    {item.cardInfo.expiry}
-                                </Text>
-                                <Text
-                                    style={[styles.monthYearText, styles.monthYearUnderText]}>
-                                    {t('expiry')}
-                                </Text>
-                            </Col>
-                        </Grid>
-                    </View>
-                </View>
-            </LinearGradient>
-        </Animated.View>
+        <View>
+            {renderCards()}
+        </View>
     );
 }
 
@@ -171,19 +255,21 @@ const styles = StyleSheet.create({
         borderTopLeftRadius: 19
     },
     leftPattern: {
+        width: "100%",
+        backgroundColor: "transparent",
         borderBottomRightRadius: 70,
         borderTopLeftRadius: 19
     },
     bigPattern: {
-        width: '70%',
+        width: '74%',
         height: '90%',
         backgroundColor: "#fff",
         zIndex: 2
     },
     littlePattern: {
         position: "absolute",
-        top: '15%',
-        width: '55%',
+        top: '11%',
+        width: '64%',
         height: '45%',
         zIndex: 3,
     },
@@ -199,6 +285,14 @@ const styles = StyleSheet.create({
         alignContent: "center",
         alignItems: "center",
         textAlign: "center"
+    },
+    cardCount: {
+        width: 7,
+        height: 7,
+        borderRadius: 7,
+        backgroundColor: "transparent",
+        marginRight: 2,
+        zIndex: 10,
     },
     right: {
         position: 'absolute',

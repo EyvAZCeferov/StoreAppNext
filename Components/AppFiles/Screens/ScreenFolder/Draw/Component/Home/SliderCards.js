@@ -1,5 +1,5 @@
 import * as React from 'react';
-import {StyleSheet, Dimensions, SafeAreaView, View, FlatList, Animated} from 'react-native';
+import {StyleSheet, Dimensions, SafeAreaView, View, FlatList, Animated, ActivityIndicator} from 'react-native';
 import firebase from '../../../../../Functions/FireBase/firebaseConfig';
 import CardOne from "./CardOne";
 
@@ -35,7 +35,6 @@ export default function SliderCards({props}) {
     function onHandleRefresh() {
         setrefreshing(true);
         getInfo();
-        renderBody();
     }
 
     const AnimatedFlatlist = Animated.createAnimatedComponent(FlatList);
@@ -43,6 +42,14 @@ export default function SliderCards({props}) {
     const onScroll = Animated.event([{nativeEvent: {contentOffset: {y}}}], {
         useNativeDriver: true,
     });
+
+    function renderCardOne({item, index}) {
+        return (
+            <CardOne
+                {...{index, y, item}}
+            />
+        )
+    }
 
     function renderCards() {
         return (
@@ -62,11 +69,9 @@ export default function SliderCards({props}) {
                     refreshing={refreshing}
                     onRefresh={onHandleRefresh}
                     backgroundColor="#fff"
-                    keyExtractor={(item, index) => index.toString()}
                     data={cards}
-                    renderItem={({item, index}) => {
-                        return <CardOne {...{index, y, item}} />;
-                    }}
+                    keyExtractor={(item, index) => index.toString()}
+                    renderItem={renderCardOne}
                     {...{onScroll}}
                 />
             </View>
@@ -77,7 +82,16 @@ export default function SliderCards({props}) {
     function renderBody() {
         return (
             <View>
-                {refreshing ? null : (
+                {refreshing ? (
+                    <View style={{
+                        flex: 1,
+                        justifyContent: "center",
+                        alignItems: "center",
+                        alignContent: "center"
+                    }}>
+                        <ActivityIndicator color="#7c9d32" animating={true} size="large"/>
+                    </View>
+                ) : (
                     <View style={styles.container}>
                         <SafeAreaView
                             style={{

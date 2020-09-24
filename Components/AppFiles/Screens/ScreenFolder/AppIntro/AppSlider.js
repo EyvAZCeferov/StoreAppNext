@@ -36,11 +36,31 @@ export default class AppSlider extends React.Component {
                     image: require('./images/5.png'),
                     desc: null
                 },
+                {
+                    title: null,
+                    image: require('./images/6.png'),
+                    desc: null
+                },
+                {
+                    title: null,
+                    image: require('./images/7.png'),
+                    desc: null
+                },
+                {
+                    title: null,
+                    image: require('./images/8.png'),
+                    desc: null
+                },
+                {
+                    title: null,
+                    image: require('./images/9.png'),
+                    desc: null
+                },
             ]
         }
     }
 
-  async _onDone() {
+    async _onDone() {
         this.props.callfunc()
     }
 
@@ -51,20 +71,7 @@ export default class AppSlider extends React.Component {
                     style={styles.buttonIcon}
                     name="right"
                     size={24}
-                    color="#7c9d32"
-                />
-            </View>
-        )
-    }
-
-    _renderPrevButton() {
-        return (
-            <View style={styles.button}>
-                <AntDesign
-                    style={styles.buttonIcon}
-                    name="left"
-                    size={24}
-                    color="#7c9d32"
+                    color="#fff"
                 />
             </View>
         )
@@ -72,14 +79,13 @@ export default class AppSlider extends React.Component {
 
     _renderDoneButton() {
         return (
-            <View style={styles.button}>
+            <View style={[styles.button, {backgroundColor: "#7c9d32"}]}>
                 <AntDesign
                     style={styles.buttonIcon}
                     name="check"
                     size={24}
-                    color="#7c9d32"
+                    color="#fff"
                 />
-                <Text style={styles.buttonText}>Bitir</Text>
             </View>
         )
     }
@@ -104,16 +110,15 @@ export default class AppSlider extends React.Component {
                     renderItem={this._renderItem}
                     data={this.state.slides}
                     onDone={() => this._onDone()}
-                    bottomButton={false}
-                    dotStyle={{backgroundColor: "rgba(124,157,50,0.5)"}}
-                    activeDotStyle={{backgroundColor: "rgb(124,157,50)"}}
-                    dotClickEnabled={true}
-                    showNextButton={false}
+                    bottomButton={true}
+                    dotStyle={{backgroundColor: "transparent"}}
+                    activeDotStyle={{backgroundColor: "transparent"}}
+                    dotClickEnabled={false}
+                    showNextButton={true}
                     showPrevButton={false}
                     showDoneButton={true}
                     renderDoneButton={this._renderDoneButton}
-                    // renderNextButton={this._renderNextButton}
-                    // renderPrevButton={this._renderPrevButton}
+                    renderNextButton={this._renderNextButton}
                 />
             </View>
         )
@@ -127,18 +132,18 @@ const styles = StyleSheet.create({
     },
     button: {
         flexDirection: "row",
-        justifyContent: "space-between",
+        justifyContent: "center",
         textAlign: "center",
         alignItems: "center",
         alignContent: "center",
-        backgroundColor: "transparent"
+        backgroundColor: "rgba(0,0,0,0.4)",
+        borderRadius: width / 20,
     },
     buttonIcon: {
         textAlign: "center",
         alignItems: "center",
         alignContent: "center",
         padding: 15,
-        color: "#7c9d32"
     },
     buttonText: {
         color: "#7c9d32",

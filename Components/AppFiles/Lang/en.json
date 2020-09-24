@@ -43,6 +43,8 @@
   "accounts": "Accounts",
   "receipts": "Receipts",
   "history": "History",
+  "historyStartSelect": "Choose a start date",
+  "historyEndSelect": "Choose a deadline",
   "bonuses": "Bonuses",
   "campaigns": "Campaigns",
   "map": "Map",

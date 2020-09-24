@@ -5,13 +5,12 @@ import {
     Item,
     Form,
     Input,
-    Toast,
 } from 'native-base';
 import {LiteCreditCardInput} from 'react-native-credit-card-input';
 import {t} from '../../../../Lang';
 
 var {width} = Dimensions.get('window');
-const icon = require('../../../../../../assets/images/logo1.png');
+const icon = require('../../../../../../assets/icon.png');
 import firebase from '../../../../Functions/FireBase/firebaseConfig';
 import {StatusBar} from "expo-status-bar";
 import DropdownAlert from "react-native-dropdownalert";

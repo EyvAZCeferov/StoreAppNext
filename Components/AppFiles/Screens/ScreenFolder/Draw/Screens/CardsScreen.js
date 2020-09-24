@@ -15,7 +15,6 @@ import {
     Button,
     List,
     ListItem,
-    Thumbnail,
     Left,
     Right,
     Body,
@@ -31,7 +30,7 @@ const succesImage = require('../../../../../../assets/images/Alert/tick.png');
 
 import {LiteCreditCardInput} from 'react-native-credit-card-input';
 import ScreensStandart from '../Component/ScreensStandart';
-import {AntDesign, EvilIcons, MaterialCommunityIcons} from '@expo/vector-icons';
+import {AntDesign, EvilIcons, MaterialCommunityIcons, FontAwesome,FontAwesome5} from '@expo/vector-icons';
 import firebase from '../../../../Functions/FireBase/firebaseConfig';
 
 const {width, height} = Dimensions.get('window');
@@ -133,6 +132,46 @@ export default class CardsScreen extends React.Component {
             }
         }
 
+        function cardTypeFunc() {
+            switch (item.cardInfo.type) {
+                case "visa":
+                    return <FontAwesome name="cc-visa" size={30} color="#7c9d32"/>
+                    break;
+                case "master-card":
+                    return <FontAwesome name="cc-mastercard" size={30} color="#7c9d32"/>
+                    break;
+                case 'american-express':
+                    return <FontAwesome name="cc-amex" size={30} color="#7c9d32"/>
+                    break;
+                case 'discover':
+                    return <FontAwesome name="cc-discover" size={30} color="#7c9d32"/>
+                    break;
+                case 'jcb':
+                    return <FontAwesome name="cc-jcb" size={30} color="#7c9d32"/>
+                    break;
+                case 'diners-club-north-america':
+                    return <FontAwesome name="cc-diners-club" size={30} color="#7c9d32"/>
+                    break;
+                case 'diners-club':
+                    return <FontAwesome name="cc-diners-club" size={30} color="#7c9d32"/>
+                    break;
+                case 'diners-club-carte-blanche':
+                    return <FontAwesome name="cc-diners-club" size={30} color="#7c9d32"/>
+                    break;
+                case 'diners-club-international':
+                    return <FontAwesome name="cc-diners-club" size={30} color="#7c9d32"/>
+                    break;
+                case 'maestro':
+                    return <FontAwesome name="credit-card-alt" size={30} color="#7c9d32"/>
+                    break;
+                case 'visa-electron':
+                    return <FontAwesome5 name="cc-visa" size={30} color="#7c9d32"/>
+                    break;
+                default:
+                    return <FontAwesome name="credit-card" size={30} color="#7c9d32"/>
+            }
+        }
+
         return (
             <View>
                 {
@@ -141,57 +180,41 @@ export default class CardsScreen extends React.Component {
                             <ScrollView>
                                 <ShimmerPlaceholder
                                     visible={false}
-                                    delay={1000}
-                                    duration={1000}
                                     isInteraction={true}
                                     style={{width: width, height: 50, marginBottom: 15}}
                                 />
                                 <ShimmerPlaceholder
                                     visible={false}
-                                    delay={1000}
-                                    duration={1000}
                                     isInteraction={true}
                                     style={{width: width, height: 50, marginBottom: 15}}
                                 />
                                 <ShimmerPlaceholder
                                     visible={false}
-                                    delay={1000}
-                                    duration={1000}
                                     isInteraction={true}
                                     style={{width: width, height: 50, marginBottom: 15}}
                                 />
                                 <ShimmerPlaceholder
                                     visible={false}
-                                    delay={1000}
-                                    duration={1000}
                                     isInteraction={true}
                                     style={{width: width, height: 50, marginBottom: 15}}
                                 />
                                 <ShimmerPlaceholder
                                     visible={false}
-                                    delay={1000}
-                                    duration={1000}
                                     isInteraction={true}
                                     style={{width: width, height: 50, marginBottom: 15}}
                                 />
                                 <ShimmerPlaceholder
                                     visible={false}
-                                    delay={1000}
-                                    duration={1000}
                                     isInteraction={true}
                                     style={{width: width, height: 50, marginBottom: 15}}
                                 />
                                 <ShimmerPlaceholder
                                     visible={false}
-                                    delay={1000}
-                                    duration={1000}
                                     isInteraction={true}
                                     style={{width: width, height: 50, marginBottom: 15}}
                                 />
                                 <ShimmerPlaceholder
                                     visible={false}
-                                    delay={1000}
-                                    duration={1000}
                                     isInteraction={true}
                                     style={{width: width, height: 50, marginBottom: 15}}
                                 />
@@ -201,14 +224,7 @@ export default class CardsScreen extends React.Component {
                         (
                             <ListItem style={styles.firstList} thumbnail key={index + 1}>
                                 <Left style={styles.left}>
-                                    <Thumbnail
-                                        square
-                                        source={{
-                                            uri:
-                                                'https://kapitalbank.az/images/cards/M/mastercard-platinum1594371040.png',
-                                        }}
-                                        style={styles.thumbImage}
-                                    />
+                                    {cardTypeFunc()}
                                 </Left>
                                 <Body style={styles.body}>
                                     <View>
@@ -325,7 +341,7 @@ export default class CardsScreen extends React.Component {
     render() {
         return (
             <View style={styles.f1}>
-                <StatusBar backgroundColor="#fff" style="dark"/>
+                <StatusBar backgroundColor="#ffffff" style="dark"/>
                 <DropdownAlert
                     ref={ref => this.dropDownAlertRef = ref}
                     useNativeDriver={true}
@@ -340,6 +356,7 @@ export default class CardsScreen extends React.Component {
                 />
                 <ScreensStandart {...this.props} name={t('cards')}/>
                 <View style={styles.f1}>
+                    <StatusBar backgroundColor="#ffffff" style="dark"/>
                     {this.renderRefreshLists()}
                     {this.state.cardCount == 0 ||
                     this.state.cards == null ? (
@@ -348,7 +365,7 @@ export default class CardsScreen extends React.Component {
                         </List>
                     ) : (
                         <ScrollView>
-                            <List style={styles.w100}>
+                            <List style={[styles.w100,{marginBottom:80}]}>
                                 {this.listComponent()}
                             </List>
                         </ScrollView>
@@ -376,6 +393,7 @@ export default class CardsScreen extends React.Component {
                                 width: width,
                                 height: height,
                             }}>
+                            <StatusBar backgroundColor="#ffffff" style="dark" />
                             <DropdownAlert
                                 ref={ref => this.dropDownAlertRef = ref}
                                 useNativeDriver={true}

@@ -43,6 +43,8 @@
   "accounts": "Счета",
   "receipts": "поступления",
   "history": "история",
+  "historyStartSelect": "Rusca Başlanğıc tarixi seç",
+  "historyEndSelect": "Rusca Son tarixi seç",
   "bonuses": "Бонусы",
   "campaigns": "Кампании",
   "map": "карта",

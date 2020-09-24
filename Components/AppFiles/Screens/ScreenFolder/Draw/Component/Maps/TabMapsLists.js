@@ -80,126 +80,72 @@ export default class TabMapsLists extends React.Component {
     renderLoc({item, index}) {
         var that = this;
 
-        function getKilom(longis, latis) {
-            var hesablaLong = that.state.longitude / longis;
-            var hesablaLat = that.state.latitude / latis;
-            var result = hesablaLat + hesablaLong;
-            return Math.ceil(result);
+        function getKilom(latis, longis) {
+            var hesablaLong = longis - that.state.longitude;
+            var hesablaLat = latis - that.state.latitude;
+            var kokalti = Math.sqrt(hesablaLong * hesablaLong + hesablaLat * hesablaLat)
+            return Math.ceil(kokalti*100);
         }
 
         return (
-            <View>
-                {
-                    this.state.refreshing || this.state.loading ?
-                        (
-                            <ScrollView>
-                                <ShimmerPlaceholder
-                                    visible={false}
-                                    isInteraction={true}
-                                    style={{width: width, height: 150, marginBottom: 15}}
-                                />
-                                <ShimmerPlaceholder
-                                    visible={false}
-                                    isInteraction={true}
-                                    style={{width: width, height: 150, marginBottom: 15}}
-                                />
-                                <ShimmerPlaceholder
-                                    visible={false}
-                                    isInteraction={true}
-                                    style={{width: width, height: 150, marginBottom: 15}}
-                                />
-                                <ShimmerPlaceholder
-                                    visible={false}
-                                    isInteraction={true}
-                                    style={{width: width, height: 150, marginBottom: 15}}
-                                />
-                                <ShimmerPlaceholder
-                                    visible={false}
-                                    isInteraction={true}
-                                    style={{width: width, height: 150, marginBottom: 15}}
-                                />
-                                <ShimmerPlaceholder
-                                    visible={false}
-                                    isInteraction={true}
-                                    style={{width: width, height: 150, marginBottom: 15}}
-                                />
-                                <ShimmerPlaceholder
-                                    visible={false}
-                                    isInteraction={true}
-                                    style={{width: width, height: 150, marginBottom: 15}}
-                                />
-                                <ShimmerPlaceholder
-                                    visible={false}
-                                    isInteraction={true}
-                                    style={{width: width, height: 150, marginBottom: 15}}
-                                />
-                            </ScrollView>
-                        )
-                        :
-                        (
-                            <ListItem style={styles.firstList} thumbnail key={index}>
-                                <Left>
-                                    <Thumbnail
-                                        square
-                                        source={{
-                                            uri: item.image_url,
-                                        }}
-                                        style={styles.thumbImage}
-                                    />
-                                </Left>
-                                <Body>
-                                    <Text>{item.name}</Text>
-                                    <Text>{item.address}</Text>
-                                </Body>
-                                <Right>
-                                    <Button transparent>
-                                        <Text>{getKilom(item.coords.lat, item.coords.lng)} M</Text>
-                                    </Button>
-                                </Right>
-                            </ListItem>
-                        )
-                }
-            </View>
+            <ListItem style={styles.firstList} thumbnail key={index}>
+                <Left>
+                    <Thumbnail
+                        square
+                        source={{
+                            uri: item.image_url,
+                        }}
+                        style={styles.thumbImage}
+                    />
+                </Left>
+                <Body>
+                    <Text>{item.name}</Text>
+                    <Text>{item.address}</Text>
+                </Body>
+                <Right>
+                    <Button transparent>
+                        <Text>{getKilom(item.coords.lat, item.coords.lng)} M</Text>
+                    </Button>
+                </Right>
+            </ListItem>
         );
     }
 
     renderRefreshLists() {
-        if (this.state.refreshing || this.state.loading) {
-            return (
-                <ScrollView>
-                    <ShimmerPlaceholder
-                        visible={false}
-                        isInteraction={true}
-                        style={{width: width, height: 90, marginBottom: 15}}
-                    />
-                    <ShimmerPlaceholder
-                        visible={false}
-                        isInteraction={true}
-                        style={{width: width, height: 90, marginBottom: 15}}
-                    />
-                     <ShimmerPlaceholder
-                        visible={false}
-                        isInteraction={true}
-                        style={{width: width, height: 90, marginBottom: 15}}
-                    />
-                     <ShimmerPlaceholder
-                        visible={false}
-                        isInteraction={true}
-                        style={{width: width, height: 90, marginBottom: 15}}
-                    />
-                     <ShimmerPlaceholder
-                        visible={false}
-                        isInteraction={true}
-                        style={{width: width, height: 90, marginBottom: 15}}
-                    />
-                     <ShimmerPlaceholder
-                        visible={false}
-                        isInteraction={true}
-                        style={{width: width, height: 90, marginBottom: 15}}
-                    />
-                </ScrollView>
-            )
-        }
+        return (
+            <ScrollView>
+                <ShimmerPlaceholder
+                    visible={false}
+                    isInteraction={true}
+                    style={{width: width, height: 90, marginBottom: 15}}
+                />
+                <ShimmerPlaceholder
+                    visible={false}
+                    isInteraction={true}
+                    style={{width: width, height: 90, marginBottom: 15}}
+                />
+                <ShimmerPlaceholder
+                    visible={false}
+                    isInteraction={true}
+                    style={{width: width, height: 90, marginBottom: 15}}
+                />
+                <ShimmerPlaceholder
+                    visible={false}
+                    isInteraction={true}
+                    style={{width: width, height: 90, marginBottom: 15}}
+                />
+                <ShimmerPlaceholder
+                    visible={false}
+                    isInteraction={true}
+                    style={{width: width, height: 90, marginBottom: 15}}
+                />
+                <ShimmerPlaceholder
+                    visible={false}
+                    isInteraction={true}
+                    style={{width: width, height: 90, marginBottom: 15}}
+                />
+            </ScrollView>
+        )
     }
 
     render() {
@@ -208,13 +154,16 @@ export default class TabMapsLists extends React.Component {
                 <View style={styles.f1}>
                     <ScrollView style={styles.scrollrecent}>
                         <List style={styles.w100}>
-                            {this.renderRefreshLists()}
-                            <FlatList
-                                style={styles.w100}
-                                data={this.state.maps}
-                                renderItem={this.renderLoc.bind(this)}
-                                keyExtractor={(item,index)=>index.toString()}
-                            />
+                            {this.state.refreshing || this.state.loading ?
+                                this.renderRefreshLists() :
+                                (
+                                    <FlatList
+                                        style={styles.w100}
+                                        data={this.state.maps}
+                                        renderItem={this.renderLoc.bind(this)}
+                                        keyExtractor={(item, index) => index.toString()}
+                                    />
+                                )}
                         </List>
                     </ScrollView>
                 </View>

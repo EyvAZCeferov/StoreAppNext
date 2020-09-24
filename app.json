@@ -26,7 +26,8 @@
     "android": {
       "icon": "./assets/icon.png",
       "package": "com.alov.payandway",
-      "versionCode": 1
+      "versionCode": 1,
+      "useNextNotificationsApi": true
     },
     "description": "Pay and Win mobil tətbiqetməsi istifadəçilərin rahat,sürətli,kassa növbəsi gözləmədən,nəğd pulla və digər insanlarla minumum təməsda olmaq alış veriş etmələri üçün nəzərdə tutulub.",
     "web": {

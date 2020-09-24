@@ -5,6 +5,7 @@ import TabMapsLists from '../Component/Maps/TabMapsLists';
 import TabMapsView from '../Component/Maps/TabMapsView';
 import ScreensStandart from '../Component/ScreensStandart';
 import {t} from '../../../../Lang';
+import {StatusBar} from "expo-status-bar";
 
 var width = Dimensions.get('window').width;
 var height = Dimensions.get('window').height;
@@ -14,6 +15,7 @@ export default class Maps extends React.Component {
         return (
             <View style={styles.f1}>
                 <ScreensStandart {...this.props} name={t('map')}/>
+                <StatusBar backgroundColor="#fff" style="dark" />
                 <Tabs tabStyle={styles.tabsBg} activeTabStyle={styles.activeTab}
                       containerStyle={styles.tabsBg}>
                     <Tab
@@ -47,7 +49,6 @@ const styles = StyleSheet.create({
     },
     tabsBg: {
         backgroundColor: '#fff',
-        color: '#6d7587',
         padding: 0,
         margin: 0,
     },

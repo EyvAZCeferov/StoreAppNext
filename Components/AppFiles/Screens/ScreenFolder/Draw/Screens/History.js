@@ -5,6 +5,7 @@ import {
     ScrollView,
     StyleSheet,
     Dimensions,
+    TouchableOpacity
 } from 'react-native';
 import {
     Container,
@@ -15,10 +16,11 @@ import {
     Button,
     List,
     ListItem,
-    DatePicker
+    DatePicker,
+    Picker
 } from 'native-base';
 import ScreensStandart from '../Component/ScreensStandart';
-import {AntDesign, MaterialIcons} from '@expo/vector-icons';
+import {AntDesign, Entypo, Feather, MaterialIcons} from '@expo/vector-icons';
 
 var width = Dimensions.get('window').width;
 var height = Dimensions.get('window').height;
@@ -169,9 +171,9 @@ export default class History extends React.Component {
 
     renderList(props) {
         if (this.state.history !== null) {
-            return this.state.history.map((element) => {
+            return this.state.history.map((element,index) => {
                 return (
-                    <ListItem style={styles.firstList} thumbnail>
+                    <ListItem style={styles.firstList} thumbnail key={index}>
                         <Left>
                             <Thumbnail
                                 square
@@ -208,14 +210,15 @@ export default class History extends React.Component {
     render() {
         const thisDay=new Date();
         const minDateCount=thisDay.getTime()-2592000;
-        const minDate = new Date(minDateCount * 1000);
+        const minDate = new Date(minDateCount * 100);
         return (
             <View style={styles.f1}>
                 <StatusBar style="dark" backgroundColor="white"/>
                 <ScreensStandart {...this.props} name={t('history')}/>
                 <Container>
-                    <View style={styles.f1}>
-                        <View>
+                    <StatusBar style="dark" backgroundColor="white"/>
+                    <View style={[styles.f1,{height:height,flexDirection:"column",justifyContent:"space-between",alignContent:"center",alignItems:"center"}]}>
+                        <View style={{height:height/8,flexDirection:"column",justifyContent:"space-around",alignContent:"center",alignItems:"center"}}>
                             <View style={styles.contentHeader}>
                                 <View style={styles.contentHeaderColumn}>
                                     <MaterialIcons name="date-range" size={24} color="#7c9d32"/>
@@ -225,7 +228,7 @@ export default class History extends React.Component {
                                         locale='az'
                                         maximumDate={thisDay}
                                         minimumDate={minDate}
-                                        placeHolderText="Zamanı seç"
+                                        placeHolderText={t('historyStartSelect')}
                                         placeHolderTextStyle={{color: "#7c9d32"}}
                                         textStyle={{color: "#7c9d32", fontSize: 20}}
                                         animationType="slide"
@@ -239,7 +242,7 @@ export default class History extends React.Component {
                                         defaultDate={thisDay}
                                         locale='az'
                                         maximumDate={thisDay}
-                                        placeHolderText="Zamanı seç"
+                                        placeHolderText={t('historyEndSelect')}
                                         placeHolderTextStyle={{color: "#7c9d32"}}
                                         textStyle={{color: "#7c9d32", fontSize: 20}}
                                         animationType="slide"
@@ -247,8 +250,37 @@ export default class History extends React.Component {
                                     />
                                 </View>
                             </View>
+                            <View style={styles.contentHeader}>
+                                <View style={styles.contentHeaderColumn}>
+                                    <Picker
+                                        mode="dropdown"
+                                        placeholder={t('language')}
+                                        placeholderStyle={{color: '#7c9d32'}}
+                                        placeholderIconColor="#7c9d32"
+                                        style={{
+                                            color: '#7c9d32',
+                                            width: 150,
+                                        }}
+                                        selectedValue={this.state.selected}
+                                        onValueChange={(val) => this.onValueChange(val)}>
+                                        <Picker.Item
+                                            label="    Mağaza adı"
+                                            color="#7c9d32"
+                                            icon={
+                                                <Feather name="check-circle" size={24} color="black"/>
+                                            }
+                                            value="az"
+                                        />
+                                    </Picker>
+                                </View>
+                                <View style={[styles.contentHeaderColumn,{backgroundColor:"transparent",marginHorizontal:"auto"}]}>
+                                    <TouchableOpacity onPress={()=>alert('Pressed')}>
+                                        <MaterialIcons name="search" size={24} color="#7c9d32"/>
+                                    </TouchableOpacity>
+                                </View>
+                            </View>
                         </View>
-                        <View style={{position: "absolute", top: '15%', height: height, width: width}}>
+                        <View style={{height: height-height/8, width: width}}>
                             <ScrollView>
                                 <List style={styles.w100}>
                                     {this.renderList(this.props.navigation)}

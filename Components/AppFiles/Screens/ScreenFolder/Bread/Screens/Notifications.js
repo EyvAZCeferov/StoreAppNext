@@ -8,6 +8,7 @@ import {
     FlatList,
     Alert,
     Modal,
+    Platform
 } from 'react-native';
 import {
     Button,
@@ -22,7 +23,6 @@ import {
     Header,
     Card,
     CardItem,
-    Badge,
 } from 'native-base';
 import firebase from '../../../../Functions/FireBase/firebaseConfig';
 import {t} from '../../../../Lang';
@@ -33,48 +33,65 @@ import {
     AntDesign,
     Feather,
     Entypo,
-    FontAwesome,
 } from '@expo/vector-icons';
 import {StatusBar} from "expo-status-bar";
+import * as Permissions from "expo-permissions";
+import * as Notifications from 'expo-notifications';
+import Constants from 'expo-constants';
 
-export default class Notifications extends React.Component {
-    state = {
-        notifies: [
-            {
-                image:
-                    'https://banker.az/wp-content/uploads/2018/02/Kapital_Bank_-e1518595902278.png',
-                content: [{title: 'Baki Store', desc: '100 Azn lik Alisveris'}],
-                price: 50,
-                date: '20.07.2020',
-                id: 1,
-                read: true,
-            },
-            {
-                image:
-                    'https://banker.az/wp-content/uploads/2018/02/Kapital_Bank_-e1518595902278.png',
-                content: [{title: 'BazarStore', desc: '20 Azn lik Alisveris'}],
-                price: 50,
-                date: '20.07.2020',
-                id: 2,
-                read: false,
-            },
-            {
-                image:
-                    'https://banker.az/wp-content/uploads/2018/02/Kapital_Bank_-e1518595902278.png',
-                content: [{title: 'ArazStore', desc: '30 Azn lik Alisveris'}],
-                price: 50,
-                date: '20.07.2020',
-                id: 3,
-                read: false,
-            },
-        ],
-        notifications: [],
-        refreshing: true,
-        loading: true,
-        active: false,
-    };
+Notifications.setNotificationHandler({
+    handleNotification: async () => ({
+        shouldShowAlert: true,
+        shouldPlaySound: true,
+        shouldSetBadge: true,
+    }),
+});
 
-    getInfo() {
+export default function Notification(props) {
+    const [notifies, setNotifies] = React.useState([
+        {
+            image:
+                'https://banker.az/wp-content/uploads/2018/02/Kapital_Bank_-e1518595902278.png',
+            content: [{title: 'Baki Store', desc: '100 Azn lik Alisveris'}],
+            price: 50,
+            date: '20.07.2020',
+            id: 1,
+            read: true,
+        },
+        {
+            image:
+                'https://banker.az/wp-content/uploads/2018/02/Kapital_Bank_-e1518595902278.png',
+            content: [{title: 'BazarStore', desc: '20 Azn lik Alisveris'}],
+            price: 50,
+            date: '20.07.2020',
+            id: 2,
+            read: false,
+        },
+        {
+            image:
+                'https://banker.az/wp-content/uploads/2018/02/Kapital_Bank_-e1518595902278.png',
+            content: [{title: 'ArazStore', desc: '30 Azn lik Alisveris'}],
+            price: 50,
+            date: '20.07.2020',
+            id: 3,
+            read: false,
+        },
+    ])
+    const [notification, setNotification] = React.useState(null)
+    const [refresh, setRefresh] = React.useState(true)
+    const [token, setToken] = React.useState(null)
+
+    async function getNotifyPerform() {
+        registerForPushNotificationsAsync().then(token => setTokenFunction(token));
+
+        function setTokenFunction(token) {
+            var user = firebase.auth().currentUser;
+            firebase.database().ref('users/' + user.uid + '/userInfos/push_id').set(token)
+            setToken(token)
+        }
+    }
+
+    function getInfo() {
         firebase.database().goOnline();
         var user = firebase.auth().currentUser;
         var datas = [];
@@ -86,155 +103,98 @@ export default class Notifications extends React.Component {
                     data.forEach((data) => {
                         datas.push(data.val());
                     });
-                    this.setState({
-                        notifications: datas,
-                        refreshing: false,
-                        loading: false,
-                    });
+
+                    setNotification(datas)
+                    setRefresh(false)
+                    renderContent()
                 });
         } else {
-            this.props.navigation.navigate('Home');
+            props.navigation.navigate('Home');
         }
     }
 
-    componentDidMount() {
-        this.getInfo();
+    async function registerForPushNotificationsAsync() {
+        let token;
+        if (Constants.isDevice) {
+            const {status: existingStatus} = await Permissions.getAsync(Permissions.NOTIFICATIONS);
+            let finalStatus = existingStatus;
+            if (existingStatus !== 'granted') {
+                const {status} = await Permissions.askAsync(Permissions.NOTIFICATIONS);
+                finalStatus = status;
+            }
+            if (finalStatus !== 'granted') {
+                alert('Failed to get push token for push notification!');
+                return;
+            }
+            token = (await Notifications.getExpoPushTokenAsync()).data;
+        } else {
+            alert('Must use physical device for Push Notifications');
+        }
+
+        if (Platform.OS === 'android') {
+            await Notifications.setNotificationChannelAsync('default', {
+                name: 'default',
+                importance: Notifications.AndroidImportance.MAX,
+                vibrationPattern: [0, 250, 250, 250],
+                lightColor: '#FF231F7C',
+            });
+        }
+        return token
     }
 
-    componentWillUnmount() {
+    React.useEffect(() => {
+        getInfo()
+        getNotifyPerform()
+    }, [])
+
+    function componentWillUnmount() {
         firebase.database().goOffline();
     }
 
-    async handleRefresh() {
-        this.setState(
-            {
-                refreshing: true,
-                loading: true,
-            },
-            () => {
-                this.getInfo();
-            }
-        );
+    async function handleRefresh() {
+        setRefresh(true)
+        getInfo()
     }
 
-    renderItem({item, index}) {
-        function read(index) {
-            var user = firebase.auth().currentUser;
-            if (user) {
-                firebase
-                    .database()
-                    .ref('users/' + user.uid + '/notifications/' + index)
-                    .update({
-                        read: true,
-                    });
-            } else {
-                this.props.navigation.navigate('Login');
-            }
-        }
-
-        function viewInfo(index) {
-            var user = firebase.auth().currentUser;
-            var notifyData = null;
-            if (user) {
-                firebase
-                    .database()
-                    .ref('users/' + user.uid + '/notifications/' + index)
-                    .on('value', (data) => {
-                        var newData = data.toJSON();
-                        notifyData = newData.description;
-                        return notifyData;
-                    });
-                Alert.alert(notifyData);
-            } else {
-                this.props.navigation.navigate('Login');
-            }
-        }
-
-        return (
-            <ListItem
-                style={styles.firstList}
-                thumbnai
-                key={index}
-                onPress={() => viewInfo(item.id)}>
-                <Left style={styles.left}>
-                    <Thumbnail
-                        square
-                        source={{
-                            uri: item.image,
-                        }}
-                        style={styles.thumbImage}
-                    />
-                </Left>
-                <Body style={styles.body}>
-                    <Text style={styles.cardNumbText}>{item.content[0].title}</Text>
-                    <Text style={styles.cardNumbText}>{item.date}</Text>
-                </Body>
-                <Right style={styles.right}>
-                    <Button transparent onPress={() => read(item.id)}>
-                        <FontAwesome name="check" size={24} color="#7c9d32"/>
-                    </Button>
-                    {item.read === false ? (
-                        <Badge primary>
-                            <Entypo name="unread" size={24} color="#fff"/>
-                        </Badge>
-                    ) : null}
-                </Right>
-            </ListItem>
-        );
-    }
-
-    renderItem2({item, index}) {
-        function read(index) {
-            var user = firebase.auth().currentUser;
-            if (user) {
-                firebase
-                    .database()
-                    .ref('users/' + user.uid + '/notifications/' + index)
-                    .update({
-                        read: true,
-                    });
-            }
-        }
+    function renderItem2({item, index}) {
 
         function viewInfo(index, bool = false) {
             return (
-                <View>
-                    <View
-                        style={{
-                            flex: 1,
-                            justifyContent: 'center',
-                            alignItems: 'center',
-                            alignContent: 'center',
-                            marginTop: 70,
-                            width: width,
-                            height: height,
+                <View key={index} style={{
+                    backgroundColor: "red",
+                    justifyContent: "center",
+                    alignContent: "center",
+                    alignItems: "center",
+                    width: width,
+                    height: height,
+                    flex: 1,
+                }}>
+                    <Modal
+                        style={{width: width, height: height, backgroundColor: "#fff"}}
+                        animationType="slide"
+                        transparent={false}
+                        visible={false}
+                        onRequestClose={() => {
+                            Alert.alert('Modal has been closed.');
                         }}>
-                        <Modal
-                            animationType="fade"
-                            transparent={true}
-                            visible={bool}
-                            onRequestClose={() => {
-                                Alert.alert('Modal has been closed.');
-                            }}>
-                            <Card style={{marginTop: 30}}>
-                                <CardItem header>
-                                    <Body>
-                                        <Text>ArazStore notify </Text>
-                                    </Body>
-                                    <Right>
-                                        <Button transparent onPress={() => (bool = false)}>
-                                            <AntDesign name="close" size={24} color="#D50000"/>
-                                        </Button>
-                                    </Right>
-                                </CardItem>
-                                <CardItem>
-                                    <Body>
-                                        <Text>100 azn lik alış veriş etdiniz</Text>
-                                    </Body>
-                                </CardItem>
-                            </Card>
-                        </Modal>
-                    </View>
+                        <Card>
+                            <CardItem header>
+                                <Body>
+                                    <Text>ArazStore notify </Text>
+                                </Body>
+                                <Right>
+                                    <Button transparent>
+                                        <AntDesign name="close" size={24} color="#D50000"/>
+                                    </Button>
+                                </Right>
+                            </CardItem>
+                            <CardItem>
+                                <Body>
+                                    <Text>100 azn lik alış veriş etdiniz</Text>
+                                </Body>
+                            </CardItem>
+                        </Card>
+                    </Modal>
                 </View>
             );
         }
@@ -242,10 +202,10 @@ export default class Notifications extends React.Component {
         return (
             <ListItem
                 style={styles.firstList}
-                thumbnai
+                thumbnail
                 key={index}
                 onPress={() => viewInfo(item.id, true)}>
-                <Left style={styles.left}>
+                <Left>
                     <Thumbnail
                         square
                         source={{
@@ -254,29 +214,24 @@ export default class Notifications extends React.Component {
                         style={styles.thumbImage}
                     />
                 </Left>
-                <Body style={styles.body}>
+                <Body>
                     <Text style={styles.cardNumbText}>
                         {item.content[0].title}
-                        {item.read === false ? (
-                            <Entypo name="dot-single" size={28} color="#BF360C"/>
-                        ) : null}
                     </Text>
-                    <Text style={styles.cardNumbText}>{item.date}</Text>
+                    <Text style={{fontSize: 15, color: "rgba(0,0,0,.5)"}}>{item.date}</Text>
                 </Body>
-                <Right style={styles.right}>
-                    <Button transparent onPress={() => read(item.id)}>
-                        {item.read === false ? (
-                            <FontAwesome name="check" size={24} color="#6d7587"/>
-                        ) : (
-                            <FontAwesome name="check" size={24} color="#7c9d32"/>
-                        )}
-                    </Button>
+                <Right>
+                    {item.read === false ? (
+                        <Entypo name="dot-single" size={33} color="#BF360C"/>
+                    ) : (
+                        <Entypo name="dot-single" size={33} color="#7c9d32"/>
+                    )}
                 </Right>
             </ListItem>
         );
     }
 
-    deleteNotifies() {
+    function deleteNotifies() {
         var user = firebase.auth().currentUser;
         if (user) {
             Alert.alert(
@@ -301,11 +256,11 @@ export default class Notifications extends React.Component {
                 {cancelable: true}
             );
         } else {
-            this.props.navigation.navigate('Login');
+            props.navigation.navigate('Login');
         }
     }
 
-    readNotifies() {
+    function readNotifies() {
         var user = firebase.auth().currentUser;
         if (user) {
             Alert.alert(
@@ -329,97 +284,102 @@ export default class Notifications extends React.Component {
                 {cancelable: true}
             );
         } else {
-            this.props.navigation.navigate('Login');
+            props.navigation.navigate('Login');
         }
     }
 
-    render() {
+
+    function renderContent() {
         return (
-            <View style={styles.f1}>
+            <View>
+                <ScrollView style={styles.scrollrecent}>
+                    {refresh ||
+                    notification === null ? (
+                        <List style={styles.w100}>
+                            <Text style={styles.nullObject}>{t('noResult')}</Text>
+                        </List>
+                    ) : (
+                        <List style={styles.w100}>
+                            <FlatList
+                                style={styles.w100}
+                                data={notifies}
+                                renderItem={renderItem2}
+                                keyExtractor={(item, index) => index.toString()}
+                                refreshing={refresh}
+                                onRefresh={handleRefresh}
+                            />
+                        </List>
+                    )}
+                </ScrollView>
+            </View>
+        )
+    }
+
+
+    return (
+        <View style={styles.f1}>
+            <StatusBar backgroundColor="#fff" style="dark"/>
+            <Container style={styles.f1}>
                 <StatusBar backgroundColor="#fff" style="dark"/>
-                <Container style={styles.f1}>
-                    <Header
+                <Header
+                    style={{
+                        flexDirection: "row",
+                        justifyContent: "space-between",
+                        backgroundColor: "#fff",
+                        alignItems: "center",
+                        alignContent: "center",
+                        textAlign: "center"
+                    }}>
+                    <StatusBar backgroundColor="#fff" style="dark"/>
+                    <View
                         style={{
-                            flexDirection: "row",
-                            justifyContent: "space-between",
-                            marginTop: 12,
-                            backgroundColor: "#fff",
                             alignItems: "center",
                             alignContent: "center",
-                            textAlign: "center"
-                        }}>
-                        <View
+                            textAlign: "center",
+                            justifyContent: "center"
+                        }}
+                    >
+                        <Button
                             style={{
                                 alignItems: "center",
                                 alignContent: "center",
                                 textAlign: "center",
                                 justifyContent: "center"
                             }}
-                        >
-                            <Button
-                                style={{
-                                    alignItems: "center",
-                                    alignContent: "center",
-                                    textAlign: "center",
-                                    justifyContent: "center"
-                                }}
-
-                                transparent
-                                onPress={() => this.props.navigation.goBack()}>
-                                <AntDesign name="back" size={24} color="#7c9d32"/>
-                            </Button>
-                        </View>
-                        <View style={{
-                            alignItems: "center",
-                            alignContent: "center",
-                            textAlign: "center",
-                            justifyContent: "center"
-                        }}>
-                            <Text style={styles.headerTitle}>{t('notifications')}</Text>
-                        </View>
-                        <View style={{
-                            alignItems: "center",
-                            alignContent: "center",
-                            textAlign: "center",
-                            justifyContent: "space-between",
-                            flexDirection: "row",
-                        }}>
-                            <Button transparent onPress={() => this.deleteNotifies}>
-                                <Feather name="trash-2" size={24} color="#7c9d32"/>
-                            </Button>
-                            <Button transparent onPress={() => this.readNotifies}>
-                                <Feather name="user-check" size={24} color="#7c9d32"/>
-                            </Button>
-                        </View>
-                    </Header>
-                    <Content>
-                        <View>
-                            <ScrollView style={styles.scrollrecent}>
-                                {this.state.refreshing === true ||
-                                this.state.loading === true ||
-                                this.state.notifications === null ? (
-                                    <List style={styles.w100}>
-                                        <Text style={styles.nullObject}>{t('noResult')}</Text>
-                                    </List>
-                                ) : (
-                                    <List style={styles.w100}>
-                                        <FlatList
-                                            style={styles.w100}
-                                            data={this.state.notifies}
-                                            renderItem={this.renderItem2}
-                                            keyExtractor={(item, index) => index.toString()}
-                                            refreshing={this.state.refreshing}
-                                            onRefresh={this.handleRefresh}
-                                        />
-                                    </List>
-                                )}
-                            </ScrollView>
-                        </View>
-                    </Content>
-                </Container>
-            </View>
-        );
-    }
+                            transparent
+                            onPress={() => props.navigation.goBack()}>
+                            <AntDesign name="back" size={24} color="#7c9d32"/>
+                        </Button>
+                    </View>
+                    <View style={{
+                        alignItems: "center",
+                        alignContent: "center",
+                        textAlign: "center",
+                        justifyContent: "center"
+                    }}>
+                        <Text style={styles.headerTitle}>{t('notifications')}</Text>
+                    </View>
+                    <View style={{
+                        alignItems: "center",
+                        alignContent: "center",
+                        textAlign: "center",
+                        justifyContent: "space-between",
+                        flexDirection: "row",
+                    }}>
+                        <Button transparent onPress={() => deleteNotifies}>
+                            <Feather name="trash-2" size={24} color="#7c9d32"/>
+                        </Button>
+                        <Button transparent onPress={() => readNotifies}>
+                            <Feather name="user-check" size={24} color="#7c9d32"/>
+                        </Button>
+                    </View>
+                </Header>
+                <Content>
+                    {renderContent()}
+                </Content>
+            </Container>
+        </View>
+    );
 }
 
 const styles = StyleSheet.create({
@@ -440,22 +400,17 @@ const styles = StyleSheet.create({
     w100: {
         width: width,
     },
-    body: {
-        marginLeft: -150,
-    },
     firstList: {
-        marginTop: 15,
+        marginBottom: 5,
     },
     cardNumbText: {
         fontSize: 17,
+        marginBottom: 3,
         color: '#6d7587',
         fontWeight: 'bold',
     },
     thumbImage: {
-        borderRadius: 100,
-    },
-    right: {
-        marginLeft: -40,
+        borderRadius: 50,
     },
     nullObject: {
         color: '#D50000',

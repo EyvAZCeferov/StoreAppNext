@@ -70,11 +70,11 @@ export default class OneCampaign extends React.Component {
     }
 
     async share(title, desc, url) {
-        console.log(title, desc, url)
+        var des = unescape(desc.replace(/(<([^>]+)>)/gi, ''))
         try {
             const result = await Share.share({
                     title: title,
-                    message: desc,
+                    message: des,
                     url: url != null ? url : 'https://payandwin.az',
                 }, {
                     dialogTitle: title + " Paylaşmaq üçün hazırdır.",

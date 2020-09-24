@@ -7,7 +7,8 @@ import {
     ImageBackground,
     Dimensions,
     ScrollView,
-    FlatList
+    FlatList,
+    ActivityIndicator
 } from 'react-native';
 import firebase from "../../../../Functions/FireBase/firebaseConfig";
 import {StatusBar} from 'expo-status-bar';
@@ -52,13 +53,12 @@ export default class OneService extends React.Component {
                         data.forEach(element => {
                             keys.push(element.key)
                         });
-                        keys.map(element => {
+                        keys.map((element) => {
                             firebase
                                 .database()
-                                .ref('campaigns/' + element + 'category_id')
-                                .child(params.uid)
+                                .ref('campaigns/' + element + '/category_id/'+params.uid)
                                 .on('value', data => {
-                                    console.log(data.toJSON())
+                                    console.log(data)
                                     data.forEach(d => {
                                         cards.push(d.val())
                                     });
@@ -186,7 +186,11 @@ export default class OneService extends React.Component {
                         <View/>
                     </View>
                     <View style={styles.serviceAbout}>
-                        {this.state.refresh ? null : (
+                        {this.state.refresh ? (
+                            <View style={{flex:1,justifyContent:"center",alignItems:"center",alignContent:"center"}}>
+                                <ActivityIndicator size="large" focusable={true} accessibilityLabel="Hay?" color="#7c9d32"  />
+                            </View>
+                        ) : (
                             <ImageBackground
                                 source={{uri: "https://picsum.photos/200/300.jpg"}}
                                 resizeMode='cover'

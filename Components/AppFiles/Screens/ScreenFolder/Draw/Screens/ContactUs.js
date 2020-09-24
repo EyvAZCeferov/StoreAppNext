@@ -102,6 +102,7 @@ export default class ContactUs extends React.Component {
                 <StatusBar backgroundColor="#fff" style="dark" animated={true}/>
                 <ScreensStandart {...this.props} name={t('contactus')}/>
                 <View style={[styles.content, {backgroundColor: "transparent", height: 800}]}>
+                    <StatusBar backgroundColor="#fff" style="dark"/>
                     <View style={styles.row}>
                         <Grid style={{width: width, height: 50}}>
                             <Col style={styles.colCenter}>
@@ -150,7 +151,9 @@ export default class ContactUs extends React.Component {
                                 <Spinner color="#7c9d32" size={36}/>
                             ) : (
                                 <View>
+                                    <StatusBar backgroundColor="#fff" style="dark"/>
                                     <KeyboardAwareScrollView style={{backgroundColor: 'transparent',height:600,marginTop: 15}}>
+                                        <StatusBar backgroundColor="#fff" style="dark"/>
                                         <View style={{
                                             width: width,
                                             height: 90,

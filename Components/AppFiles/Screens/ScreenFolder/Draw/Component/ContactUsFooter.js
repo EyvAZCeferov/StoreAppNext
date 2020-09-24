@@ -38,13 +38,6 @@ export default class ContactUsFooter extends React.Component {
                     </Button>
                     <Button
                         transparent
-                        onPress={() => Linking.openURL('http://linkedin.com')}>
-                        <View style={[styles.btn, styles.btnLink]}>
-                            <Feather name="linkedin" size={22} color="#fff"/>
-                        </View>
-                    </Button>
-                    <Button
-                        transparent
                         onPress={() => Linking.openURL('https://www.instagram.com/payandwin.az/')}>
                         <View style={[styles.btn, styles.btnInsda]}>
                             <Feather name="instagram" size={24} color="#fff"/>

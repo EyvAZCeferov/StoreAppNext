@@ -22,7 +22,7 @@ import {t} from '../../../../Lang';
 var width = Dimensions.get('window').width;
 const succesImage = require('../../../../../../assets/images/Alert/tick.png');
 
-const icon = require('../../../../../../assets/images/logo.jpeg');
+const icon = require('../../../../../../assets/icon.png');
 import firebase from '../../../../Functions/FireBase/firebaseConfig';
 import {StatusBar} from "expo-status-bar";
 import DropdownAlert from "react-native-dropdownalert";

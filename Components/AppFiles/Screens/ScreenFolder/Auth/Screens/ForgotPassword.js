@@ -24,7 +24,7 @@ import {t} from '../../../../Lang';
 const succesImage = require('../../../../../../assets/images/Alert/tick.png');
 
 var width = Dimensions.get('window').width;
-const icon = require('../../../../../../assets/images/logo.jpeg');
+const icon = require('../../../../../../assets/icon.png');
 import firebase from '../../../../Functions/FireBase/firebaseConfig';
 import DropdownAlert from "react-native-dropdownalert";
 

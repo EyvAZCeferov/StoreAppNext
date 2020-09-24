@@ -219,6 +219,7 @@ export default class AccountSettings extends React.Component {
                 {this.state.isReady ? (
  <View>
                     <View style={styles.header}>
+                        <StatusBar backgroundColor="#fff" style="dark"/>
                         <View style={customStyle.headerArena}>
                             <View style={styles.imagePickerArena}>
                                 <View style={styles.imageArena}>
@@ -250,7 +251,9 @@ export default class AccountSettings extends React.Component {
                         </View>
                     </View>
                     <View style={customStyle.f1}>
+                        <StatusBar backgroundColor="#fff" style="dark"/>
                         <Content style={styles.content}>
+                            <StatusBar backgroundColor="#fff" style="dark"/>
                             <Form style={[customStyle.m0p0, customStyle.centerItems]}>
                                 <Item style={styles.itemStyle}>
                                     <Input
@@ -309,6 +312,7 @@ export default class AccountSettings extends React.Component {
                 </View>
                 ):(
                     <View style={{flex:1,justifyContent:'center',alignContent:'center' ,alignItems:'center',textAlign:'center' }}>
+                        <StatusBar backgroundColor="#fff" style="dark"/>
                         <ActivityIndicator size="large" color="#7c9d32" />
                     </View>
 
