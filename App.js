@@ -7,8 +7,10 @@ import {getLang, t} from './Components/AppFiles/Lang';
 import firebase from './Components/AppFiles/Functions/FireBase/firebaseConfig';
 import {AntDesign} from "@expo/vector-icons";
 import AsyncStorage from '@react-native-community/async-storage';
+import * as Network from 'expo-network'
 
 enableScreens();
+import {Alert} from 'react-native'
 import {Root} from 'native-base';
 //Screnns
 import {
@@ -34,7 +36,8 @@ import {
     ProfileSection,
     BarcodeScanDo,
     Service,
-    ProgramLocker
+    ProgramLocker,
+    SetFing
 } from "./Components/AppFiles/Screens/CallScreen";
 
 import AppSlider from './Components/AppFiles/Screens/ScreenFolder/AppIntro/AppSlider'
@@ -178,39 +181,64 @@ function NavigateAuth(props) {
 }
 
 function AuthVerify(props) {
-    const [verify, setVerify] = React.useState(false)
+    const [verify, setVerify] = React.useState(true)
 
     return verify ? <ProgramLockScreens {...props}/> : <Screen {...props} />;
 }
 
 function AppIntro(props) {
-    const [firstOpenSlider,setfirstOpenSlider] = React.useState(null);
+    const [firstOpenSlider, setfirstOpenSlider] = React.useState(null);
 
-  async function getfirstOpen() {
-        AsyncStorage.getItem('firstOpenSlider').then((a) => {
+    async function getfirstOpen() {
+        AsyncStorage.getItem('firstOp').then((a) => {
             setfirstOpenSlider(a)
-         });
+        });
     }
 
     React.useEffect(() => {
         getfirstOpen();
     }, [])
 
-    function changeStat(){
-        AsyncStorage.setItem('firstOpenSlider','Ok');
-        AsyncStorage.getItem('firstOpenSlider').then((a) => {
+    function changeStat() {
+        AsyncStorage.setItem('firstOp', 'Ok');
+        AsyncStorage.getItem('firstOp').then((a) => {
             setfirstOpenSlider(a)
-         });
+        });
     }
 
-    return firstOpenSlider ==null ? <AppSlider callfunc={()=>changeStat()} {...props} /> : <NavigateAuth {...props} />;
+    return firstOpenSlider == null ? <AppSlider callfunc={() => changeStat()} {...props} /> :
+        <NavigateAuth {...props} />;
+}
+
+function PreView(props) {
+    return <SetFing/>
 }
 
 export default function (props) {
     React.useEffect(() => {
         getLang();
+        getNetStat()
         console.disableYellowBox = true;
     }, [])
+
+    async function getNetStat() {
+        let status = await Network.getNetworkStateAsync();
+        if (!status.isConnected && !status.isInternetReachable) {
+            Alert.alert(
+                'İnternet Xətası',
+                "İnternetə qoşulub təkrar yoxlayın",
+                [
+                    {
+                        text: t('cancel'),
+                        onPress: () => console.log('Cancel Pressed'),
+                        style: 'cancel',
+                    },
+                ],
+                {cancelable: true}
+            );
+        }
+    }
+
     return (
         <Root>
             <NavigationContainer>

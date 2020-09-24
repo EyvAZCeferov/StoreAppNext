@@ -16,7 +16,7 @@
     </select>
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="64eff0f2-a29f-4a6e-8bcc-bb9791a422d7" name="Default Changelist" comment="Updated">
+    <list default="true" id="64eff0f2-a29f-4a6e-8bcc-bb9791a422d7" name="Default Changelist" comment="SetPass and Program Lock fixed and created">
       <change afterPath="$PROJECT_DIR$/.idea/inspectionProfiles/Project_Default.xml" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/Components/AppFiles/Screens/ScreenFolder/AppIntro/images/6.png" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/Components/AppFiles/Screens/ScreenFolder/AppIntro/images/7.png" afterDir="false" />
@@ -194,6 +194,7 @@
       <workItem from="1600712976285" duration="5187000" />
       <workItem from="1600767334540" duration="13973000" />
       <workItem from="1600802001017" duration="6104000" />
+      <workItem from="1600927265787" duration="167000" />
     </task>
     <task id="LOCAL-00001" summary="Fles">
       <created>1599058921979</created>
@@ -230,7 +231,14 @@
       <option name="project" value="LOCAL" />
       <updated>1600514708376</updated>
     </task>
-    <option name="localTasksCounter" value="6" />
+    <task id="LOCAL-00006" summary="SetPass and Program Lock fixed and created">
+      <created>1600927459714</created>
+      <option name="number" value="00006" />
+      <option name="presentableId" value="LOCAL-00006" />
+      <option name="project" value="LOCAL" />
+      <updated>1600927459714</updated>
+    </task>
+    <option name="localTasksCounter" value="7" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -265,7 +273,8 @@
     <MESSAGE value="Fles" />
     <MESSAGE value="ProgramLock Added" />
     <MESSAGE value="Updated" />
-    <option name="LAST_COMMIT_MESSAGE" value="Updated" />
+    <MESSAGE value="SetPass and Program Lock fixed and created" />
+    <option name="LAST_COMMIT_MESSAGE" value="SetPass and Program Lock fixed and created" />
   </component>
   <component name="WindowStateProjectService">
     <state x="570" y="204" key="#Notifications" timestamp="1598798096992">

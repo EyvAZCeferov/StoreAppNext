@@ -7,7 +7,7 @@ import {
 import NumberButtons from './Components/NumberButtons';
 import ProgramLockHeader from './Components/ProgramLockHeader';
 import FooterBar from './Components/FooterBar';
-import CodeField from './Components/CodeField';
+import CodeFieldInput from './Components/CodeField';
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view'
 import * as LocalAuthentication from 'expo-local-authentication';
 
@@ -15,7 +15,9 @@ var width = Dimensions.get('window').width;
 var height = Dimensions.get('window').height;
 import firebase from "../../../../../Functions/FireBase/firebaseConfig";
 import {t} from "../../../../../Lang";
+import AsyncStorage from '@react-native-community/async-storage';
 
+var reqems = '';
 export default class ProgramLock extends React.Component {
     constructor(props) {
         super(props);
@@ -23,8 +25,17 @@ export default class ProgramLock extends React.Component {
             userName: null,
             userAvatar: null,
             userLogined: false,
-            hasFingerPrintHardware: false
+            hasFingerPrintHardware: false,
+            pass: ''
         }
+    }
+
+    async getSoragePerm() {
+        await AsyncStorage.getItem('haveFinger').then((a) => {
+            if (a != null) {
+                this.hasHardware()
+            }
+        });
     }
 
     async hasHardware() {
@@ -42,8 +53,10 @@ export default class ProgramLock extends React.Component {
     }
 
     componentDidMount() {
-        this.getInfo();
-        this.hasHardware();
+        setInterval(() => {
+            this.getInfo();
+        }, 3000)
+        this.getSoragePerm();
     }
 
     async getInfo() {
@@ -60,6 +73,7 @@ export default class ProgramLock extends React.Component {
                         userName: newData.email
                     })
                 })
+            this.renderContent()
         } else {
             alert('Connection Error');
         }
@@ -94,30 +108,49 @@ export default class ProgramLock extends React.Component {
         this.callFinger()
     }
 
+    changeVal(val) {
+        reqems = reqems + val;
+        if (reqems.length > 4) {
+            //
+        } else {
+            this.setState({pass: reqems})
+        }
+    }
+
+    clearVal() {
+        this.setState({pass: null})
+    }
+
+    renderContent() {
+        return (
+            <View style={styles.container}>
+                <View style={styles.header}>
+                    <ProgramLockHeader
+                        {...this.props}
+                        userName={this.state.userName}
+                        userAvatar={this.state.userAvatar}
+                    />
+                </View>
+                <View style={styles.codefieldArena}>
+                    <CodeFieldInput value={this.state.pass} {...this.props} />
+                </View>
+                <View style={styles.buttons}>
+                    <NumberButtons
+                        clearVal={() => this.clearVal()}
+                        changeVal={(e) => this.changeVal(e)} {...this.props} />
+                </View>
+                <View style={styles.footer}>
+                    <FooterBar permission={this.state.hasFingerPrintHardware}
+                               callFingerPrint={() => this.fingerPrint()} {...this.props} />
+                </View>
+            </View>
+        )
+    }
+
     render() {
         return (
             <View>
-                <KeyboardAwareScrollView>
-                    <View style={styles.container}>
-                        <View style={styles.header}>
-                            <ProgramLockHeader
-                                {...this.props}
-                                userName={this.state.userName}
-                                userAvatar={this.state.userAvatar}
-                            />
-                        </View>
-                        <View style={styles.codefieldArena}>
-                            <CodeField {...this.props} />
-                        </View>
-                        <View style={styles.buttons}>
-                            <NumberButtons {...this.props} />
-                        </View>
-                        <View style={styles.footer}>
-                            <FooterBar permission={this.state.hasFingerPrintHardware}
-                                       callFingerPrint={() => this.fingerPrint()} {...this.props} />
-                        </View>
-                    </View>
-                </KeyboardAwareScrollView>
+                {this.renderContent()}
             </View>
         );
     }

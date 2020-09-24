@@ -1,5 +1,5 @@
 import React, {useState} from 'react';
-import {View, StyleSheet, Dimensions, Text, TouchableOpacity,BackHandler} from 'react-native';
+import {View, StyleSheet, Dimensions, Text, TouchableOpacity, BackHandler} from 'react-native';
 import {Col, Grid, Row} from 'react-native-easy-grid';
 
 var width = Dimensions.get('window').width;
@@ -10,6 +10,15 @@ import {t} from "../../../../../../Lang";
 
 export default function NumberButton(props) {
     const [val, setVal] = useState(null);
+
+    function changeVal(e) {
+        props.changeVal(e)
+    }
+
+    function clearVal() {
+        props.clearVal();
+    }
+
     return (
         <View>
             <View style={styles.container}>
@@ -18,17 +27,17 @@ export default function NumberButton(props) {
                         <Row style={styles.alignCenter}>
                             <Grid style={styles.alignCenter}>
                                 <Col style={styles.alignCenter}>
-                                    <TouchableOpacity onPress={() => alert('1')} style={styles.btn}>
+                                    <TouchableOpacity onPress={() => changeVal(1)} style={styles.btn}>
                                         <Text style={styles.btnText}>1</Text>
                                     </TouchableOpacity>
                                 </Col>
                                 <Col style={styles.alignCenter}>
-                                    <TouchableOpacity style={styles.btn}>
+                                    <TouchableOpacity style={styles.btn} onPress={() => changeVal(2)}>
                                         <Text style={styles.btnText}>2</Text>
                                     </TouchableOpacity>
                                 </Col>
                                 <Col style={styles.alignCenter}>
-                                    <TouchableOpacity style={styles.btn}>
+                                    <TouchableOpacity style={styles.btn} onPress={() => changeVal(3)}>
                                         <Text style={styles.btnText}>3</Text>
                                     </TouchableOpacity>
                                 </Col>
@@ -37,17 +46,17 @@ export default function NumberButton(props) {
                         <Row style={styles.alignCenter}>
                             <Grid style={styles.alignCenter}>
                                 <Col style={styles.alignCenter}>
-                                    <TouchableOpacity style={styles.btn}>
+                                    <TouchableOpacity style={styles.btn} onPress={() => changeVal(4)}>
                                         <Text style={styles.btnText}>4</Text>
                                     </TouchableOpacity>
                                 </Col>
                                 <Col style={styles.alignCenter}>
-                                    <TouchableOpacity style={styles.btn}>
+                                    <TouchableOpacity style={styles.btn} onPress={() => changeVal(5)}>
                                         <Text style={styles.btnText}>5</Text>
                                     </TouchableOpacity>
                                 </Col>
                                 <Col style={styles.alignCenter}>
-                                    <TouchableOpacity style={styles.btn}>
+                                    <TouchableOpacity style={styles.btn} onPress={() => changeVal(6)}>
                                         <Text style={styles.btnText}>6</Text>
                                     </TouchableOpacity>
                                 </Col>
@@ -56,17 +65,17 @@ export default function NumberButton(props) {
                         <Row style={styles.alignCenter}>
                             <Grid style={styles.alignCenter}>
                                 <Col style={styles.alignCenter}>
-                                    <TouchableOpacity style={styles.btn}>
+                                    <TouchableOpacity style={styles.btn} onPress={() => changeVal(7)}>
                                         <Text style={styles.btnText}>7</Text>
                                     </TouchableOpacity>
                                 </Col>
                                 <Col style={styles.alignCenter}>
-                                    <TouchableOpacity style={styles.btn}>
+                                    <TouchableOpacity style={styles.btn} onPress={() => changeVal(8)}>
                                         <Text style={styles.btnText}>8</Text>
                                     </TouchableOpacity>
                                 </Col>
                                 <Col style={styles.alignCenter}>
-                                    <TouchableOpacity style={styles.btn}>
+                                    <TouchableOpacity style={styles.btn} onPress={() => changeVal(9)}>
                                         <Text style={styles.btnText}>9</Text>
                                     </TouchableOpacity>
                                 </Col>
@@ -86,12 +95,12 @@ export default function NumberButton(props) {
                                     </TouchableOpacity>
                                 </Col>
                                 <Col style={styles.alignCenter}>
-                                    <TouchableOpacity style={styles.btn}>
+                                    <TouchableOpacity style={styles.btn} onPress={() => changeVal(0)}>
                                         <Text style={styles.btnText}>0</Text>
                                     </TouchableOpacity>
                                 </Col>
                                 <Col style={styles.alignCenter}>
-                                    <TouchableOpacity style={styles.btn}>
+                                    <TouchableOpacity style={styles.btn} onPress={() => clearVal()}>
                                         <MaterialCommunityIcons
                                             name="backspace-outline"
                                             size={24}
