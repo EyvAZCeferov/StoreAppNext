@@ -16,10 +16,10 @@ import styles, {
     CELL_BORDER_RADIUS,
     CELL_SIZE,
     NOT_EMPTY_CELL_BG_COLOR,
-} from './CodeFieldStyles';
+} from './CodeFieldStylesSetPass';
 import AsyncStorage from "@react-native-community/async-storage";
 
-export default function CodeFieldInput(prop) {
+export default function CodeFieldSetPass(prop) {
     const {Value, Text: AnimatedText} = Animated;
 
     const CELL_COUNT = 4;
@@ -100,17 +100,8 @@ export default function CodeFieldInput(prop) {
             setValue('')
         }
         renderCodefield()
-        checkPass()
     })
 
-    function checkPass() {
-        AsyncStorage.getItem('localAuthPass').then((a) => {
-            setLocalPass(a)
-        });
-        if (value == '1234') {
-            prop.completed()
-        }
-    }
 
     function renderCodefield() {
         return (
@@ -130,7 +121,7 @@ export default function CodeFieldInput(prop) {
     }
 
     return (
-        <View style={styles.codearea}>
+        <View style={styles.codeareaSetPas}>
             <SafeAreaView style={styles.root}>
                 {renderCodefield()}
             </SafeAreaView>

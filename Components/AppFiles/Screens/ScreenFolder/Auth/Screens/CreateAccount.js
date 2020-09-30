@@ -8,12 +8,14 @@ import {
 } from 'native-base';
 import {LiteCreditCardInput} from 'react-native-credit-card-input';
 import {t} from '../../../../Lang';
+import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view'
 
 var {width} = Dimensions.get('window');
 const icon = require('../../../../../../assets/icon.png');
 import firebase from '../../../../Functions/FireBase/firebaseConfig';
 import {StatusBar} from "expo-status-bar";
 import DropdownAlert from "react-native-dropdownalert";
+import {CreateAccContext} from '../../../../Functions/Hooks/Authentication/CreateAccount/CreateAccContext';
 
 const succesImage = require('../../../../../../assets/images/Alert/tick.png');
 
@@ -28,6 +30,8 @@ export default class CreateAccount extends React.Component {
         };
     }
 
+    static contextType = CreateAccContext
+
     makeid(length) {
         var result = '';
         var characters =
@@ -41,138 +45,128 @@ export default class CreateAccount extends React.Component {
 
     signUp = () => {
         Keyboard.dismiss();
-        firebase
-            .auth()
-            .createUserWithEmailAndPassword(this.state.phoneNumb, this.state.pincode)
-            .then(
-                () => {
-                    var user = firebase.auth().currentUser;
-                    firebase
-                        .database()
-                        .ref('users/' + user.uid + '/userInfos')
-                        .set({
-                            email: this.state.phoneNumb,
-                            uid: user.uid,
-                        });
-                    var id = this.makeid(15);
-                    firebase
-                        .database()
-                        .ref('users/' + user.uid + '/cards/' + id)
-                        .set({
-                            cardInfo: this.state.cardInfos,
-                            cardPass: this.state.pincode,
-                            cardId: id,
-                        });
-                    this.dropDownAlertRef.alertWithType('success', t('signedIn'));
+        let cardId = this.makeid(15)
+        let uid = firebase.database().key
+        if (this.state.phoneNumb !== null) {
+            const user = {
+                bonuses: null,
+                pleaseCreateAcc: "dontCreate",
+                cards: {
+                    cardId: {
+                        cardId: cardId,
+                        cardPass: this.state.pincode,
+                        cardInfo: this.state.cardInfos,
+                    },
                 },
-                (err) => {
-                    this.dropDownAlertRef.alertWithType('error', err.message);
+                checks: null,
+                notifications: null,
+                userInfos: {
+                    email: this.state.phoneNumb,
+                    uid: uid,
+                    profPic: null,
+                    push_id: null,
                 }
-            );
+            };
+            const {userData, setUserData} = this.context
+            setUserData(user)
+            this.props.navigation.navigate('SetPass', {prevPage: "CreateAccount"})
+        }
     };
-    props = this.props;
+
     _onChange = (data) => {
         this.setState({cardInfos: data.values});
     };
 
-    componentDidMount() {
-        firebase.database().goOnline();
-    }
-
-    componentWillUnmount() {
-        firebase.database().goOffline();
-    }
 
     render() {
         return (
             <View style={styles.container}>
-                <StatusBar backgroundColor="#fff" style="dark"/>
-                <DropdownAlert
-                    ref={ref => this.dropDownAlertRef = ref}
-                    useNativeDriver={true}
-                    closeInterval={1000}
-                    zIndex={5000}
-                    updateStatusBar={true}
-                    tapToCloseEnabled={true}
-                    showCancel={true}
-                    elevation={10}
-                    isInteraction={true}
-                    successImageSrc={succesImage}
-                />
-                <View style={[styles.center, styles.mt]}>
-                    <View>
-                        <View style={styles.center}>
-                            <Image source={icon} style={[styles.logo, styles.mt5]}/>
-                            <Text style={styles.title}>{t('payandwinregister')}</Text>
+                <KeyboardAwareScrollView>
+                    <StatusBar backgroundColor="#fff" style="dark"/>
+                    <DropdownAlert
+                        ref={ref => this.dropDownAlertRef = ref}
+                        useNativeDriver={true}
+                        closeInterval={1000}
+                        zIndex={5000}
+                        updateStatusBar={true}
+                        tapToCloseEnabled={true}
+                        showCancel={true}
+                        elevation={10}
+                        isInteraction={true}
+                        successImageSrc={succesImage}
+                    />
+                    <View style={[styles.center, styles.mt]}>
+                        <View>
+                            <View style={styles.center}>
+                                <Image source={icon} style={[styles.logo, styles.mt5]}/>
+                                <Text style={styles.title}>{t('payandwinregister')}</Text>
+                            </View>
                         </View>
-                    </View>
-                    <View>
-                        <View onPress={Keyboard.dismiss} accessible={false}>
-                            <Form
-                                type="POST"
-                                action=""
-                                style={styles.container}
-                                onPress={Keyboard.dismiss}
-                                accessible={false}>
-                                <Item style={styles.itemStyle}>
-                                    <Input
-                                        keyboardShouldPersistTaps="handled"
-                                        style={styles.inputstyle}
-                                        placeholder={t('phoneNumb')}
-                                        placeholderTextColor="#6d7587"
-                                        autoCompleteType="tel"
-                                        autoCorrect={false}
-                                        maxLength={12}
-                                        selectionColor="#7c9d32"
-                                        textContentType="telephoneNumber"
-                                        onChangeText={(text) => this.setState({phoneNumb: text})}
-                                    />
-                                </Item>
-                                <Item style={styles.itemStyle}>
-                                    <View style={[styles.inputstyle, styles.cardInput]}>
-                                        <LiteCreditCardInput
+                        <View>
+                            <View onPress={Keyboard.dismiss} accessible={false}>
+                                <Form
+                                    style={styles.container}
+                                    onPress={Keyboard.dismiss}>
+                                    <Item style={styles.itemStyle}>
+                                        <Input
                                             keyboardShouldPersistTaps="handled"
-                                            keyboardType="number-pad"
-                                            onChange={this._onChange}
+                                            style={styles.inputstyle}
+                                            placeholder={t('phoneNumb')}
+                                            placeholderTextColor="#6d7587"
+                                            autoCompleteType="tel"
+                                            autoCorrect={false}
+                                            maxLength={15}
+                                            selectionColor="#7c9d32"
+                                            textContentType="telephoneNumber"
+                                            onChangeText={(text) => this.setState({phoneNumb: text})}
                                         />
-                                    </View>
-                                </Item>
-                                <Item style={styles.itemStyle}>
-                                    <Input
-                                        keyboardShouldPersistTaps="handled"
-                                        autoCorrect={false}
-                                        style={styles.inputstyle}
-                                        placeholder={t('pincode')}
-                                        placeholderTextColor="#6d7587"
-                                        maxLength={9}
-                                        secureTextEntry={true}
-                                        onChangeText={(text) => this.setState({pincode: text})}
-                                    />
-                                </Item>
-                                <Item style={styles.itemStyle}>
-                                    <Button
-                                        style={styles.buttonStyle}
-                                        onPress={this.signUp}
-                                        success
-                                        rounded>
-                                        <Text style={styles.continueButtonText}>
-                                            {t('continue')}
-                                        </Text>
-                                    </Button>
-                                </Item>
-                                <Item style={styles.itemStyle}>
-                                    <Button
-                                        style={styles.buttonStyle}
-                                        transparent
-                                        onPress={() => this.props.navigation.navigate('Login')}
-                                    >
-                                        <Text style={styles.buttonText}>{t('backLogin')}</Text>
-                                    </Button>
-                                </Item>
-                            </Form>
+                                    </Item>
+                                    <Item style={styles.itemStyle}>
+                                        <View style={[styles.inputstyle, styles.cardInput]}>
+                                            <LiteCreditCardInput
+                                                keyboardShouldPersistTaps="handled"
+                                                keyboardType="number-pad"
+                                                onChange={this._onChange}
+                                            />
+                                        </View>
+                                    </Item>
+                                    <Item style={styles.itemStyle}>
+                                        <Input
+                                            keyboardShouldPersistTaps="handled"
+                                            autoCorrect={false}
+                                            style={styles.inputstyle}
+                                            placeholder={t('pincode')}
+                                            placeholderTextColor="#6d7587"
+                                            maxLength={9}
+                                            secureTextEntry={true}
+                                            onChangeText={(text) => this.setState({pincode: text})}
+                                        />
+                                    </Item>
+                                    <Item style={styles.itemStyle}>
+                                        <Button
+                                            style={styles.buttonStyle}
+                                            onPress={this.signUp}
+                                            success
+                                            rounded>
+                                            <Text style={styles.continueButtonText}>
+                                                {t('continue')}
+                                            </Text>
+                                        </Button>
+                                    </Item>
+                                    <Item style={styles.itemStyle}>
+                                        <Button
+                                            style={styles.buttonStyle}
+                                            transparent
+                                            onPress={() => this.props.navigation.navigate('Login')}
+                                        >
+                                            <Text style={styles.buttonText}>{t('backLogin')}</Text>
+                                        </Button>
+                                    </Item>
+                                </Form>
+                            </View>
                         </View>
                     </View>
-                </View>
+                </KeyboardAwareScrollView>
             </View>
         );
     }
@@ -188,29 +182,30 @@ const styles = StyleSheet.create({
         alignItems: 'center',
     },
     mt: {
-        marginTop: 20,
+        marginTop: 10,
     },
     title: {
         fontSize: 19,
         color: '#7c9d32',
         textAlign: 'center',
         fontWeight: 'bold',
-        marginTop: 20,
-        marginBottom: 40,
+        marginTop: 10,
+        marginBottom: 20,
     },
     itemStyle: {
         justifyContent: 'center',
-        width: width - 70,
+        width: width - 50,
         marginVertical: 10,
         borderColor: 'transparent',
         alignItems: 'center',
         alignContent: 'center',
     },
     inputstyle: {
-        width: width - 250,
+        width: '100%',
         justifyContent: 'center',
-        height: 50,
-        lineHeight: 20,
+        height: 70,
+        padding: 2,
+        paddingLeft: 12,
         borderColor: '#fff',
         backgroundColor: '#fff',
         borderWidth: 3,
@@ -228,7 +223,8 @@ const styles = StyleSheet.create({
         elevation: 19,
     },
     cardInput: {
-        width: width - 70,
+        width: '100%',
+        paddingLeft: 0,
     },
     buttonText: {
         color: '#7c9d32',

@@ -10,13 +10,7 @@ export const ACTIVE_CELL_BG_COLOR = '#f1f1f1';
 
 const styles = StyleSheet.create({
     codearea: {
-        height: 40,
-        marginTop: 170,
-        width: width,
-    },
-    codeareaSetPas: {
-        height: 120,
-        marginTop: 130,
+        height: 70,
         width: width,
     },
     codeFieldRoot: {
@@ -43,49 +37,7 @@ const styles = StyleSheet.create({
         borderRadius: 0,
     },
     root: {
-        height: height,
-    },
-    title: {
-        color: '#6d7587',
-        fontSize: 23,
-        fontWeight: '700',
-        textAlign: 'center',
-        paddingVertical: 25,
-
-    },
-    title2: {
-        color: '#6d7587',
-        fontSize: 20,
-        fontWeight: '700',
-        textAlign: 'center',
-        paddingVertical: 25,
-
-        paddingTop: 50,
-    },
-    subtitle: {
-        paddingVertical: 20,
-        color: '#6d7587',
-        fontSize: 17,
-        fontWeight: '500',
-        textAlign: 'center',
-
-    },
-    passwordUnderTExt: {
-        paddingVertical: 0,
-        paddingLeft: 50,
-        color: '#6d7587',
-        fontSize: 13,
-        fontWeight: '500',
-
-    },
-    icon: {
-        marginLeft: 'auto',
-        marginRight: 'auto',
-        marginTop: 50,
-        color: '#6d7587',
-    },
-    imageArena: {
-        marginVertical: 30,
+        height: '100%',
     },
 });
 

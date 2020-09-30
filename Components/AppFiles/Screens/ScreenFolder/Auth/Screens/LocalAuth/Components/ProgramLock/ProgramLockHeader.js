@@ -21,7 +21,7 @@ export default class ProgramLockHeader extends React.Component {
         this.getInfo();
         setInterval(() => {
             this.getInfo();
-        }, 1000)
+        }, 0)
     }
 
     getInfo() {
@@ -38,7 +38,6 @@ export default class ProgramLockHeader extends React.Component {
                     <View style={styles.header}>
                         <Thumbnail
                             rounded
-                            style={customStyle.mVer15}
                             source={{
                                 uri: this.state.pp,
                             }}
@@ -53,7 +52,6 @@ export default class ProgramLockHeader extends React.Component {
                     <View style={styles.header}>
                         <Thumbnail
                             rounded
-                            style={customStyle.mVer15}
                             source={icon}
                         />
                         <Text style={styles.title}>{t('namesurname')}</Text>
@@ -65,8 +63,8 @@ export default class ProgramLockHeader extends React.Component {
 
     render() {
         return (
-            <View>
-                <StatusBar style="light" backgroundColor="#7c9d32"/>
+            <View style={styles.container}>
+                <StatusBar style="dark" backgroundColor="#fff"/>
                 {this.renderElements()}
             </View>
         );
@@ -76,17 +74,18 @@ export default class ProgramLockHeader extends React.Component {
 const styles = StyleSheet.create({
     container: {
         width: width,
-        height: 140,
+        height: '100%',
         justifyContent: 'center',
         alignContent: 'center',
         alignItems: 'center',
-        backgroundColor: '#7c9d32',
+        backgroundColor: 'transparent',
         borderColor: "transparent",
         textAlign: 'center',
     },
     header: {
         width: width,
-        height: 130,
+        height: "100%",
+        paddingTop: '15%',
         backgroundColor: 'transparent',
         borderColor: "transparent",
         justifyContent: 'center',
@@ -95,12 +94,13 @@ const styles = StyleSheet.create({
         textAlign: 'center',
     },
     title: {
-        color: '#fff',
+        color: 'rgba(0,0,0,.6)',
         fontSize: 18,
         fontWeight: "bold",
         letterSpacing: 4,
         lineHeight: 18,
         backgroundColor: "transparent",
         textAlign: 'center',
+        marginTop: 18,
     },
 });

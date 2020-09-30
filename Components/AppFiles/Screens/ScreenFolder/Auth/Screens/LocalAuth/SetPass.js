@@ -3,41 +3,44 @@ import {
     View,
     StyleSheet,
     Dimensions,
+    Text,
 } from 'react-native';
 import NumberButtons from './Components/NumberButtons';
-import ProgramLockHeader from './Components/ProgramLock/ProgramLockHeader';
-import CodeFieldInput from './Components/CodeField';
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view'
-import * as LocalAuthentication from 'expo-local-authentication';
 
 const succesImage = require('../../../../../../../assets/images/Alert/tick.png');
 
 var width = Dimensions.get('window').width;
 var height = Dimensions.get('window').height;
-import firebase from "../../../../../Functions/FireBase/firebaseConfig";
-import {t} from "../../../../../Lang";
 import AsyncStorage from '@react-native-community/async-storage';
 import DropdownAlert from "react-native-dropdownalert";
-import {ProgramLockContext} from "../../../../../Functions/Hooks/Authentication/Lock/ProgramLockContext";
+import SetPassHeader from "./Components/SetPass/SetPassHeader";
+import {StatusBar} from "expo-status-bar";
+import CodeFieldSetPass from "./Components/SetPass/CodeFieldSetPass";
+import {t} from "../../../../../Lang";
+import {CreateAccContext} from "../../../../../Functions/Hooks/Authentication/CreateAccount/CreateAccContext";
+import * as LocalAuthentication from "expo-local-authentication";
+import firebase from "../../../../../Functions/FireBase/firebaseConfig";
 
 var reqems = '';
 export default class SetPass extends React.Component {
-    static contextType = ProgramLockContext
 
     constructor(props) {
         super(props);
         this.state = {
-            userName: null,
-            userAvatar: null,
-            userLogined: false,
-            hasFingerPrintHardware: false,
-            pass: ''
+            pass1: '',
+            pass2: '',
+            setFinger: false
         }
     }
 
-    async getSoragePerm() {
+    static contextType = CreateAccContext
+
+    async getStat() {
         await AsyncStorage.getItem('haveFinger').then((a) => {
             if (a != null) {
+                this.setState({setFinger: true})
+            } else {
                 this.hasHardware()
             }
         });
@@ -46,90 +49,69 @@ export default class SetPass extends React.Component {
     async hasHardware() {
         let permission = await LocalAuthentication.hasHardwareAsync()
         if (permission) {
-            let type = await LocalAuthentication.supportedAuthenticationTypesAsync();
+            let type = await LocalAuthentication.supportedAuthenticationTypesAsync(1);
             let isFinger = type.includes(1)
             if (isFinger) {
-                this.callFinger();
-                this.setState({
-                    hasFingerPrintHardware: isFinger
-                });
+                this.setState({setFinger: true})
             }
         }
     }
 
+    async resetStat() {
+        await AsyncStorage.removeItem('haveFinger')
+        await AsyncStorage.removeItem('localAuthPass')
+    }
+
     componentDidMount() {
         setInterval(() => {
-            this.getInfo();
-        }, 3000)
-        this.getSoragePerm();
+            this.completed()
+        }, 0)
     }
 
-    async getInfo() {
-        firebase.database().goOnline();
-        var user = firebase.auth().currentUser;
-        if (user != null) {
-            firebase
-                .database()
-                .ref('users/' + user.uid + '/userInfos')
-                .on('value', (data) => {
-                    var newData = data.toJSON();
-                    this.setState({
-                        userAvatar: newData.profPic,
-                        userName: newData.email
-                    })
-                })
-            this.renderContent()
-        } else {
-            alert('Connection Error');
-        }
+    componentWillMount() {
+        this.resetStat();
+        this.getStat();
     }
 
-    completed() {
-        const {notOpen, setNotOpen} = this.context
-
-        this.dropDownAlertRef.alertWithType('success', t('signedIn'));
-        this.setState({
-            userLogined: true,
-        })
-        setNotOpen(false)
-    }
-
-    async callFinger() {
-        let enroll = await LocalAuthentication.isEnrolledAsync();
-        if (enroll) {
-            let authenticate = await LocalAuthentication.authenticateAsync({
-                promptMessage: t('fingerprintaccesstotheapplicationUseyourfingerprinttologin'),
-                cancelLabel: t('cancel'),
-                fallbackLabel: t('password'),
-                disableDeviceFallback: true
-            });
-            if (authenticate != null) {
-                if (authenticate.success) {
-                    this.dropDownAlertRef.alertWithType('success', t('signedIn'));
-                    this.completed()
-                } else {
-                    alert('Error');
+    async completed() {
+        const params = this.props.route.params;
+        if (this.state.pass1 !== '' && this.state.pass2 !== '') {
+            if (this.state.pass1 === this.state.pass2) {
+                await AsyncStorage.setItem('localAuthPass', this.state.pass1);
+                if (params.prevPage === 'Settings') {
+                    this.props.navigation.navigate('Settings')
+                    this.dropDownAlertRef.alertWithType('success', t('changed'));
+                } else if (params.prevPage === 'CreateAccount') {
+                    if (this.state.setFinger) {
+                        this.props.navigation.navigate('SetFinger')
+                    } else {
+                        const {userData, setUserData} = this.context
+                        setUserData({pleaseCreateAcc: "Create"})
+                    }
+                    this.dropDownAlertRef.alertWithType('success', t('added'));
                 }
             }
         }
     }
 
-    fingerPrint() {
-        this.callFinger()
-    }
-
     changeVal(val) {
         reqems = reqems + val;
-        if (reqems.length > 4) {
-            //
-        } else {
-            this.setState({pass: reqems})
+        if (this.state.pass1.length <= 3) {
+            this.setState({pass1: reqems})
+            if (this.state.pass1.length === 3) {
+                reqems = ''
+            }
+        } else if (this.state.pass1.length > 3) {
+            this.setState({pass2: reqems})
+            if (this.state.pass2.length === 3) {
+                reqems = ''
+            }
         }
     }
 
     clearVal() {
         reqems = ''
-        this.setState({pass: ''})
+        this.setState({pass1: "", pass2: ""})
     }
 
 
@@ -148,6 +130,7 @@ export default class SetPass extends React.Component {
                     isInteraction={true}
                     successImageSrc={succesImage}
                 />
+                <StatusBar backgroundColor="#fff" style="dark"/>
                 <View style={styles.header}>
                     <DropdownAlert
                         ref={ref => this.dropDownAlertRef = ref}
@@ -161,14 +144,13 @@ export default class SetPass extends React.Component {
                         isInteraction={true}
                         successImageSrc={succesImage}
                     />
-                    <ProgramLockHeader
-                        {...this.props}
-                        userName={this.state.userName}
-                        userAvatar={this.state.userAvatar}
-                    />
+                    <SetPassHeader/>
                 </View>
                 <View style={styles.codefieldArena}>
-                    <CodeFieldInput completed={() => this.completed()} value={this.state.pass} {...this.props} />
+                    <CodeFieldSetPass value={this.state.pass1} {...this.props} />
+                    <Text style={styles.passwordUnderTExt}>{t('newpassword')}</Text>
+                    <CodeFieldSetPass value={this.state.pass2} {...this.props} />
+                    <Text style={styles.passwordUnderTExt}>{t('repeatthenewpassword')}</Text>
                 </View>
                 <View style={styles.buttons}>
                     <NumberButtons
@@ -218,32 +200,29 @@ const styles = StyleSheet.create({
     container: {
         width: width,
         height: height,
-        backgroundColor: "#fff"
+        backgroundColor: "#fff",
+        justifyContent: "space-around"
     },
     header: {
-        position: 'absolute',
-        top: 0,
-        left: 0,
-        right: 0,
-        height: 140,
-        backgroundColor: "#7c9d32",
+        height: 80,
+        backgroundColor: "#fff",
         width: width,
     },
     codefieldArena: {
-        position: 'absolute',
-        top: -10,
-        left: 0,
-        right: 0,
-        height: 50,
+        height: 180,
         width: width,
+        backgroundColor: "#fff",
     },
     buttons: {
-        position: 'absolute',
-        top: 230,
-        left: 0,
-        right: 0,
         height: 290,
         width: width,
         backgroundColor: "#fff",
+    },
+    passwordUnderTExt: {
+        color: 'rgba(0,0,0,.4)',
+        fontSize: 13,
+        marginTop: '-3%',
+        paddingLeft: '9%',
+        fontWeight: '500',
     },
 });

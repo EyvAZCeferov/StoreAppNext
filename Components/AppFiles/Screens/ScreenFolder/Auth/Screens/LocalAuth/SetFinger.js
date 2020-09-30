@@ -5,6 +5,9 @@ import {AntDesign, Entypo} from '@expo/vector-icons'
 import {t} from "../../../../../Lang";
 import AsyncStorage from '@react-native-community/async-storage';
 import * as LocalAuthentication from "expo-local-authentication";
+import {
+    CreateAccContext,
+} from "../../../../../Functions/Hooks/Authentication/CreateAccount/CreateAccContext";
 
 const {width, height} = Dimensions.get("window");
 
@@ -16,8 +19,11 @@ export default class SetFinger extends React.Component {
         }
     }
 
+    static contextType = CreateAccContext
+
     componentDidMount() {
-        this.getStat();
+        alert('Have')
+        this.getStat()
     }
 
     async getStat() {
@@ -31,11 +37,18 @@ export default class SetFinger extends React.Component {
     }
 
     async onScanned() {
+        alert('Scanned')
         await AsyncStorage.setItem('haveFinger', 'Haved');
+        const {userData, setUserData} = this.context
+        setUserData({pleaseCreateAcc: "Create"})
+        this.setState({setFinger: true})
     }
 
     async onCancel() {
+        alert('Canced')
         await AsyncStorage.setItem('haveFinger', null)
+        const {userData, setUserData} = this.context
+        setUserData({pleaseCreateAcc: "Create"})
     }
 
     renderStateIcon() {
@@ -72,8 +85,7 @@ export default class SetFinger extends React.Component {
             });
             if (authenticate != null) {
                 if (authenticate.success) {
-                    this.setState({setFinger: true})
-                    this.onScanned()
+                    this.onScanned();
                 }
             }
         }

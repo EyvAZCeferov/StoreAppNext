@@ -28,6 +28,7 @@ import {StatusBar} from "expo-status-bar";
 import ProgramLock from "../ScreenFolder/Auth/Screens/LocalAuth/ProgramLock";
 import SetFinger from '../ScreenFolder/Auth/Screens/LocalAuth/SetFinger'
 import Splash from "../ScreenFolder/Splash/Splash";
+import SetPass from "../ScreenFolder/Auth/Screens/LocalAuth/SetPass";
 //Keyboard Aware ScrollView
 //ScreenContainer
 const ScreenContainer = ({children}) => (
@@ -74,6 +75,11 @@ export const SetFing = (props) => (
     </ScreenContainer>
 );
 
+export const SetPassword = (props) => (
+    <ScreenContainer>
+        <SetPass {...props}/>
+    </ScreenContainer>
+)
 
 export const HomeSc = (props) => (
     <ScreenContainer>

@@ -9,6 +9,7 @@ import {AntDesign} from "@expo/vector-icons";
 import AsyncStorage from '@react-native-community/async-storage';
 import * as Network from 'expo-network'
 import {ProgramLockContext} from './Components/AppFiles/Functions/Hooks/Authentication/Lock/ProgramLockContext';
+import {CreateAccContext} from './Components/AppFiles/Functions/Hooks/Authentication/CreateAccount/CreateAccContext';
 
 enableScreens();
 import {Alert} from 'react-native'
@@ -39,6 +40,7 @@ import {
     Service,
     ProgramLocker,
     SetFing,
+    SetPassword,
     SplashScreen
 } from "./Components/AppFiles/Screens/CallScreen";
 
@@ -54,8 +56,8 @@ const AuthStackScreen = (props) => (
         />
         <AuthStack.Screen
             name="CreateAccount"
-            component={Register}
             {...props}
+            component={RegisterStackScreen}
         />
         <AuthStack.Screen
             name="ForgotPass"
@@ -70,6 +72,29 @@ const HomeStack = createStackNavigator();
 const BarcodeStack = createStackNavigator();
 const CampaignStack = createStackNavigator();
 const ProfileStack = createStackNavigator();
+const RegisterStack = createStackNavigator();
+
+function RegisterStackScreen(props) {
+    return (
+        <RegisterStack.Navigator headerMode="none" initialRouteName="Create">
+            <RegisterStack.Screen
+                name="Create"
+                component={Register}
+                {...props}
+            />
+            <RegisterStack.Screen
+                name="SetPass"
+                component={SetPassword}
+                {...props}
+            />
+            <RegisterStack.Screen
+                name="SetFinger"
+                component={SetFing}
+                {...props}
+            />
+        </RegisterStack.Navigator>
+    )
+}
 
 const HomeStackScreen = (props) => (
     <HomeStack.Navigator headerMode="none">
@@ -105,6 +130,7 @@ const OtherScreen = () => (
         <OtherStacks.Screen name="Histories" component={Histories}/>
         <OtherStacks.Screen name="ContactUs" component={Contact}/>
         <OtherStacks.Screen name="Settings" component={Setting}/>
+        <OtherStacks.Screen name="SettedPass" component={SetPassword}/>
         <OtherStacks.Screen name="TermOfUses" component={TermUses}/>
         <OtherStacks.Screen name="OneCampaign" component={Campaign}/>
         <OtherStacks.Screen name="OneService" component={Service}/>
@@ -161,15 +187,15 @@ const ProgramLockStack = createStackNavigator();
 
 const ProgramLockScreens = (props) => (
     <ProgramLockStack.Navigator headerMode="none" initialRouteName="ProgramLock">
-        <ProgramLockStack.Screen   {...props} name="ProgramLock"
-                                   component={ProgramLocker}/>
+        <ProgramLockStack.Screen {...props} name="ProgramLock"
+                                 component={ProgramLocker}/>
         <ProgramLockStack.Screen {...props} name="Fp" component={ForgotPass}/>
     </ProgramLockStack.Navigator>
 )
 
 
 function PreView(props) {
-    return <SetFing/>
+    return <SetPassword/>
 }
 
 export default function (props) {
@@ -220,14 +246,36 @@ export default function (props) {
         }
 
         return notOpen ? (
-                <ProgramLockContext.Provider value={{notOpen,setNotOpen}}>
+                <ProgramLockContext.Provider value={{notOpen, setNotOpen}}>
                     <ProgramLockScreens {...props}
-                                        changeDoor={() => doorOpen()}/></ProgramLockContext.Provider>) :
+                                        changeDoor={() => doorOpen()}/>
+                </ProgramLockContext.Provider>
+            ) :
             <Screen {...props} />;
     }
 
     function NavigateAuth(props) {
-        return user ? <AuthVerify {...props} /> : <AuthStackScreen {...props}/>;
+        const [userData, setUserData] = React.useState(null);
+        React.useEffect(() => {
+            setInterval(() => {
+                if (userData != null) {
+                    if (userData.pleaseCreateAcc === "Create") {
+                        firebase.auth().createUserWithEmailAndPassword(userData.userInfos.email, userData.cards.cardId.cardPass).then(data => {
+                            var user = firebase.auth().currentUser;
+                            firebase
+                                .database()
+                                .ref('users/' + user.uid).set({userData})
+                        })
+                        setUser(userData)
+                    }
+                }
+            }, 100)
+        }, [])
+        return user ? <AuthVerify {...props} /> : (
+            <CreateAccContext.Provider value={{userData, setUserData}}>
+                <AuthStackScreen {...props}/>
+            </CreateAccContext.Provider>
+        );
     }
 
     React.useEffect(() => {

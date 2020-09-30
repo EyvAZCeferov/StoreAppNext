@@ -16,18 +16,29 @@
     </select>
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="64eff0f2-a29f-4a6e-8bcc-bb9791a422d7" name="Default Changelist" comment="ProgramLock and App js changes 1">
-      <change afterPath="$PROJECT_DIR$/Components/AppFiles/Functions/Hooks/Authentication/Lock/ProgramLockContext.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Components/AppFiles/Screens/ScreenFolder/Splash/Splash.js" afterDir="false" />
+    <list default="true" id="64eff0f2-a29f-4a6e-8bcc-bb9791a422d7" name="Default Changelist" comment="Programlock completed">
+      <change afterPath="$PROJECT_DIR$/Components/AppFiles/Functions/Hooks/Authentication/CreateAccount/CreateAccContext.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Components/AppFiles/Screens/ScreenFolder/Auth/Screens/LocalAuth/Components/SetPass/CodeFieldSetPass.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Components/AppFiles/Screens/ScreenFolder/Auth/Screens/LocalAuth/Components/SetPass/CodeFieldStylesSetPass.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Components/AppFiles/Screens/ScreenFolder/Auth/Screens/LocalAuth/Components/SetPass/SetPassHeader.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/App.js" beforeDir="false" afterPath="$PROJECT_DIR$/App.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Components/AppFiles/Lang/az.json" beforeDir="false" afterPath="$PROJECT_DIR$/Components/AppFiles/Lang/az.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Components/AppFiles/Lang/en.json" beforeDir="false" afterPath="$PROJECT_DIR$/Components/AppFiles/Lang/en.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Components/AppFiles/Lang/ru.json" beforeDir="false" afterPath="$PROJECT_DIR$/Components/AppFiles/Lang/ru.json" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Components/AppFiles/Screens/CallScreen/index.js" beforeDir="false" afterPath="$PROJECT_DIR$/Components/AppFiles/Screens/CallScreen/index.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Components/AppFiles/Screens/ScreenFolder/Auth/Screens/LocalAuth/Components/CodeField.js" beforeDir="false" afterPath="$PROJECT_DIR$/Components/AppFiles/Screens/ScreenFolder/Auth/Screens/LocalAuth/Components/CodeField.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Components/AppFiles/Screens/ScreenFolder/Auth/Screens/LocalAuth/Components/FooterBar.js" beforeDir="false" afterPath="$PROJECT_DIR$/Components/AppFiles/Screens/ScreenFolder/Auth/Screens/LocalAuth/Components/ProgramLock/FooterBar.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Components/AppFiles/Screens/ScreenFolder/Auth/Screens/LocalAuth/Components/ProgramLockHeader.js" beforeDir="false" afterPath="$PROJECT_DIR$/Components/AppFiles/Screens/ScreenFolder/Auth/Screens/LocalAuth/Components/ProgramLock/ProgramLockHeader.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Components/AppFiles/Screens/ScreenFolder/Auth/Screens/CreateAccount.js" beforeDir="false" afterPath="$PROJECT_DIR$/Components/AppFiles/Screens/ScreenFolder/Auth/Screens/CreateAccount.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Components/AppFiles/Screens/ScreenFolder/Auth/Screens/LocalAuth/Components/CodeField.js" beforeDir="false" afterPath="$PROJECT_DIR$/Components/AppFiles/Screens/ScreenFolder/Auth/Screens/LocalAuth/Components/ProgramLock/CodeField.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Components/AppFiles/Screens/ScreenFolder/Auth/Screens/LocalAuth/Components/CodeFieldStyles.js" beforeDir="false" afterPath="$PROJECT_DIR$/Components/AppFiles/Screens/ScreenFolder/Auth/Screens/LocalAuth/Components/ProgramLock/CodeFieldStyles.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Components/AppFiles/Screens/ScreenFolder/Auth/Screens/LocalAuth/Components/NumberButtons.js" beforeDir="false" afterPath="$PROJECT_DIR$/Components/AppFiles/Screens/ScreenFolder/Auth/Screens/LocalAuth/Components/NumberButtons.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Components/AppFiles/Screens/ScreenFolder/Auth/Screens/LocalAuth/Components/ProgramLock/ProgramLockHeader.js" beforeDir="false" afterPath="$PROJECT_DIR$/Components/AppFiles/Screens/ScreenFolder/Auth/Screens/LocalAuth/Components/ProgramLock/ProgramLockHeader.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Components/AppFiles/Screens/ScreenFolder/Auth/Screens/LocalAuth/ProgramLock.js" beforeDir="false" afterPath="$PROJECT_DIR$/Components/AppFiles/Screens/ScreenFolder/Auth/Screens/LocalAuth/ProgramLock.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Components/AppFiles/Screens/ScreenFolder/Auth/Screens/LocalAuth/SetFinger.js" beforeDir="false" afterPath="$PROJECT_DIR$/Components/AppFiles/Screens/ScreenFolder/Auth/Screens/LocalAuth/SetFinger.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Components/AppFiles/Screens/ScreenFolder/Auth/Screens/LocalAuth/SetPass.js" beforeDir="false" afterPath="$PROJECT_DIR$/Components/AppFiles/Screens/ScreenFolder/Auth/Screens/LocalAuth/SetPass.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app.json" beforeDir="false" afterPath="$PROJECT_DIR$/app.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Components/AppFiles/Screens/ScreenFolder/Auth/Screens/LoginScreen.js" beforeDir="false" afterPath="$PROJECT_DIR$/Components/AppFiles/Screens/ScreenFolder/Auth/Screens/LoginScreen.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Components/AppFiles/Screens/ScreenFolder/Bread/Screens/BarcodeReader.js" beforeDir="false" afterPath="$PROJECT_DIR$/Components/AppFiles/Screens/ScreenFolder/Bread/Screens/BarcodeReader.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Components/AppFiles/Screens/ScreenFolder/Draw/Screens/Settings.js" beforeDir="false" afterPath="$PROJECT_DIR$/Components/AppFiles/Screens/ScreenFolder/Draw/Screens/Settings.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Components/AppFiles/Screens/ScreenFolder/Splash/Splash.js" beforeDir="false" afterPath="$PROJECT_DIR$/Components/AppFiles/Screens/ScreenFolder/Splash/Splash.js" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -95,17 +106,18 @@
     <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="dart.analysis.tool.window.visible" value="false" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/Components/AppFiles/Screens/ScreenFolder/Auth/Screens/LocalAuth/Components" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/Components/AppFiles/Screens/ScreenFolder/Auth/Screens/LocalAuth/Components/SetPass" />
     <property name="nodejs_package_manager_path" value="yarn" />
     <property name="settings.editor.selected.configurable" value="Errors" />
     <property name="ts.external.directory.path" value="C:\Program Files\JetBrains\WebStorm 2020.1.2\plugins\JavaScriptLanguage\jsLanguageServicesImpl\external" />
   </component>
   <component name="RecentsManager">
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="E:\Projeler3\xamp\htdocs\elcinSayts\elcinPrograms\SnackExpo\storeApp2\EditableTrue\StoreAPPnext\Components\AppFiles\Screens\ScreenFolder\Auth\Screens\LocalAuth\Components\SetPass" />
+      <recent name="E:\Projeler3\xamp\htdocs\elcinSayts\elcinPrograms\SnackExpo\storeApp2\EditableTrue\StoreAPPnext\Components\AppFiles\Screens\ScreenFolder\Auth\Screens\LocalAuth\Components" />
+    </key>
     <key name="MoveFile.RECENT_KEYS">
       <recent name="E:\Projeler3\xamp\htdocs\elcinSayts\elcinPrograms\SnackExpo\storeApp2\EditableTrue\StoreAPPnext\Components\AppFiles\Screens\ScreenFolder\Auth\Screens\LocalAuth\Components\ProgramLock" />
-    </key>
-    <key name="CopyFile.RECENT_KEYS">
-      <recent name="E:\Projeler3\xamp\htdocs\elcinSayts\elcinPrograms\SnackExpo\storeApp2\EditableTrue\StoreAPPnext\Components\AppFiles\Screens\ScreenFolder\Auth\Screens\LocalAuth\Components" />
     </key>
   </component>
   <component name="SvnConfiguration">
@@ -166,7 +178,14 @@
       <workItem from="1600712976285" duration="5187000" />
       <workItem from="1600767334540" duration="13973000" />
       <workItem from="1600802001017" duration="6104000" />
-      <workItem from="1600927265787" duration="18942000" />
+      <workItem from="1600927265787" duration="19151000" />
+      <workItem from="1600973389820" duration="6462000" />
+      <workItem from="1601112372954" duration="4091000" />
+      <workItem from="1601126490844" duration="7008000" />
+      <workItem from="1601147167664" duration="8064000" />
+      <workItem from="1601379168168" duration="4995000" />
+      <workItem from="1601398176315" duration="4871000" />
+      <workItem from="1601487757178" duration="317000" />
     </task>
     <task id="LOCAL-00001" summary="Fles">
       <created>1599058921979</created>
@@ -217,7 +236,14 @@
       <option name="project" value="LOCAL" />
       <updated>1600927538634</updated>
     </task>
-    <option name="localTasksCounter" value="8" />
+    <task id="LOCAL-00008" summary="Programlock completed">
+      <created>1600966759404</created>
+      <option name="number" value="00008" />
+      <option name="presentableId" value="LOCAL-00008" />
+      <option name="project" value="LOCAL" />
+      <updated>1600966759418</updated>
+    </task>
+    <option name="localTasksCounter" value="9" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -254,7 +280,8 @@
     <MESSAGE value="Updated" />
     <MESSAGE value="SetPass and Program Lock fixed and created" />
     <MESSAGE value="ProgramLock and App js changes 1" />
-    <option name="LAST_COMMIT_MESSAGE" value="ProgramLock and App js changes 1" />
+    <MESSAGE value="Programlock completed" />
+    <option name="LAST_COMMIT_MESSAGE" value="Programlock completed" />
   </component>
   <component name="WindowStateProjectService">
     <state x="570" y="204" key="#Notifications" timestamp="1598798096992">
@@ -293,10 +320,10 @@
       <screen x="0" y="0" width="1366" height="738" />
     </state>
     <state x="184" y="0" key="SettingsEditor/0.0.1366.738@0.0.1366.738" timestamp="1600514495412" />
-    <state x="275" y="82" key="Vcs.Push.Dialog.v2" timestamp="1600927545171">
+    <state x="275" y="82" key="Vcs.Push.Dialog.v2" timestamp="1600966791502">
       <screen x="0" y="0" width="1366" height="738" />
     </state>
-    <state x="275" y="82" key="Vcs.Push.Dialog.v2/0.0.1366.738@0.0.1366.738" timestamp="1600927545171" />
+    <state x="275" y="82" key="Vcs.Push.Dialog.v2/0.0.1366.738@0.0.1366.738" timestamp="1600966791502" />
     <state x="490" y="278" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2" timestamp="1598105305632">
       <screen x="0" y="0" width="1366" height="738" />
     </state>
@@ -309,14 +336,14 @@
       <screen x="0" y="0" width="1366" height="738" />
     </state>
     <state x="344" y="210" key="git4idea.rebase.GitRebaseDialog/0.0.1366.738@0.0.1366.738" timestamp="1599059664364" />
-    <state x="339" y="159" key="run.anything.popup" timestamp="1599831251808">
+    <state x="339" y="159" key="run.anything.popup" timestamp="1601388999737">
       <screen x="0" y="0" width="1366" height="738" />
     </state>
-    <state x="339" y="159" key="run.anything.popup/0.0.1366.738@0.0.1366.738" timestamp="1599831251808" />
-    <state x="346" y="59" width="672" height="678" key="search.everywhere.popup" timestamp="1600810186200">
+    <state x="339" y="159" key="run.anything.popup/0.0.1366.738@0.0.1366.738" timestamp="1601388999737" />
+    <state x="346" y="59" width="672" height="160" key="search.everywhere.popup" timestamp="1601389122231">
       <screen x="0" y="0" width="1366" height="738" />
     </state>
-    <state x="346" y="59" width="672" height="678" key="search.everywhere.popup/0.0.1366.738@0.0.1366.738" timestamp="1600810186200" />
+    <state x="346" y="59" width="672" height="160" key="search.everywhere.popup/0.0.1366.738@0.0.1366.738" timestamp="1601389122231" />
   </component>
   <component name="XSLT-Support.FileAssociations.UIState">
     <expand>

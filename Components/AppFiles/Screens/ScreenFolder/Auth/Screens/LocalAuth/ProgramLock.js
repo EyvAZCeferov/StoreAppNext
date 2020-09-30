@@ -7,11 +7,12 @@ import {
 import NumberButtons from './Components/NumberButtons';
 import ProgramLockHeader from './Components/ProgramLock/ProgramLockHeader';
 import FooterBar from './Components/ProgramLock/FooterBar';
-import CodeFieldInput from './Components/CodeField';
+import CodeFieldInput from './Components/ProgramLock/CodeField';
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view'
 import * as LocalAuthentication from 'expo-local-authentication';
 
 const succesImage = require('../../../../../../../assets/images/Alert/tick.png');
+import {StatusBar} from 'expo-status-bar';
 
 var width = Dimensions.get('window').width;
 var height = Dimensions.get('window').height;
@@ -30,7 +31,6 @@ export default class ProgramLock extends React.Component {
         this.state = {
             userName: null,
             userAvatar: null,
-            userLogined: false,
             hasFingerPrintHardware: false,
             pass: ''
         }
@@ -89,9 +89,6 @@ export default class ProgramLock extends React.Component {
         const {notOpen, setNotOpen} = this.context
 
         this.dropDownAlertRef.alertWithType('success', t('signedIn'));
-        this.setState({
-            userLogined: true,
-        })
         setNotOpen(false)
     }
 
@@ -146,6 +143,7 @@ export default class ProgramLock extends React.Component {
                     isInteraction={true}
                     successImageSrc={succesImage}
                 />
+                <StatusBar backgroundColor="#fff" style="dark"/>
                 <View style={styles.header}>
                     <DropdownAlert
                         ref={ref => this.dropDownAlertRef = ref}
@@ -184,18 +182,6 @@ export default class ProgramLock extends React.Component {
     render() {
         return (
             <View>
-                <DropdownAlert
-                    ref={ref => this.dropDownAlertRef = ref}
-                    useNativeDriver={true}
-                    closeInterval={1000}
-                    zIndex={5000}
-                    updateStatusBar={true}
-                    tapToCloseEnabled={true}
-                    showCancel={true}
-                    elevation={10}
-                    isInteraction={true}
-                    successImageSrc={succesImage}
-                />
                 <KeyboardAwareScrollView>
                     <DropdownAlert
                         ref={ref => this.dropDownAlertRef = ref}
@@ -220,37 +206,25 @@ const styles = StyleSheet.create({
     container: {
         width: width,
         height: height,
-        backgroundColor: "#fff"
+        backgroundColor: "#fff",
+        flexDirection: "column",
+        justifyContent: "space-between"
     },
     header: {
-        position: 'absolute',
-        top: 0,
-        left: 0,
-        right: 0,
-        height: 140,
-        backgroundColor: "#7c9d32",
+        backgroundColor: "#fff",
         width: width,
+        height: (height / 2) - 100
     },
     codefieldArena: {
-        position: 'absolute',
-        top: -10,
-        left: 0,
-        right: 0,
-        height: 50,
-        width: width,
-    },
-    buttons: {
-        position: 'absolute',
-        top: 230,
-        left: 0,
-        right: 0,
-        height: 290,
+        height: 70,
         width: width,
         backgroundColor: "#fff",
     },
+    buttons: {
+        height: 290,
+        width: width,
+    },
     footer: {
-        position: 'absolute',
-        bottom: 1,
         height: 70,
         left: 0,
         right: 0,

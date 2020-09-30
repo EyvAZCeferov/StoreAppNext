@@ -14,8 +14,6 @@ import {StatusBar} from "expo-status-bar";
 import PayCards from "../Components/PayStart/Paying";
 import firebase from "../../../../Functions/FireBase/firebaseConfig";
 import {Entypo, AntDesign} from '@expo/vector-icons';
-import {Tooltip} from 'react-native-elements';
-import {t} from "../../../../Lang";
 import DropdownAlert from "react-native-dropdownalert";
 
 const succesImage = require('../../../../../../assets/images/Alert/tick.png');

@@ -76,11 +76,13 @@ export default class LoginScreen extends React.Component {
                     successImageSrc={succesImage}
                 />
                 <Container>
+                    <StatusBar backgroundColor="#7c9d32" style="light"/>
                     <Header style={customStyle.loginheader}>
+                        <StatusBar backgroundColor="#7c9d32" style="light"/>
                         <Thumbnail source={icon}/>
                     </Header>
                     <Body>
-
+                        <StatusBar backgroundColor="#7c9d32" style="light"/>
                         <View>
                             <View>
                                 <View>
@@ -148,7 +150,7 @@ export default class LoginScreen extends React.Component {
                                     <Button
                                         rounded
                                         onPress={() =>
-                                            this.props.navigation.navigate('CreateAccount')
+                                            this.props.navigation.navigate('CreateAccount', {screen: "Create"})
                                         }
                                         full
                                         success
