@@ -27,12 +27,20 @@ export default function CardOne({index, y, item}) {
     function getCount() {
         var user = firebase.auth().currentUser;
         if (user) {
+            var digit = null;
             firebase
                 .database()
                 .ref('users/' + user.uid + '/cards')
                 .on('value', (data) => {
-                    setCardCount(data.numChildren())
+                    digit = digit + data.numChildren()
                 });
+            firebase
+                .database()
+                .ref('users/' + user.uid + '/bonuses')
+                .on('value', (data) => {
+                    digit = digit + data.numChildren()
+                });
+            setCardCount(digit)
             renderCards()
         } else {
             alert('Connect Error')
@@ -57,10 +65,15 @@ export default function CardOne({index, y, item}) {
     function hideNumb(e) {
         var numb = e;
         //use slice to remove first 12 elements
-        let first12 = numb.slice(4, 14);
+        let first12 = numb.slice(4, 12);
         //define what char to use to replace numbers
         let char = '*'
-        let repeatedChar = char.repeat(numb.length - 14);
+        let repeatedChar = ""
+        if (numb.length == 16 || numb.length == 12 || numb.length > 12) {
+            repeatedChar = char.repeat(numb.length - 14);
+        } else {
+            repeatedChar = char.repeat(numb.length - 8);
+        }
         // replace numbers with repeated char
         first12 = first12.replace(first12, repeatedChar);
         //concat hidden char with last 4 digits of input
@@ -167,7 +180,8 @@ export default function CardOne({index, y, item}) {
                             <View style={[styles.leftPattern, styles.bigPattern]}/>
                             <View
                                 style={[styles.leftPattern, styles.littlePattern, {backgroundColor: cardBgColors[index][1]}]}/>
-                            <Text style={styles.priceText}>{item.cardInfo.cvc} ₼</Text>
+                            <Text
+                                style={styles.priceText}>{item.cardInfo.cvc ? item.cardInfo.cvc : item.cardInfo.price} ₼</Text>
                             {cardCountBounces()}
                         </Left>
                         <Right style={styles.right}>

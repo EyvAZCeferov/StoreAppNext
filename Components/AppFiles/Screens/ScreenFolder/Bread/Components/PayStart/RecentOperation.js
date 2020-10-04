@@ -3,7 +3,7 @@ import {View, Text, ScrollView, FlatList, Alert, StyleSheet, Dimensions, Activit
 import firebase from "../../../../../Functions/FireBase/firebaseConfig";
 import {Body, Button, Left, List, ListItem, Right} from "native-base";
 import {t} from "../../../../../Lang";
-import {AntDesign, Feather,Entypo} from "@expo/vector-icons";
+import {AntDesign, Feather, Entypo} from "@expo/vector-icons";
 
 const {width, height} = Dimensions.get('window');
 export default class RecentOperation extends React.Component {
@@ -11,39 +11,37 @@ export default class RecentOperation extends React.Component {
         super(props);
         this.state = {
             checks: null,
-            checksCount:0,
+            checksCount: 0,
             refresh: true,
             checkid: this.props.checkid,
         }
     }
 
-  async getInfo() {
-    firebase.database().goOnline();
+    async getInfo() {
+        firebase.database().goOnline();
         var user = firebase.auth().currentUser;
-        this.setState({refresh:true});
+        this.setState({refresh: true});
         if (user) {
             var datas = [];
             firebase
                 .database()
-                .ref('users/' + user.uid + '/checks/' + this.props.checkid)
+                .ref('users/' + user.uid + '/checks/' + this.props.checkid + '/buying')
                 .on('value', (data) => {
-                  if(data.numChildren() !=0){
-                    data.forEach((data) => {
-                        datas.push(data.val());
-                    });
-                    this.setState({checks: datas,checksCount:data.numChildren(), refresh: false});
-                  }else{
-                    this.setState({checks: null,checksCount:0, refresh: false});
-                  }
+                    if (data.numChildren() != 0) {
+                        data.forEach((data) => {
+                            datas.push(data.val());
+                        });
+                        this.setState({checks: datas, checksCount: data.numChildren(), refresh: false});
+                    } else {
+                        this.setState({checks: null, checksCount: 0, refresh: false});
+                    }
                 });
-                this.renderStateList()
-        } else {
-            alert('Connection Problem');
+            this.renderStateList()
         }
     }
 
     componentDidMount() {
-      	this.getInfo()
+        this.getInfo()
     }
 
     componentWillUnmount() {
@@ -51,14 +49,14 @@ export default class RecentOperation extends React.Component {
     }
 
     renderStateList() {
-      if(this.state.refresh){
-        return <View style={{flex:1}}><ActivityIndicator size="large" color="#7c9d32" /></View>;
-      }else{
-        if (this.state.checks != null || this.state.checksCount!=0) {
-            return this.renderFullList();
+        if (this.state.refresh) {
+            return <View style={{flex: 1}}><ActivityIndicator size="large" color="#7c9d32"/></View>;
         } else {
-            return this.renderNullList();
-        }
+            if (this.state.checks != null || this.state.checksCount != 0) {
+                return this.renderFullList();
+            } else {
+                return this.renderNullList();
+            }
         }
     }
 
@@ -69,23 +67,30 @@ export default class RecentOperation extends React.Component {
             },
             () => {
                 this.getInfo();
-                  this.renderStateList()
+                this.renderStateList()
             }
         );
     }
 
     renderNullList() {
         return (
-            <List style={{width: width, height: height/2,backgroundColor:"#fff",justifyContent:"space-around",flexDirection:"column",alignItems:"center",
-            alignContent:"center"}}>
+            <List style={{
+                width: width,
+                height: height / 2,
+                backgroundColor: "#fff",
+                justifyContent: "space-around",
+                flexDirection: "column",
+                alignItems: "center",
+                alignContent: "center"
+            }}>
                 <Text style={styles.nullObject}>{t('noResult')}</Text>
                 <View style={{
-                    backgroundColor:"transparent",
+                    backgroundColor: "transparent",
                     width: width,
-                    height:55,
-                    justifyContent:"center",flexDirection:"column",alignItems:"center",
-                    alignContent:"center"
-                  }}>
+                    height: 55,
+                    justifyContent: "center", flexDirection: "column", alignItems: "center",
+                    alignContent: "center"
+                }}>
                     <View>
                         <Button
                             onPress={() => this.props.navigation.navigate('OtherPages', {
@@ -110,34 +115,42 @@ export default class RecentOperation extends React.Component {
         )
     }
 
-    callFlatlist(){
-      return (
-        <FlatList
-            data={this.state.checks}
-            renderItem={this.renderItems.bind(this)}
-            keyExtractor={(item, index) => index.toString()}
-            refreshing={this.state.refresh}
-            onRefresh={this.handleRefresh}
-        />);
+    callFlatlist() {
+        return (
+            <FlatList
+                data={this.state.checks}
+                renderItem={this.renderItems.bind(this)}
+                keyExtractor={(item, index) => index.toString()}
+                refreshing={this.state.refresh}
+                onRefresh={this.handleRefresh}
+            />);
     }
 
     renderFullList() {
         return (
-            <List style={{width: width,position:"relative", height: height/2,backgroundColor:"#fff",justifyContent:"space-around",flexDirection:"column",alignItems:"center",
-            alignContent:"center"}}>
-               	{this.callFlatlist()}
+            <List style={{
+                width: width,
+                position: "relative",
+                height: height / 2,
+                backgroundColor: "#fff",
+                justifyContent: "space-around",
+                flexDirection: "column",
+                alignItems: "center",
+                alignContent: "center"
+            }}>
+                {this.callFlatlist()}
                 <View style={{
-                    position:"absolute",
-                    backgroundColor:"transparent",
+                    position: "absolute",
+                    backgroundColor: "transparent",
                     width: width,
-                    bottom:55,
-                    height:55,
-                    justifyContent:"space-around",
-                    flexDirection:"row",
-                    alignItems:"center",
-                    alignContent:"center",
-                    zIndex:3,
-                  }}>
+                    bottom: 55,
+                    height: 55,
+                    justifyContent: "space-around",
+                    flexDirection: "row",
+                    alignItems: "center",
+                    alignContent: "center",
+                    zIndex: 3,
+                }}>
                     <View>
                         <Button
                             onPress={() => this.props.navigation.navigate('OtherPages', {
@@ -207,7 +220,7 @@ export default class RecentOperation extends React.Component {
 
         function deleteYes(index) {
             var user = firebase.auth().currentUser;
-            that.setState({refresh:true});
+            that.setState({refresh: true});
             firebase
                 .database()
                 .ref('users/' + user.uid + '/checks/' + that.state.checkid + '/' + index)
@@ -225,10 +238,10 @@ export default class RecentOperation extends React.Component {
 
         return (
             <ListItem thumbnail key={index} style={styles.listItem}>
-                <Left style={{borderColor:"transparent"}}>
-                    <AntDesign name="shoppingcart" style={{paddingLeft:10}} size={25} color="#7c9d32"/>
+                <Left style={{borderColor: "transparent"}}>
+                    <AntDesign name="shoppingcart" style={{paddingLeft: 10}} size={25} color="#7c9d32"/>
                 </Left>
-                <Body style={{borderColor:"transparent"}}>
+                <Body style={{borderColor: "transparent"}}>
                     <View style={styles.listNameCount}>
                         <Text style={styles.listTitle}>{item.name}</Text>
                         <Text style={styles.listSubtitle}>
@@ -239,7 +252,7 @@ export default class RecentOperation extends React.Component {
                         {item.price} Azn
                     </Text>
                 </Body>
-                <Right style={{borderColor:"transparent"}}>
+                <Right style={{borderColor: "transparent"}}>
                     <Button transparent onPress={() => deleteItem(item.barcode)}>
                         <Feather name="trash-2" size={24} color="#BF360C"/>
                     </Button>
@@ -299,12 +312,12 @@ const styles = StyleSheet.create({
     },
     listItem: {
         margin: 0,
-        marginLeft:0,
+        marginLeft: 0,
         padding: 0,
         width: width,
         height: 65,
-        borderColor:"rgba(0,0,0,.5)",
-        borderBottomWidth:3,
+        borderColor: "rgba(0,0,0,.5)",
+        borderBottomWidth: 3,
     },
     listNameCount: {
         width: width,

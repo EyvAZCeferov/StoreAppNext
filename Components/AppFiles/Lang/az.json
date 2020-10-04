@@ -39,6 +39,14 @@
   "params": "Məlumat",
   "notifications": "Bildirişlər",
   "cards": "Kartlar",
+  "market": {
+    "selectmarket": "Market Select",
+    "selectRetry": "Market Select Please"
+  },
+  "cardsSelections": {
+    "selectcard": "Card Select",
+    "selectRetry": "Card Select Please"
+  },
   "cardSelected": "Kart seçildi.",
   "minimalCard": "Minimum 1 kart olmalıdır",
   "accounts": "Hesablar",

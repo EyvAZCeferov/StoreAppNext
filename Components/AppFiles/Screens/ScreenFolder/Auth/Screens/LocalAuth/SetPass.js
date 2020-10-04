@@ -20,7 +20,6 @@ import CodeFieldSetPass from "./Components/SetPass/CodeFieldSetPass";
 import {t} from "../../../../../Lang";
 import {CreateAccContext} from "../../../../../Functions/Hooks/Authentication/CreateAccount/CreateAccContext";
 import * as LocalAuthentication from "expo-local-authentication";
-import firebase from "../../../../../Functions/FireBase/firebaseConfig";
 
 var reqems = '';
 export default class SetPass extends React.Component {
@@ -62,15 +61,15 @@ export default class SetPass extends React.Component {
         await AsyncStorage.removeItem('localAuthPass')
     }
 
-    componentDidMount() {
+    funcStat() {
         setInterval(() => {
             this.completed()
         }, 0)
     }
 
-    componentWillMount() {
-        this.resetStat();
-        this.getStat();
+    componentDidMount() {
+        this.funcStat();
+        this.resetStat()
     }
 
     async completed() {
@@ -78,16 +77,11 @@ export default class SetPass extends React.Component {
         if (this.state.pass1 !== '' && this.state.pass2 !== '') {
             if (this.state.pass1 === this.state.pass2) {
                 await AsyncStorage.setItem('localAuthPass', this.state.pass1);
-                if (params.prevPage === 'Settings') {
+                if (params.prevPage == 'Settings') {
                     this.props.navigation.navigate('Settings')
                     this.dropDownAlertRef.alertWithType('success', t('changed'));
-                } else if (params.prevPage === 'CreateAccount') {
-                    if (this.state.setFinger) {
-                        this.props.navigation.navigate('SetFinger')
-                    } else {
-                        const {userData, setUserData} = this.context
-                        setUserData({pleaseCreateAcc: "Create"})
-                    }
+                } else if (params.prevPage == 'CreateAccount') {
+                    this.props.navigation.navigate('SetFinger')
                     this.dropDownAlertRef.alertWithType('success', t('added'));
                 }
             }

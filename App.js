@@ -41,10 +41,14 @@ import {
     ProgramLocker,
     SetFing,
     SetPassword,
-    SplashScreen
+    SplashScreen,
+    PayWel,
+    SelectCard
 } from "./Components/AppFiles/Screens/CallScreen";
 
 import AppSlider from './Components/AppFiles/Screens/ScreenFolder/AppIntro/AppSlider'
+import PayWelcome from "./Components/AppFiles/Screens/ScreenFolder/Bread/Components/PayStart/PayWelcome";
+import CardSelector from "./Components/AppFiles/Screens/ScreenFolder/Bread/Components/PayStart/CardSelector";
 
 const AuthStack = createStackNavigator();
 const AuthStackScreen = (props) => (
@@ -69,7 +73,7 @@ const AuthStackScreen = (props) => (
 
 const Tabs = createMaterialBottomTabNavigator();
 const HomeStack = createStackNavigator();
-const BarcodeStack = createStackNavigator();
+const StartShoppingStack = createStackNavigator();
 const CampaignStack = createStackNavigator();
 const ProfileStack = createStackNavigator();
 const RegisterStack = createStackNavigator();
@@ -101,10 +105,10 @@ const HomeStackScreen = (props) => (
         <HomeStack.Screen name="Home" {...props} component={HomeSc}/>
     </HomeStack.Navigator>
 );
-const BarcodeStackScreen = (props) => (
-    <BarcodeStack.Navigator headerMode="none">
-        <BarcodeStack.Screen name="BarcodeReader" {...props} component={Barcode}/>
-    </BarcodeStack.Navigator>
+const StartShoppingScreens = (props) => (
+    <StartShoppingStack.Navigator headerMode="none" initialRouteName="PayWelCome">
+        <StartShoppingStack.Screen name="PayWelCome" {...props} component={PayWel}/>
+    </StartShoppingStack.Navigator>
 );
 
 const CampaignStackScreen = (props) => (
@@ -134,23 +138,25 @@ const OtherScreen = () => (
         <OtherStacks.Screen name="TermOfUses" component={TermUses}/>
         <OtherStacks.Screen name="OneCampaign" component={Campaign}/>
         <OtherStacks.Screen name="OneService" component={Service}/>
-        <OtherStacks.Screen name="PayPre" component={Paying}/>
-        <OtherStacks.Screen name="PayThanks" component={PayEnd}/>
         <OtherStacks.Screen name="OneCheck" component={Check}/>
         <OtherStacks.Screen name="Notification" component={Notify}/>
         <OtherStacks.Screen name="Barcode" options={{animationEnabled: false}} component={BarcodeScanDo}/>
+        <OtherStacks.Screen name="SelectCard" component={SelectCard}/>
+        <OtherStacks.Screen name="Buy" component={Barcode}/>
+        <OtherStacks.Screen name="PayPre" component={Paying}/>
+        <OtherStacks.Screen name="PayThanks" component={PayEnd}/>
     </OtherStacks.Navigator>
 )
 
 const TabsScreen = () => (
     <Tabs.Navigator
         headerMode="none"
-        initialRouteName="Home2"
+        initialRouteName="Home"
         activeColor="#7c9d32"
         inactiveColor="rgba(0,0,0,.5)"
         barStyle={{backgroundColor: '#fff', borderColor: '#fff', borderWidth: 0, borderRadius: 0}}
         screenOptions={({route}) => ({
-            tabBarIcon: ({color}) => {
+            tabBarIcon: ({color = "#7c9d32"}) => {
                 const icons = {
                     Home: 'home',
                     Start: 'plus',
@@ -164,12 +170,21 @@ const TabsScreen = () => (
                         size={25}
                     />
                 )
-
             },
+            tabBarLabel: () => {
+                const names = {
+                    Home: t('home'),
+                    Start: t('start'),
+                    Campaign: t('campaigns'),
+                    Profile: t('params'),
+                }
+                return names[route.name]
+            },
+            tabBarColor: "#ffffff",
         })}
     >
         <Tabs.Screen name="Home" options={{tabBarLabel: t('home')}} component={HomeStackScreen}/>
-        <Tabs.Screen name="Start" options={{tabBarLabel: t('start')}} component={BarcodeStackScreen}/>
+        <Tabs.Screen name="Start" options={{tabBarLabel: t('start')}} component={StartShoppingScreens}/>
         <Tabs.Screen name="Campaign" options={{tabBarLabel: t('campaigns')}} component={CampaignStackScreen}/>
         <Tabs.Screen name="Profile" options={{tabBarLabel: t('params')}} component={ProfileStackScreen}/>
     </Tabs.Navigator>
@@ -195,7 +210,7 @@ const ProgramLockScreens = (props) => (
 
 
 function PreView(props) {
-    return <SetPassword/>
+    return <CardSelector/>
 }
 
 export default function (props) {
@@ -265,8 +280,8 @@ export default function (props) {
                             firebase
                                 .database()
                                 .ref('users/' + user.uid).set({userData})
+                            setUser(userData)
                         })
-                        setUser(userData)
                     }
                 }
             }, 100)
@@ -298,7 +313,7 @@ export default function (props) {
         React.useEffect(() => {
             setTimeout(() => {
                 setisReady(true)
-            }, 1500)
+            }, 1900)
         }, [])
         return isready ? <NavigateAuth {...props} /> : <SplashScreen/>
     }

@@ -74,7 +74,6 @@ export default class Bonuses extends React.Component {
                 });
         } else {
             this.listComponent();
-
             this.props.navigation.navigate('Home');
         }
     }
@@ -136,8 +135,8 @@ export default class Bonuses extends React.Component {
                         <Entypo name="price-tag" color="#7c9d32" size={30}/>
                     </Left>
                     <Body>
-                        <Text style={styles.cardNumbText}>{item.number}</Text>
-                        <Text>{item.price} Azn</Text>
+                        <Text style={styles.cardNumbText}>{item.cardInfo.number}</Text>
+                        <Text>{item.cardInfo.price} Azn</Text>
                     </Body>
                     <Right>
                         <Button transparent onPress={() => deleteItem(item.cardId)}>
@@ -192,6 +191,21 @@ export default class Bonuses extends React.Component {
         return result;
     }
 
+    toCardStr(e) {
+        var v = e.replace(/\s+/g, '').replace(/[^0-9]/gi, '')
+        var matches = v.match(/\d{4,16}/g)
+        var match = matches && matches[0] || ''
+        var parts = []
+        for (var i = 0, len = match.length; i < len; i += 4) {
+            parts.push(match.substring(i, i + 4))
+        }
+        if (parts.length) {
+            return parts.join(' ')
+        } else {
+            return e
+        }
+    }
+
     addCard = () => {
         if (this.state.cardCode == null) {
             this.dropDownAlertRef.alertWithType('info', t('pinCodeNull'));
@@ -199,13 +213,20 @@ export default class Bonuses extends React.Component {
             this.setState({active: false})
             var user = firebase.auth().currentUser;
             var uid = this.makeid(15);
+            var numb = this.toCardStr(this.state.cardCode)
+            console.log(numb)
             firebase
                 .database()
                 .ref('users/' + user.uid + '/bonuses/' + uid)
                 .set({
-                    number: this.state.cardCode,
-                    price: 30,
                     cardId: uid,
+                    cardInfo: {
+                        number: numb,
+                        price: 30,
+                        type: "bonuse",
+                        expiry: 10 / 20,
+                        cvc: 518
+                    },
                 })
                 .then(
                     () => {
@@ -296,7 +317,7 @@ export default class Bonuses extends React.Component {
     render() {
         return (
             <View style={styles.f1}>
-                <StatusBar backgroundColor="#fff" style="dark" />
+                <StatusBar backgroundColor="#fff" style="dark"/>
                 <ScreensStandart {...this.props} name={t('mybonuses')}/>
                 <DropdownAlert
                     ref={ref => this.dropDownAlertRef = ref}
@@ -335,7 +356,7 @@ export default class Bonuses extends React.Component {
                             width: width,
                             height: height,
                         }}>
-                        <StatusBar backgroundColor="#fff" style="dark" />
+                        <StatusBar backgroundColor="#fff" style="dark"/>
                         <DropdownAlert
                             ref={ref => this.dropDownAlertRef = ref}
                             useNativeDriver={true}

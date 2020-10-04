@@ -69,19 +69,18 @@ export default class OneCampaign extends React.Component {
         this.getInfo();
     }
 
-    async share(title, desc, url) {
-        var des = unescape(desc.replace(/(<([^>]+)>)/gi, ''))
+    async share(tit, desc, url) {
+        let des = unescape(desc.replace(/(<([^>]+)>)/gi, ''))
         try {
             const result = await Share.share({
-                    title: title,
-                    message: des,
-                    url: url != null ? url : 'https://payandwin.az',
-                }, {
-                    dialogTitle: title + " Paylaşmaq üçün hazırdır.",
-                    subject: title,
-                    tintColor: "7c9d32"
-                })
-            ;
+                title: tit,
+                message: des,
+                url: url != null ? url : 'https://payandwin.az',
+            }, {
+                dialogTitle: tit + " Paylaşmaq üçün hazırdır.",
+                subject: tit,
+                tintColor: "7c9d32"
+            });
 
             if (result.action === Share.sharedAction) {
                 this.dropDownAlertRef.alertWithType('success', 'Paylaşmaq üçün hazırdır.');

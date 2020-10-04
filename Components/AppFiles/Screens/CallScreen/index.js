@@ -15,6 +15,7 @@ import History from "../ScreenFolder/Draw/Screens/History";
 import Maps from "../ScreenFolder/Draw/Screens/Maps";
 import Settings from "../ScreenFolder/Draw/Screens/Settings";
 import BarCodeReader from "../ScreenFolder/Bread/Screens/BarcodeReader";
+import PayWelcome from "../ScreenFolder/Bread/Components/PayStart/PayWelcome";
 import BarCodes from "../ScreenFolder/Bread/Screens/BarCodes";
 import Notifications from "../ScreenFolder/Bread/Screens/Notifications";
 import OneCampaign from "../ScreenFolder/Bread/Screens/OneCampaign";
@@ -29,6 +30,7 @@ import ProgramLock from "../ScreenFolder/Auth/Screens/LocalAuth/ProgramLock";
 import SetFinger from '../ScreenFolder/Auth/Screens/LocalAuth/SetFinger'
 import Splash from "../ScreenFolder/Splash/Splash";
 import SetPass from "../ScreenFolder/Auth/Screens/LocalAuth/SetPass";
+import CardSelector from "../ScreenFolder/Bread/Components/PayStart/CardSelector";
 //Keyboard Aware ScrollView
 //ScreenContainer
 const ScreenContainer = ({children}) => (
@@ -136,6 +138,18 @@ export const Setting = (props) => (
 );
 
 //Bread Return
+
+export const PayWel = (props) => (
+    <ScreenContainer>
+        <PayWelcome {...props} />
+    </ScreenContainer>
+);
+
+export const SelectCard = (props) => (
+    <ScreenContainer>
+        <CardSelector {...props} />
+    </ScreenContainer>
+);
 
 export const Barcode = (props) => (
     <ScreenContainer>

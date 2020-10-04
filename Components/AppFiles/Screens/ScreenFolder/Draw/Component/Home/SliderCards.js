@@ -19,8 +19,16 @@ export default function SliderCards({props}) {
                     data.forEach((data) => {
                         datas.push(data.val());
                     });
-                    setcards(datas);
                 });
+            firebase
+                .database()
+                .ref('users/' + user.uid + '/bonuses')
+                .on('value', (data) => {
+                    data.forEach((data) => {
+                        datas.push(data.val());
+                    });
+                });
+            setcards(datas)
             setrefreshing(false)
             renderBody();
         } else {
@@ -45,9 +53,7 @@ export default function SliderCards({props}) {
 
     function renderCardOne({item, index}) {
         return (
-            <CardOne
-                {...{index, y, item}}
-            />
+            <CardOne {...{index, y, item}} />
         )
     }
 

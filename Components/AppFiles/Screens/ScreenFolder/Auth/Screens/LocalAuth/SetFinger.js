@@ -22,7 +22,6 @@ export default class SetFinger extends React.Component {
     static contextType = CreateAccContext
 
     componentDidMount() {
-        alert('Have')
         this.getStat()
     }
 
@@ -30,6 +29,7 @@ export default class SetFinger extends React.Component {
         await AsyncStorage.getItem('haveFinger').then((a) => {
             if (a != null) {
                 this.setState({setFinger: true})
+                console.log(a)
             } else {
                 this.hasHardware()
             }
@@ -49,6 +49,7 @@ export default class SetFinger extends React.Component {
         await AsyncStorage.setItem('haveFinger', null)
         const {userData, setUserData} = this.context
         setUserData({pleaseCreateAcc: "Create"})
+        console.log(userData)
     }
 
     renderStateIcon() {
@@ -147,7 +148,8 @@ const styles = StyleSheet.create({
     },
     cancelButton: {
         padding: 10,
-        marginRight: 10
+        marginRight: 10,
+        backgroundColor: "red",
     },
     desc: {
         fontSize: 14,

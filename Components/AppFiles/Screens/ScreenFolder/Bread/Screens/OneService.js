@@ -56,7 +56,7 @@ export default class OneService extends React.Component {
                         keys.map((element) => {
                             firebase
                                 .database()
-                                .ref('campaigns/' + element + '/category_id/'+params.uid)
+                                .ref('campaigns/' + element + '/category_id/' + params.uid)
                                 .on('value', data => {
                                     console.log(data)
                                     data.forEach(d => {
@@ -66,9 +66,7 @@ export default class OneService extends React.Component {
                         })
 
                         this.setState({
-                            campaigns: null
-                        })
-                        this.setState({
+                            campaigns: null,
                             refresh: false
                         })
                     })
@@ -187,8 +185,14 @@ export default class OneService extends React.Component {
                     </View>
                     <View style={styles.serviceAbout}>
                         {this.state.refresh ? (
-                            <View style={{flex:1,justifyContent:"center",alignItems:"center",alignContent:"center"}}>
-                                <ActivityIndicator size="large" focusable={true} accessibilityLabel="Hay?" color="#7c9d32"  />
+                            <View style={{
+                                flex: 1,
+                                justifyContent: "center",
+                                alignItems: "center",
+                                alignContent: "center"
+                            }}>
+                                <ActivityIndicator size="large" focusable={true} accessibilityLabel="Hay?"
+                                                   color="#7c9d32"/>
                             </View>
                         ) : (
                             <ImageBackground

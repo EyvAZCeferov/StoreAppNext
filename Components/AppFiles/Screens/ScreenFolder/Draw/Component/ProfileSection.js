@@ -40,7 +40,7 @@ export default function ProfileSection(props) {
                     } else {
                         setprofPic(null);
                     }
-                    setnameSurname('Way Way Way Way And Pay');
+                    setnameSurname('Pay And Win');
                     renderImage();
                     setRefresh(false);
                 });
