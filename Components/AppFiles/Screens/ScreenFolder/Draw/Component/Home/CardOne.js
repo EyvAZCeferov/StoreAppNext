@@ -42,8 +42,6 @@ export default function CardOne({index, y, item}) {
                 });
             setCardCount(digit)
             renderCards()
-        } else {
-            alert('Connect Error')
         }
     }
 

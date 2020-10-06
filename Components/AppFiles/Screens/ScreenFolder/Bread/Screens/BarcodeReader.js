@@ -8,9 +8,7 @@ import {
 import RecentOperation from '../Components/PayStart/RecentOperation';
 import {StatusBar} from "expo-status-bar";
 import PayCards from "../Components/PayStart/Paying";
-import DropdownAlert from "react-native-dropdownalert";
 
-const succesImage = require('../../../../../../assets/images/Alert/tick.png');
 
 const {width, height} = Dimensions.get("window");
 export default class BarCodeReader extends React.Component {
@@ -25,6 +23,8 @@ export default class BarCodeReader extends React.Component {
         const params = this.props.route.params;
         if (params.checkid != null && params.selectedCard != null) {
             this.setState({refresh: false})
+            this.renderArena()
+            console.log('Barcode Readers')
         }
     }
 
@@ -47,18 +47,6 @@ export default class BarCodeReader extends React.Component {
                 ) : (
                     <View>
                         <StatusBar backgroundColor="#7c9d32" style="light"/>
-                        <DropdownAlert
-                            ref={ref => this.dropDownAlertRef = ref}
-                            useNativeDriver={true}
-                            closeInterval={1000}
-                            zIndex={5000}
-                            updateStatusBar={true}
-                            tapToCloseEnabled={true}
-                            showCancel={true}
-                            elevation={10}
-                            isInteraction={true}
-                            successImageSrc={succesImage}
-                        />
                         <View style={styles.upperView}>
                             <PayCards checkid={params.checkid} cardNumb={params.selectedCard} {...this.props}/>
                         </View>
@@ -88,11 +76,13 @@ const styles = StyleSheet.create({
         justifyContent: "space-between",
     },
     upperView: {
-        height: 250,
-        backgroundColor: "#f1f1f1"
+        maxHeight: height / 2,
+        minHeight: 250,
+        backgroundColor: "#fff"
     },
     downerView: {
-        height: height,
-        backgroundColor: "red"
+        maxHeight: height / 2,
+        minHeight: 250,
+        backgroundColor: "#fff"
     }
 });

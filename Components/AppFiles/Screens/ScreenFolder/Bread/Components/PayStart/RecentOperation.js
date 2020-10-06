@@ -1,9 +1,10 @@
 import React from 'react';
-import {View, Text, ScrollView, FlatList, Alert, StyleSheet, Dimensions, ActivityIndicator} from 'react-native';
+import {View, Text, FlatList, Alert, StyleSheet, Dimensions, ActivityIndicator, TouchableOpacity} from 'react-native';
 import firebase from "../../../../../Functions/FireBase/firebaseConfig";
 import {Body, Button, Left, List, ListItem, Right} from "native-base";
 import {t} from "../../../../../Lang";
 import {AntDesign, Feather, Entypo} from "@expo/vector-icons";
+import DropdownAlert from "react-native-dropdownalert";
 
 const {width, height} = Dimensions.get('window');
 export default class RecentOperation extends React.Component {
@@ -20,37 +21,60 @@ export default class RecentOperation extends React.Component {
     async getInfo() {
         firebase.database().goOnline();
         var user = firebase.auth().currentUser;
-        this.setState({refresh: true});
         if (user) {
-            var datas = [];
+            this.setState({refresh: true})
+            let datas = [];
             firebase
                 .database()
-                .ref('users/' + user.uid + '/checks/' + this.props.checkid + '/buying')
+                .ref('users/' + user.uid + '/checks/' + this.props.checkid + '/products')
                 .on('value', (data) => {
                     if (data.numChildren() != 0) {
                         data.forEach((data) => {
                             datas.push(data.val());
                         });
                         this.setState({checks: datas, checksCount: data.numChildren(), refresh: false});
+                        this.renderStateList()
                     } else {
                         this.setState({checks: null, checksCount: 0, refresh: false});
+                        this.renderStateList()
                     }
                 });
             this.renderStateList()
         }
+        this.renderStateList()
     }
 
-    componentDidMount() {
+    componentWillMount() {
         this.getInfo()
-    }
-
-    componentWillUnmount() {
-        firebase.database().goOffline();
+        setInterval(() => {
+            this.getInfo()
+        }, 2000)
     }
 
     renderStateList() {
         if (this.state.refresh) {
-            return <View style={{flex: 1}}><ActivityIndicator size="large" color="#7c9d32"/></View>;
+            return (
+                <View style={{
+                    width,
+                    height: height / 2.2,
+                    justifyContent: "center",
+                    alignContent: "center",
+                    alignItems: "center"
+                }}>
+                    <DropdownAlert
+                        ref={ref => this.dropDownAlertRef = ref}
+                        useNativeDriver={true}
+                        closeInterval={1000}
+                        zIndex={5000}
+                        updateStatusBar={true}
+                        tapToCloseEnabled={true}
+                        showCancel={true}
+                        elevation={10}
+                        isInteraction={true}
+                    />
+                    <ActivityIndicator size="large" color="#7c9d32" focusable={true} animating={true}/>
+                </View>
+            )
         } else {
             if (this.state.checks != null || this.state.checksCount != 0) {
                 return this.renderFullList();
@@ -67,7 +91,6 @@ export default class RecentOperation extends React.Component {
             },
             () => {
                 this.getInfo();
-                this.renderStateList()
             }
         );
     }
@@ -81,18 +104,31 @@ export default class RecentOperation extends React.Component {
                 justifyContent: "space-around",
                 flexDirection: "column",
                 alignItems: "center",
-                alignContent: "center"
+                alignContent: "center",
             }}>
+                <DropdownAlert
+                    ref={ref => this.dropDownAlertRef = ref}
+                    useNativeDriver={true}
+                    closeInterval={1000}
+                    zIndex={5000}
+                    updateStatusBar={true}
+                    tapToCloseEnabled={true}
+                    showCancel={true}
+                    elevation={10}
+                    isInteraction={true}
+                />
                 <Text style={styles.nullObject}>{t('noResult')}</Text>
                 <View style={{
-                    backgroundColor: "transparent",
+                    backgroundColor: "#fff",
                     width: width,
                     height: 55,
-                    justifyContent: "center", flexDirection: "column", alignItems: "center",
-                    alignContent: "center"
+                    justifyContent: "center",
+                    flexDirection: "column",
+                    alignItems: "center",
+                    alignContent: "center",
                 }}>
                     <View>
-                        <Button
+                        <TouchableOpacity
                             onPress={() => this.props.navigation.navigate('OtherPages', {
                                 screen: "Barcode",
                                 params: {
@@ -108,14 +144,14 @@ export default class RecentOperation extends React.Component {
                             }]}
                         >
                             <Entypo name="camera" size={24} color="#7c9d32"/>
-                        </Button>
+                        </TouchableOpacity>
                     </View>
                 </View>
             </List>
         )
     }
 
-    callFlatlist() {
+    callFullList() {
         return (
             <FlatList
                 data={this.state.checks}
@@ -124,6 +160,46 @@ export default class RecentOperation extends React.Component {
                 refreshing={this.state.refresh}
                 onRefresh={this.handleRefresh}
             />);
+    }
+
+    goNext() {
+        Alert.alert(
+            t('addCard'),
+            '',
+            [
+                {
+                    text: t('cancel'),
+                    onPress: () => console.log('Cancel Pressed'),
+                    style: 'cancel',
+                },
+                {
+                    text: t('addCard'),
+                    onPress: () => this.go(),
+                    style: 'destructive',
+                },
+            ],
+            {cancelable: true}
+        );
+    }
+
+    updateShopping(d) {
+        firebase.database().goOnline();
+        let user = firebase.auth().currentUser;
+        firebase.database().ref('users/' + user.uid + '/checks/' + this.state.checkid).update({
+            date: d
+        })
+    }
+
+    go() {
+        if (this.state.checks != null) {
+            var date = Date.now()
+            this.updateShopping(date.toLocaleString())
+            this.props.navigation.navigate("PayThanks",
+                {
+                    checkid: this.state.checkid
+                }
+            )
+        }
     }
 
     renderFullList() {
@@ -136,9 +212,20 @@ export default class RecentOperation extends React.Component {
                 justifyContent: "space-around",
                 flexDirection: "column",
                 alignItems: "center",
-                alignContent: "center"
+                alignContent: "center",
             }}>
-                {this.callFlatlist()}
+                <DropdownAlert
+                    ref={ref => this.dropDownAlertRef = ref}
+                    useNativeDriver={true}
+                    closeInterval={1000}
+                    zIndex={5000}
+                    updateStatusBar={true}
+                    tapToCloseEnabled={true}
+                    showCancel={true}
+                    elevation={10}
+                    isInteraction={true}
+                />
+                {this.callFullList()}
                 <View style={{
                     position: "absolute",
                     backgroundColor: "transparent",
@@ -149,16 +236,14 @@ export default class RecentOperation extends React.Component {
                     flexDirection: "row",
                     alignItems: "center",
                     alignContent: "center",
-                    zIndex: 3,
                 }}>
                     <View>
-                        <Button
-                            onPress={() => this.props.navigation.navigate('OtherPages', {
-                                screen: "Barcode",
-                                params: {
+                        <TouchableOpacity
+                            onPress={() => this.props.navigation.navigate("Barcode",
+                                {
                                     uid: this.state.checkid
                                 }
-                            })}
+                            )}
                             style={[styles.buttonBarcode, {
                                 backgroundColor: "#fff",
                                 borderColor: "#7c9d32",
@@ -168,17 +253,11 @@ export default class RecentOperation extends React.Component {
                             }]}
                         >
                             <Entypo name="camera" size={24} color="#7c9d32"/>
-                        </Button>
+                        </TouchableOpacity>
                     </View>
                     <View>
-                        <Button
-                            onPress={() =>
-                                this.state.checks != null ? this.props.navigation.navigate('OtherPages', {
-                                    screen: "PayPre",
-                                    params: {
-                                        summary: 50
-                                    }
-                                }) : alert('Please Fill')}
+                        <TouchableOpacity
+                            onPress={() => this.goNext()}
                             style={[styles.buttonBarcode, {
                                 backgroundColor: "#fff",
                                 borderColor: "#7c9d32",
@@ -188,7 +267,7 @@ export default class RecentOperation extends React.Component {
                             }]}
                         >
                             <AntDesign name="check" size={24} color="#7c9d32"/>
-                        </Button>
+                        </TouchableOpacity>
                     </View>
                 </View>
             </List>
@@ -223,11 +302,11 @@ export default class RecentOperation extends React.Component {
             that.setState({refresh: true});
             firebase
                 .database()
-                .ref('users/' + user.uid + '/checks/' + that.state.checkid + '/' + index)
+                .ref('users/' + user.uid + '/checks/' + that.state.checkid + '/products/' + index)
                 .remove()
                 .then(
                     () => {
-                        alert(t('deleted'))
+                        this.dropDownAlertRef.alertWithType('info', t('deleted'));
                         that.handleRefresh();
                     },
                     (err) => {

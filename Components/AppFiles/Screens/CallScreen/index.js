@@ -21,7 +21,6 @@ import Notifications from "../ScreenFolder/Bread/Screens/Notifications";
 import OneCampaign from "../ScreenFolder/Bread/Screens/OneCampaign";
 import OneService from "../ScreenFolder/Bread/Screens/OneService";
 import OneCheck from "../ScreenFolder/Bread/Screens/OneCheck";
-import PayPre from "../ScreenFolder/Bread/Screens/PayPre";
 import PayThanks from "../ScreenFolder/Bread/Screens/PayThanks";
 import TermOfUses from "../ScreenFolder/Bread/Screens/TermOfUses";
 import ProfileSectionArena from "../ScreenFolder/Draw/Component/ProfileSection";
@@ -156,9 +155,16 @@ export const Barcode = (props) => (
         <BarCodeReader {...props} />
     </ScreenContainer>
 );
+
 export const BarcodeScanDo = (props) => (
     <ScreenContainer>
         <BarCodes {...props} />
+    </ScreenContainer>
+);
+
+export const PayEnd = (props) => (
+    <ScreenContainer>
+        <PayThanks {...props} />
     </ScreenContainer>
 );
 
@@ -183,18 +189,6 @@ export const Service = (props) => (
 export const Check = (props) => (
     <ScreenContainer>
         <OneCheck {...props} />
-    </ScreenContainer>
-);
-
-export const Paying = (props) => (
-    <ScreenContainer>
-        <PayPre {...props} />
-    </ScreenContainer>
-);
-
-export const PayEnd = (props) => (
-    <ScreenContainer>
-        <PayThanks {...props} />
     </ScreenContainer>
 );
 

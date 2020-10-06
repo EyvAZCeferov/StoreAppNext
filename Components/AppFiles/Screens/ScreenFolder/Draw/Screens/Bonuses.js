@@ -224,8 +224,7 @@ export default class Bonuses extends React.Component {
                         number: numb,
                         price: 30,
                         type: "bonuse",
-                        expiry: 10 / 20,
-                        cvc: 518
+                        expiry: "10 / 20",
                     },
                 })
                 .then(

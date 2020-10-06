@@ -68,7 +68,6 @@ export default class Settings extends React.Component {
             let type = await LocalAuthentication.supportedAuthenticationTypesAsync();
             let isFinger = type.includes(1)
             if (isFinger) {
-                this.callFinger();
                 this.setState({
                     hasFingerPrintHardware: isFinger
                 });

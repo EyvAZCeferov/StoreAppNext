@@ -2,11 +2,12 @@ import React, {useState, useEffect} from 'react';
 import {View, Text, TouchableOpacity, Dimensions, Keyboard, Modal} from 'react-native';
 import {Camera} from 'expo-camera';
 import {StatusBar} from "expo-status-bar";
-import {Entypo, AntDesign} from '@expo/vector-icons';
+import {Entypo,AntDesign} from '@expo/vector-icons';
 import {InputGroup, Input} from 'native-base';
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view'
 import BarcodeMask from 'react-native-barcode-mask';
 import firebase from "../../../../Functions/FireBase/firebaseConfig";
+import {t} from "../../../../Lang";
 
 const {width, height} = Dimensions.get('window');
 export default function BarCodes(props) {
@@ -72,7 +73,7 @@ export default function BarCodes(props) {
                 var user = firebase.auth().currentUser;
                 if (element != null) {
                     firebase.database()
-                        .ref('users/' + user.uid + '/checks/' + checkid + '/' + element.barcode).set({
+                        .ref('users/' + user.uid + '/checks/' + checkid + '/products/' + element.barcode).set({
                         barcode: element.barcode,
                         name: element.name,
                         price: element.price,
@@ -105,8 +106,15 @@ export default function BarCodes(props) {
                     animatedLineWidth={'90%'}
                     lineAnimationDuration={1400}
                     useNativeDriver={true}
-                    style={{justifyContent:  'center' ,alignItems:  'center' ,alignContent:  'center' ,textAlign:  'center', margin:"auto",padding:"auto" }}
-               />               
+                    style={{
+                        justifyContent: 'center',
+                        alignItems: 'center',
+                        alignContent: 'center',
+                        textAlign: 'center',
+                        margin: "auto",
+                        padding: "auto"
+                    }}
+                />
             </Camera>
             <View
                 style={{
@@ -147,7 +155,7 @@ export default function BarCodes(props) {
                         onPress={() => {
                             props.navigation.goBack();
                         }}>
-                        <AntDesign name="back" size={25} color="#fff"/>
+                        <AntDesign name="left" size={25} color="#fff"/>
                     </TouchableOpacity>
                     <TouchableOpacity
                         style={{
@@ -197,14 +205,14 @@ export default function BarCodes(props) {
                     }}
                     onPress={() => toggleModal()}
                 >
-                    <AntDesign name="edit" style={{paddingHorizontal: 15, paddingVertical: 10}} size={30}
+                    <Entypo name="edit" style={{paddingHorizontal: 15, paddingVertical: 10}} size={30}
                                color="#fff"/>
                     <Text style={{color: "#fff", fontSize: 14, fontWeight: "bold"}}>No Barcode?</Text>
                 </TouchableOpacity>
             </View>
             <View>
                 <Modal animationType="slide" animated={true} transparent={false}
-                       onRequestClose={() => console.log('Close')} presentationStyle="fullScreen"
+                       presentationStyle="fullScreen"
                        visible={modalState} statusBarTranslucent={true}>
                     <KeyboardAwareScrollView>
                         <View style={{
@@ -215,7 +223,7 @@ export default function BarCodes(props) {
                             <TouchableOpacity style={{
                                 marginTop: 40
                             }} onPress={() => setModalState(false)}>
-                                <AntDesign name="back" size={24} color="black"/>
+                                <AntDesign name="left" size={24} color="black"/>
                             </TouchableOpacity>
                         </View>
                         <View style={{
@@ -253,7 +261,7 @@ export default function BarCodes(props) {
                                         height: 80,
                                     }}
                                            autoCapitalize="none"
-                                           placeholder="Type BarCode"
+                                           placeholder={t('barcodeScreen.typeBarcode')}
                                            placeholderTextColor="rgba(0,0,0,.5)"
                                            keyboardType="numeric"
                                            onChangeText={(text) => setbarcode(text)}
@@ -275,7 +283,7 @@ export default function BarCodes(props) {
                                             fontSize: 24,
                                             paddingHorizontal: 0,
                                             paddingVertical: 20,
-                                        }}>Send</Text>
+                                        }}>{t('addCard')}</Text>
                                     </TouchableOpacity>
                                 </InputGroup>
                             </View>

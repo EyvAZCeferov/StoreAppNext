@@ -57,7 +57,6 @@ export default class CardSelector extends React.Component {
 
     goBack() {
         this.setState({
-            allCards: null,
             selectedCard: null,
         })
         this.props.navigation.goBack();
@@ -67,7 +66,7 @@ export default class CardSelector extends React.Component {
         firebase.database().goOnline();
         let user = firebase.auth().currentUser;
         const params = this.props.route.params;
-        firebase.database().ref('users/' + user.uid + '/checks/' + params.checkid).set({
+        firebase.database().ref('users/' + user.uid + '/checks/' + params.checkid).update({
             card: this.state.selectedCard
         })
     }
@@ -115,6 +114,7 @@ export default class CardSelector extends React.Component {
                 return (
                     <Picker.Item
                         label={l}
+                        key={car.cardId}
                         value={car.cardId}
                         color="#7c9d32"/>
                 )
@@ -158,7 +158,7 @@ export default class CardSelector extends React.Component {
                                     onValueChange={(text) => this.setState({selectedCard: text})}
                                     focusable={true}
                                 >
-                                    <Picker.Item label="Kart seç" color="#7c9d32"
+                                    <Picker.Item key={0} label="Kart seç" color="#7c9d32"
                                                  value=""/>
                                     {this.renderCards()}
                                 </Picker>

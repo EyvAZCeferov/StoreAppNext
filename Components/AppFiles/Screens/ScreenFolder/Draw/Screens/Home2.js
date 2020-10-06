@@ -29,7 +29,6 @@ export default class Home2 extends React.Component {
     componentDidMount() {
         firebase.database().goOnline()
         this.renderElement();
-
     }
 
     renderElement() {

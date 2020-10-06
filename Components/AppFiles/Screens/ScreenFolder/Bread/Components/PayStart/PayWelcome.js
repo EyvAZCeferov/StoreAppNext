@@ -58,7 +58,7 @@ export default class PayWelcome extends React.Component {
     getMarkets() {
         setTimeout(() => {
             this.setState({refresh: false})
-        }, 1000)
+        }, 300)
         this.setId()
     }
 
@@ -67,7 +67,6 @@ export default class PayWelcome extends React.Component {
         let user = firebase.auth().currentUser;
         firebase.database().ref('users/' + user.uid + '/checks/' + this.state.checkid).remove()
         this.setState({
-            allMarkets: null,
             selectedMarket: null,
             checkid: null,
         })
@@ -105,7 +104,7 @@ export default class PayWelcome extends React.Component {
                 return (
                     <Picker.Item
                         label={market.name}
-                        value={market.id}
+                        value={market.name}
                         color="#7c9d32"/>
                 )
             })

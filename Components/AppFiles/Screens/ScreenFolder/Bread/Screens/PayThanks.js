@@ -1,49 +1,59 @@
 import * as React from 'react';
-import {StyleSheet, Dimensions, View, Text} from 'react-native';
+import {StyleSheet, Dimensions, View, Text, ActivityIndicator} from 'react-native';
 import {Button} from 'native-base';
 
 import {AntDesign} from '@expo/vector-icons';
 import {t} from '../../../../Lang';
-
-import {QRCode as CustomQRCode} from 'react-native-custom-qr-codes-expo';
-
-const icon = require('../../../../../../assets/images/logo1.png');
-
-function Simple() {
-    return (
-        <CustomQRCode
-            logo={{uri: icon}}
-            logoMargin={5}
-            color="#101010"
-            codeStyle="circle"
-            innerEyeStyle="circle"
-            outerEyeStyle="circle"
-            style={styles.w1h1}
-            logoBackgroundColor="transparent"
-            logoSize={30}
-            value={this.state.link != null ? this.state.link : 'https://google.com'}
-        />
-    );
-}
+import {QRCode as CustomQRCode} from "react-native-custom-qr-codes-expo";
+import {StatusBar} from "expo-status-bar";
 
 var width = Dimensions.get('window').width;
 var height = Dimensions.get('window').height;
 
-export default class PayThanks extends React.Component {
-    state = {
-        link: null,
-    };
+function Simple(props) {
+    return (
+        <CustomQRCode
+            style={styles.barcode}
+            content={props.link}
+            size={width / 1.25}
+            color="#fff"
+            codeStyle="square"
+            innerEyeStyle="square"
+            outerEyeStyle="square"
+        />
+    );
+}
 
-    render() {
+export default class PayThanks extends React.Component {
+    constructor(props) {
+        super(props);
+        this.state = {
+            refresh: true,
+            link: null
+        }
+    }
+
+    componentDidMount() {
         const params = this.props.route.params;
-        const link = params ? params.link : null;
-        this.setState({link: link});
-        return (
-            <View>
+        if (params.checkid != null) {
+            this.setState({link: params.checkid, refresh: false})
+            this.renderContent()
+        }
+    }
+
+    renderContent() {
+        if (this.state.refresh) {
+            return (
+                <View style={{flex: 1, justifyContent: "center", alignItems: "center", alignContent: "center"}}>
+                    <ActivityIndicator size="large" color="#7c9d32" animating={true} focusable={true}/>
+                </View>
+            )
+        } else {
+            return (
                 <View style={[styles.f1, styles.bgGreen]}>
                     <View style={styles.thanksArena}>
                         <View style={styles.barcode}>
-                            <Simple/>
+                            <Simple {...this.props} link={this.state.link}/>
                         </View>
                         <Text style={[styles.icon, styles.title]}>
                             {t('thanksBuying')}
@@ -55,13 +65,22 @@ export default class PayThanks extends React.Component {
                                 iconLeft
                                 light
                                 style={styles.btn}
-                                onPress={this.props.navigation.navigate('BarcodeReader')}>
+                                onPress={() => this.props.navigation.navigate('Tabs', {screen: "Home"})}>
                                 <AntDesign name="home" size={24} color="black"/>
                                 <Text style={styles.btnText}>{t('returnHome')}</Text>
                             </Button>
                         </View>
                     </View>
                 </View>
+            )
+        }
+    }
+
+    render() {
+        return (
+            <View>
+                <StatusBar backgroundColor="#7c9d32" style="light"/>
+                {this.renderContent()}
             </View>
         );
     }
@@ -87,14 +106,14 @@ const styles = StyleSheet.create({
         fontSize: 50,
         color: '#fff',
         fontWeight: 'bold',
+        marginVertical: 5
     },
     barcode: {
-        width: 150,
-        height: 150,
         justifyContent: 'center',
         alignContent: 'center',
         alignItems: 'center',
-        marginBottom: 50,
+        marginBottom: 35,
+        color: "#fff",
     },
     w1h1: {
         width: 500,
@@ -104,11 +123,13 @@ const styles = StyleSheet.create({
         fontSize: 30,
         marginVertical: 10,
         marginTop: 20,
+        textAlign: "center"
     },
     subtitle: {
         fontSize: 18,
         color: '#fff',
         margin: 0,
+        textAlign: "center"
     },
     centerItems: {
         justifyContent: 'center',
@@ -124,6 +145,6 @@ const styles = StyleSheet.create({
         fontSize: 15,
         fontWeight: 'bold',
         paddingLeft: 5,
-        color: '#000',
+        color: '#010101',
     },
 });

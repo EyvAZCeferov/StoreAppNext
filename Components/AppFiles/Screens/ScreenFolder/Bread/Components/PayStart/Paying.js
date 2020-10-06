@@ -1,108 +1,112 @@
 import React from 'react';
-import {View, Text, StyleSheet, Dimensions, Animated} from 'react-native';
+import {View, Text, StyleSheet, Dimensions} from 'react-native';
 import firebase from "../../../../../Functions/FireBase/firebaseConfig";
 import {StatusBar} from 'expo-status-bar';
 
 const {width, height} = Dimensions.get('window')
+let lastPrice = 0
+let edvhesabla = 0
+export default class PayCards extends React.Component {
+    constructor(props) {
+        super(props);
+        this.state = {
+            refresh: true,
+            selectedCard: this.props.cardNumb,
+            cards: null,
+            checks: null,
+            checksCount: 0,
+            priceAll: 0,
+            edv: 0
+        }
+    }
 
-export default function PayCards(props) {
-
-    const [refresh, setRefresh] = React.useState(true);
-    const selectedCard = props.cardNumb;
-    const [cards, setCards] = React.useState(null);
-    const [checks, setChecks] = React.useState(null);
-    const [checksCount, setChecksCount] = React.useState(null);
-    const [priceAll, setPriceAll] = React.useState(0)
-    const [edv, setEdv] = React.useState(0)
-
-    function getInfo() {
-        if (selectedCard) {
+    async getInfo() {
+        if (this.state.selectedCard) {
+            this.setState({refresh: true})
             firebase.database().goOnline();
             var user = firebase.auth().currentUser;
             if (user) {
                 var dataW = null
                 firebase
                     .database()
-                    .ref('users/' + user.uid + '/cards/' + selectedCard)
+                    .ref('users/' + user.uid + '/cards/' + this.state.selectedCard)
                     .on('value', (data) => {
                         dataW = data.val();
                     });
                 if (dataW == null) {
                     firebase
                         .database()
-                        .ref('users/' + user.uid + '/bonuses/' + selectedCard)
+                        .ref('users/' + user.uid + '/bonuses/' + this.state.selectedCard)
                         .on('value', (data) => {
                             dataW = data.val();
                         });
                 }
-                setCards(dataW);
-                setRefresh(false)
-                renderTopPanel()
-                countEDV()
+                this.setState({
+                    cards: dataW,
+                    refresh: false
+                })
+                this.countEDV()
+                this.renderTopPanel()
             } else {
-                props.navigation.goBack();
+                this.props.navigation.goBack();
             }
         }
     }
 
-    React.useEffect(() => {
-        getInfo();
-    }, [])
+    componentWillMount() {
+        this.getInfo()
+        setInterval(() => {
+            this.getInfo()
+        }, 1000)
+    }
 
-    function priceCollector() {
+    priceCollector() {
         var user = firebase.auth().currentUser;
         if (user) {
             var datas = [];
             firebase
                 .database()
-                .ref('users/' + user.uid + '/checks/' + props.checkid + '/buying')
+                .ref('users/' + user.uid + '/checks/' + this.props.checkid + '/products/')
                 .on('value', (data) => {
                     if (data.numChildren() > 0 && data != null) {
                         data.forEach((data) => {
                             datas.push(data.val());
                         });
-                        console.log(datas)
-                        setChecks(datas);
-                        setChecksCount(data.numChildren())
-                    } else {
-                        setChecks(null);
-                        setChecksCount(0)
+                        this.setState({
+                            checks: datas,
+                            checksCount: data.numChildren()
+                        })
                     }
                 });
-        } else {
-            alert('Connection Problem');
         }
     }
 
-    function price() {
-        priceCollector();
-        let result = 0;
-        if (checks != null && checksCount > 0) {
-            checks.map(element => {
-                result += parseFloat(element.price);
+    price() {
+        this.priceCollector();
+        if (this.state.checks != null && this.state.checksCount > 0) {
+            this.state.checks.map(element => {
+                var elementPrice = parseFloat(element.price);
+                lastPrice = lastPrice + elementPrice;
             })
-            setPriceAll(parseFloat(result))
-        } else {
-            setPriceAll(0)
+            this.setState({priceAll: lastPrice})
         }
-        return result;
+        lastPrice = 0
+        return this.state.priceAll;
     }
 
-    function countEDV() {
-        price();
-        let edv = 0;
-        if (parseFloat(priceAll) > 0) {
-            edv = (parseFloat(priceAll) * 18) / 100;
-            setEdv(edv);
-        } else {
-            setEdv(edv);
+    countEDV() {
+        this.price();
+        if (parseFloat(this.state.priceAll) > 0) {
+            edvhesabla = (parseFloat(this.state.priceAll) * 18) / 100;
+            this.setState({edv: edvhesabla})
         }
-        return edv;
+        edvhesabla = 0
+        return this.state.edv;
     }
 
-    function balance(card) {
+    balance(card) {
         if (card != null) {
-            if (card.cvc != null) {
+            if (card.cvc) {
                 return card.cvc
             } else {
                 return card.price
@@ -110,24 +114,25 @@ export default function PayCards(props) {
         }
     }
 
-    function lastBalance(card) {
+
+    lastBalance(card) {
         if (card != null) {
-            if (checks != null && checksCount > 0) {
-                if (card.cvc != null) {
-                    return parseFloat(card.cvc) - parseFloat(priceAll)
-                } else {
-                    return parseFloat(card.price) - parseFloat(priceAll)
-                }
+            let result = 0
+            if (card.cvc) {
+                result = parseFloat(card.cvc) - parseFloat(this.state.priceAll)
+            } else {
+                result = parseFloat(card.price) - parseFloat(this.state.priceAll)
             }
+            return result
         }
     }
 
-    function renderCardDatas() {
+    renderCardDatas() {
         return (
             <View style={{
                 backgroundColor: "#fff",
                 width: width / 2.2,
-                height: height / 3,
+                height: height / 3.334,
                 borderRadius: 12
             }}>
                 <View style={{
@@ -154,7 +159,7 @@ export default function PayCards(props) {
                             <Text style={{
                                 color: "#000",
                                 fontSize: 18
-                            }}>{cards != null ? hideNumb(cards.cardInfo.number) : '*********'} </Text>
+                            }}>{this.state.cards != null ? this.hideNumb(this.state.cards.cardInfo.number) : '*********'} </Text>
                         </View>
                         <View style={{marginTop: 15}}/>
                         <View style={{
@@ -167,7 +172,7 @@ export default function PayCards(props) {
                             <Text style={{
                                 color: "#000",
                                 fontSize: 18
-                            }}>{cards != null ? balance(cards.cardInfo) : null} ₼</Text>
+                            }}>{this.state.cards != null ? this.balance(this.state.cards.cardInfo) : 0} ₼</Text>
                         </View>
                     </View>
                 </View>
@@ -175,12 +180,12 @@ export default function PayCards(props) {
         )
     }
 
-    function renderRight() {
+    renderRight() {
         return (
             <View style={{
                 backgroundColor: "#7c9d32",
                 width: width / 2.6,
-                height: height / 3.03,
+                height: height / 3.07,
                 borderBottomLeftRadius: width / 5.2,
                 borderTopLeftRadius: 0,
                 flexDirection: "column",
@@ -195,7 +200,7 @@ export default function PayCards(props) {
                         fontSize: 17,
                         marginLeft: 5,
                         marginTop: 2,
-                    }}>{priceAll} ₼</Text>
+                    }}>{this.state.priceAll} ₼</Text>
                 <View style={{marginTop: 5, marginLeft: 5}}>
                     <Text style={{color: "#fff", fontSize: 20, fontWeight: "bold"}}>Qalan Məbləğ</Text>
                     <Text
@@ -204,7 +209,7 @@ export default function PayCards(props) {
                             fontSize: 17,
                             marginLeft: 5,
                             marginTop: 2,
-                        }}>{cards != null ? lastBalance(cards.cardInfo) : null} ₼</Text>
+                        }}>{this.state.cards != null ? this.lastBalance(this.state.cards.cardInfo) : 0} ₼</Text>
                 </View>
                 <View style={{marginTop: 5, marginLeft: 5}}>
                     <Text style={{color: "#fff", fontSize: 20, fontWeight: "bold"}}>Ədv %</Text>
@@ -214,13 +219,13 @@ export default function PayCards(props) {
                             fontSize: 17,
                             marginLeft: 5,
                             marginTop: 2,
-                        }}>{edv} ₼</Text>
+                        }}>{this.state.edv} ₼</Text>
                 </View>
             </View>
         )
     }
 
-    function hideNumb(e) {
+    hideNumb(e) {
         var numb = e;
         //use slice to remove first 12 elements
         let first12 = numb.slice(4, 14);
@@ -235,25 +240,27 @@ export default function PayCards(props) {
         return hiddenNumbers;
     }
 
-    function renderTopPanel() {
+    renderTopPanel() {
         return (
             <View style={styles.cardCotnent}>
-                {renderCardDatas()}
-                {renderRight()}
+                {this.renderCardDatas()}
+                {this.renderRight()}
             </View>
         )
     }
 
-    return (
-        <View style={styles.container}>
-            <StatusBar backgroundColor="#7c9d32" style='light'/>
-            <View style={styles.cardArea}>
-                <View style={styles.card}>
-                    {renderTopPanel()}
+    render() {
+        return (
+            <View style={styles.container}>
+                <StatusBar backgroundColor="#7c9d32" style='light'/>
+                <View style={styles.cardArea}>
+                    <View style={styles.card}>
+                        {this.renderTopPanel()}
+                    </View>
                 </View>
             </View>
-        </View>
-    )
+        )
+    }
 
 }
 

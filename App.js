@@ -28,7 +28,6 @@ import {
     Contact,
     Setting,
     PayEnd,
-    Paying,
     Barcode,
     Notify,
     Bonusy,
@@ -49,6 +48,7 @@ import {
 import AppSlider from './Components/AppFiles/Screens/ScreenFolder/AppIntro/AppSlider'
 import PayWelcome from "./Components/AppFiles/Screens/ScreenFolder/Bread/Components/PayStart/PayWelcome";
 import CardSelector from "./Components/AppFiles/Screens/ScreenFolder/Bread/Components/PayStart/CardSelector";
+import OneCheck from "./Components/AppFiles/Screens/ScreenFolder/Bread/Screens/OneCheck";
 
 const AuthStack = createStackNavigator();
 const AuthStackScreen = (props) => (
@@ -140,10 +140,10 @@ const OtherScreen = () => (
         <OtherStacks.Screen name="OneService" component={Service}/>
         <OtherStacks.Screen name="OneCheck" component={Check}/>
         <OtherStacks.Screen name="Notification" component={Notify}/>
-        <OtherStacks.Screen name="Barcode" options={{animationEnabled: false}} component={BarcodeScanDo}/>
         <OtherStacks.Screen name="SelectCard" component={SelectCard}/>
         <OtherStacks.Screen name="Buy" component={Barcode}/>
-        <OtherStacks.Screen name="PayPre" component={Paying}/>
+        <OtherStacks.Screen name="Barcode" options={{animationEnabled: true, animationTypeForReplac: "push"}}
+                            component={BarcodeScanDo}/>
         <OtherStacks.Screen name="PayThanks" component={PayEnd}/>
     </OtherStacks.Navigator>
 )
@@ -210,7 +210,7 @@ const ProgramLockScreens = (props) => (
 
 
 function PreView(props) {
-    return <CardSelector/>
+    return <Check/>
 }
 
 export default function (props) {
@@ -313,7 +313,7 @@ export default function (props) {
         React.useEffect(() => {
             setTimeout(() => {
                 setisReady(true)
-            }, 1900)
+            }, 2000)
         }, [])
         return isready ? <NavigateAuth {...props} /> : <SplashScreen/>
     }
@@ -321,7 +321,7 @@ export default function (props) {
     return (
         <Root>
             <NavigationContainer>
-                <SystemOpen {...props}/>
+                <PreView {...props}/>
             </NavigationContainer>
         </Root>
 
