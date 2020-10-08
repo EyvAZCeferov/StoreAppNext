@@ -26,6 +26,7 @@ const icon = require('../../../../../../assets/icon.png');
 import firebase from '../../../../Functions/FireBase/firebaseConfig';
 import {StatusBar} from "expo-status-bar";
 import DropdownAlert from "react-native-dropdownalert";
+import AsyncStorage from "@react-native-community/async-storage";
 
 export default class LoginScreen extends React.Component {
     constructor(props) {

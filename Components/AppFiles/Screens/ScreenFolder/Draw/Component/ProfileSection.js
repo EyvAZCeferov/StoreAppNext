@@ -52,8 +52,6 @@ export default function ProfileSection(props) {
             return (
                 <ShimmerPlaceholder
                     visible={false}
-                    delay={1000}
-                    duration={1000}
                     height={60}
                     width={60}
                     style={{borderRadius: 60}}
@@ -220,7 +218,7 @@ const styles = StyleSheet.create({
     title: {
         fontWeight: 'bold',
         fontSize: 17,
-        marginLeft: '-45%',
+        marginLeft: '-40%',
         marginTop: '15%',
     },
     drawerSection: {

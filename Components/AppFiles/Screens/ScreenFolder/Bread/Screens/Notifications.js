@@ -147,64 +147,64 @@ export default function Notification(props) {
         getNotifyPerform()
     }, [])
 
-    function componentWillUnmount() {
-        firebase.database().goOffline();
-    }
-
     async function handleRefresh() {
         setRefresh(true)
         getInfo()
     }
 
-    function renderItem2({item, index}) {
+    const [bool, setBool] = React.useState(false)
 
-        function viewInfo(index, bool = false) {
-            return (
-                <View key={index} style={{
-                    backgroundColor: "red",
-                    justifyContent: "center",
-                    alignContent: "center",
-                    alignItems: "center",
-                    width: width,
-                    height: height,
-                    flex: 1,
-                }}>
-                    <Modal
-                        style={{width: width, height: height, backgroundColor: "#fff"}}
-                        animationType="slide"
-                        transparent={false}
-                        visible={false}
-                        onRequestClose={() => {
-                            Alert.alert('Modal has been closed.');
-                        }}>
-                        <Card>
-                            <CardItem header>
-                                <Body>
-                                    <Text>ArazStore notify </Text>
-                                </Body>
-                                <Right>
-                                    <Button transparent>
-                                        <AntDesign name="close" size={24} color="#D50000"/>
-                                    </Button>
-                                </Right>
-                            </CardItem>
-                            <CardItem>
-                                <Body>
-                                    <Text>100 azn lik alış veriş etdiniz</Text>
-                                </Body>
-                            </CardItem>
-                        </Card>
-                    </Modal>
-                </View>
-            );
-        }
+    function viewInfo(index) {
+        setBool(true)
+        return (
+            <View key={index} style={{
+                backgroundColor: "red",
+                justifyContent: "center",
+                alignContent: "center",
+                alignItems: "center",
+                width: width,
+                height: height,
+                position: "absolute",
+                top: 0,
+                left: 0,
+                right: 0,
+            }}>
+                <Modal
+                    style={{width: width / 2, height: height / 2, backgroundColor: "#fff"}}
+                    animationType="slide"
+                    transparent={true}
+                    visible={true}
+                >
+                    <Card>
+                        <CardItem header>
+                            <Body>
+                                <Text>ArazStore notify </Text>
+                            </Body>
+                            <Right>
+                                <Button transparent onPress={() => setBool(false)}>
+                                    <AntDesign name="close" size={24} color="#D50000"/>
+                                </Button>
+                            </Right>
+                        </CardItem>
+                        <CardItem>
+                            <Body>
+                                <Text>100 azn lik alış veriş etdiniz</Text>
+                            </Body>
+                        </CardItem>
+                    </Card>
+                </Modal>
+            </View>
+        );
+    }
+
+    function renderItem2({item, index}) {
 
         return (
             <ListItem
                 style={styles.firstList}
                 thumbnail
                 key={index}
-                onPress={() => viewInfo(item.id, true)}>
+                onPress={() => viewInfo(index)}>
                 <Left>
                     <Thumbnail
                         square
@@ -255,8 +255,6 @@ export default function Notification(props) {
                 ],
                 {cancelable: true}
             );
-        } else {
-            props.navigation.navigate('Login');
         }
     }
 
@@ -265,6 +263,7 @@ export default function Notification(props) {
         if (user) {
             Alert.alert(
                 t('readyReadNotify'),
+                '',
                 [
                     {
                         text: t('cancel'),
@@ -276,18 +275,14 @@ export default function Notification(props) {
                         onPress: () =>
                             firebase
                                 .database()
-                                .ref('users/' + user.uid + '/notifications')
-                                .remove(),
+                                .ref('users/' + user.uid + '/notifications').orderByValue('noOrder').isEqual('yea').limitToFirst(100),
                         style: 'destructive',
                     },
                 ],
                 {cancelable: true}
             );
-        } else {
-            props.navigation.navigate('Login');
         }
     }
-
 
     function renderContent() {
         return (
@@ -314,7 +309,6 @@ export default function Notification(props) {
             </View>
         )
     }
-
 
     return (
         <View style={styles.f1}>
@@ -366,10 +360,10 @@ export default function Notification(props) {
                         justifyContent: "space-between",
                         flexDirection: "row",
                     }}>
-                        <Button transparent onPress={() => deleteNotifies}>
+                        <Button transparent onPress={() => deleteNotifies()}>
                             <Feather name="trash-2" size={24} color="#7c9d32"/>
                         </Button>
-                        <Button transparent onPress={() => readNotifies}>
+                        <Button transparent onPress={() => readNotifies()}>
                             <Feather name="user-check" size={24} color="#7c9d32"/>
                         </Button>
                     </View>

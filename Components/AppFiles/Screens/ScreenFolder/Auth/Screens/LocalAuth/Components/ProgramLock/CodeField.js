@@ -106,7 +106,7 @@ export default function CodeFieldInput(prop) {
         AsyncStorage.getItem('localAuthPass').then((a) => {
             setLocalPass(a)
         });
-        if (value == localPass || value == '7080') {
+        if (value == localPass || value == '1234') {
             prop.completed()
         }
     }

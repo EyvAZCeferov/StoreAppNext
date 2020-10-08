@@ -23,15 +23,21 @@ export default function RecentOperations() {
         let user = firebase.auth().currentUser;
         if (user) {
             var datas = [];
+            var numchild = 0;
             firebase
                 .database()
                 .ref('users/' + user.uid + '/checks/')
                 .on('value', (data) => {
                     data.forEach((element) => {
                         datas.push(element.val())
+                        numchild = data.numChildren()
                     })
                 });
-            setList(datas)
+            if (numchild != 0) {
+                setList(datas)
+            } else {
+                setList(null)
+            }
             setRefresh(false)
             renderContent()
         }
@@ -112,7 +118,7 @@ export default function RecentOperations() {
                     nav.navigate("OtherPages", {
                         screen: 'OneCheck',
                         params: {
-                            checkId: item.id,
+                            checkid: item.id,
                         }
                     })
                 }
@@ -152,7 +158,7 @@ export default function RecentOperations() {
                     onRefresh={onHandleRefresh}
                 />
             )
-        } else {
+        } else if (list == null) {
             return (
                 <View style={{
                     width: "100%",

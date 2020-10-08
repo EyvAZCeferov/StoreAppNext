@@ -61,7 +61,7 @@ export default class ProgramLock extends React.Component {
     componentDidMount() {
         setInterval(() => {
             this.getInfo();
-        }, 3000)
+        }, 1000)
         this.getSoragePerm();
     }
 
@@ -80,8 +80,6 @@ export default class ProgramLock extends React.Component {
                     })
                 })
             this.renderContent()
-        } else {
-            alert('Connection Error');
         }
     }
 

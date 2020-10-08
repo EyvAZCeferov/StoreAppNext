@@ -46,9 +46,6 @@ import {
 } from "./Components/AppFiles/Screens/CallScreen";
 
 import AppSlider from './Components/AppFiles/Screens/ScreenFolder/AppIntro/AppSlider'
-import PayWelcome from "./Components/AppFiles/Screens/ScreenFolder/Bread/Components/PayStart/PayWelcome";
-import CardSelector from "./Components/AppFiles/Screens/ScreenFolder/Bread/Components/PayStart/CardSelector";
-import OneCheck from "./Components/AppFiles/Screens/ScreenFolder/Bread/Screens/OneCheck";
 
 const AuthStack = createStackNavigator();
 const AuthStackScreen = (props) => (
@@ -271,6 +268,7 @@ export default function (props) {
 
     function NavigateAuth(props) {
         const [userData, setUserData] = React.useState(null);
+
         React.useEffect(() => {
             setInterval(() => {
                 if (userData != null) {
@@ -286,6 +284,7 @@ export default function (props) {
                 }
             }, 100)
         }, [])
+
         return user ? <AuthVerify {...props} /> : (
             <CreateAccContext.Provider value={{userData, setUserData}}>
                 <AuthStackScreen {...props}/>
@@ -321,7 +320,7 @@ export default function (props) {
     return (
         <Root>
             <NavigationContainer>
-                <PreView {...props}/>
+                <SystemOpen {...props}/>
             </NavigationContainer>
         </Root>
 

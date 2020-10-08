@@ -1,6 +1,15 @@
 import React from 'react'
-import {View, Text, StyleSheet, Dimensions, ScrollView, FlatList} from 'react-native';
-import {Header, Left, Body, Button, Content, Badge} from 'native-base';
+import {
+    View,
+    Text,
+    StyleSheet,
+    Dimensions,
+    ScrollView,
+    FlatList,
+    TouchableOpacity,
+    ActivityIndicator
+} from 'react-native';
+import {Header, Left, Body, Button, Content} from 'native-base';
 
 const {width, height} = Dimensions.get('window');
 import {QRCode as CustomQRCode} from 'react-native-custom-qr-codes-expo';
@@ -9,42 +18,40 @@ import firebase from "../../../../Functions/FireBase/firebaseConfig";
 import {AntDesign} from "@expo/vector-icons";
 import {t} from "../../../../Lang";
 
+let priceAll = 0;
+let edv = 0;
 export default class OneCheck extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            products: [
-                {name: "Uzum", qyt: 2, price: 0.45, sum: 0.90},
-                {name: "DisCopu", qyt: 3, price: 0.30, sum: 0.90},
-                {name: "Pisiy mamasi", qyt: 1, price: 0.45, sum: 0.45},
-                {name: "Qutab", qyt: 50, price: 0.50, sum: 25},
-            ],
-            edvStat: "not"
+            products: [],
+            check: [],
+            edvStat: "not",
+            refresh: true,
+            checkid: null,
+            priceAll: 0,
+            edv: 0
         }
     }
 
     getInfo() {
+        this.setState({refresh: true})
         const params = this.props.route.params;
-        var checkid = params.checkid;
+        const {checkid} = params;
         this.setState({checkid})
         let user = firebase.auth().currentUser;
         if (user) {
-            var check = [];
             firebase
                 .database()
-                .ref('users/' + user.uid + '/checks/' + this.state.checkid)
+                .ref('users/' + user.uid + '/checks/' + checkid)
                 .on('value', (data) => {
-                    if (data.numChildren() > 0 && data != null) {
-                        data.forEach((data) => {
-                            check.push(data.val());
-                        });
-                    }
+                    var datas = data.toJSON()
+                    this.setState({check: datas})
                 });
-            this.setState({check})
             var products = [];
             firebase
                 .database()
-                .ref('users/' + user.uid + '/checks/' + this.state.checkid + '/products')
+                .ref('users/' + user.uid + '/checks/' + checkid + '/products')
                 .on('value', (data) => {
                     if (data.numChildren() > 0 && data != null) {
                         data.forEach((data) => {
@@ -52,9 +59,27 @@ export default class OneCheck extends React.Component {
                         });
                     }
                 });
+            products.map(element => {
+                var elementPrice = parseFloat(element.price);
+                var qyt = element.qty ? parseFloat(element.qty) : 1
+                var oneElementPrice = elementPrice * qyt
+                priceAll = priceAll + oneElementPrice;
+            })
+            this.setState({priceAll})
+            edv = (parseFloat(priceAll) * 18) / 100;
             this.setState({products})
+            this.renderViews()
+            this.setState({edv})
         }
-        this.renderContent()
+        setTimeout(() => {
+            this.renderPage()
+            this.setState({refresh: false})
+        }, 1500)
+    }
+
+    componentDidMount() {
+        this.setState({refresh: true})
+        this.getInfo()
     }
 
     renderViews() {
@@ -83,39 +108,42 @@ export default class OneCheck extends React.Component {
                         width: "100%",
                         paddingHorizontal: 10
                     }]}>
-                        <MyText children={t('checkScreen.tsAd')} style={{fontWeight: "700", fontSize: 16}}/>
-                        <MyText children=" : Araz"
+                        <MyText children={t('checkScreen.tsAd') + " : "} style={{fontWeight: "700", fontSize: 16}}/>
+                        <MyText children={this.state.check.market}
                                 style={{fontWeight: "700", fontSize: 16}}/>
                     </View>
                     <View style={{flexDirection: "row", marginVertical: 4, width: "100%", paddingHorizontal: 10}}>
                         <MyText
-                            children={t('checkScreen.tsAddress') + " : AZ5001 Sumqayıt şəhəri Koroğlu Prospekti ev 2. Bina Ünvanı m. 41 A Məhəllə"}/>
+                            children={t('checkScreen.tsAddress') + " : " + this.state.check.user ? this.state.check.user : t('checkScreen.tsAddress') + " : "}/>
                     </View>
                     <View style={{marginVertical: 10}}/>
                     <View style={{flexDirection: "row", marginVertical: 4, width: "100%", paddingHorizontal: 10}}>
                         <MyText
-                            children={t('checkScreen.voad') + " : \"Oba Retail Chain\" Məhdud məsuliyyətli Cəmiyyəti  "}/>
+                            children={t('checkScreen.voad') + " : " + this.state.check.market}/>
                     </View>
                     <View style={{flexDirection: "row", marginVertical: 4, width: "100%", paddingHorizontal: 10}}>
                         <MyText
-                            children={t('checkScreen.voen') + " 29954654654654"}/>
+                            children={t('checkScreen.voen') + " " + this.state.check.marketVoen}/>
                     </View>
                     <View style={{flexDirection: "row", marginVertical: 4, width: "100%", paddingHorizontal: 10}}>
                         <MyText
-                            children={t('checkScreen.objectCode') + " 29954654654654-2907"}/>
+                            children={t('checkScreen.objectCode') + " " + this.state.check.marketCode}/>
                     </View>
                     <View style={{marginVertical: 10}}/>
                 </View>
                 <View style={styles.headerCenter}>
                     <View style={[styles.center, {
                         flexDirection: "row",
+                        justifyContent: "center",
+                        alignContent: "center",
+                        alignItems: "center",
                         marginVertical: 4,
-                        width: "100%",
-                        paddingHorizontal: 10
+                        width: width,
                     }]}>
-                        <MyText children={t('checkScreen.selCheck')} style={{fontWeight: "700", fontSize: 15}}/>
-                        <MyText children=" : 105565465"
-                                style={{fontWeight: "700", fontSize: 15}}/>
+                        <MyText children={t('checkScreen.selCheck') + " "}
+                                style={{textAlign: "left", fontWeight: "700", fontSize: 16}}/>
+                        <MyText children={this.state.checkid}
+                                style={{textAlign: "left", fontWeight: "700", fontSize: 16}}/>
                     </View>
                 </View>
                 <View style={[styles.headerFooter]}>
@@ -127,7 +155,7 @@ export default class OneCheck extends React.Component {
                         paddingHorizontal: 10
                     }}>
                         <MyText children={t('checkScreen.kassir') + ":"}/>
-                        <MyText children="Orxan Cabbarov"
+                        <MyText children={this.state.check.kassirName}
                         />
                     </View>
                     <View style={{
@@ -140,13 +168,13 @@ export default class OneCheck extends React.Component {
                         <View style={{flexDirection: "row"}}>
                             <MyText children={t('checkScreen.tarix') + ": "}
                             />
-                            <MyText children="14.02.2020"
+                            <MyText children={this.convertStampDate(this.state.check.date, 'date')}
                             />
                         </View>
                         <View style={{flexDirection: "row"}}>
                             <MyText children={t('checkScreen.saat') + ": "}
                             />
-                            <MyText children="14:15:30"
+                            <MyText children={this.convertStampDate(this.state.check.date, 'hour')}
                             />
                         </View>
                     </View>
@@ -174,15 +202,15 @@ export default class OneCheck extends React.Component {
                     <View style={styles.tableFooter}>
                         <View style={styles.tableFooterElements}>
                             <MyText children={t('checkScreen.productSum')} style={{fontSize: 16, fontWeight: "bold"}}/>
-                            <MyText children="15" style={{fontSize: 16, fontWeight: "bold"}}/>
+                            <MyText children={this.state.priceAll} style={{fontSize: 16, fontWeight: "bold"}}/>
                         </View>
                         <View style={styles.tableFooterElements}>
                             <MyText children={t('checkScreen.edv18')}/>
-                            <MyText children="0.23"/>
+                            <MyText children={this.state.edv}/>
                         </View>
                         <View style={styles.tableFooterElements}>
                             <MyText children={t('checkScreen.sumVergi')}/>
-                            <MyText children="0.23"/>
+                            <MyText children={this.state.edv}/>
                         </View>
                         <View style={{marginVertical: 5}}/>
                         <Seperator/>
@@ -191,7 +219,7 @@ export default class OneCheck extends React.Component {
                     <View style={styles.tableFooter}>
                         <View style={styles.tableFooterElements}>
                             <MyText children={t('checkScreen.nagdsiz')}/>
-                            <MyText children="15"/>
+                            <MyText children={this.state.priceAll}/>
                         </View>
                         <View style={styles.tableFooterElements}>
                             <MyText children={t('checkScreen.bonus')}/>
@@ -205,7 +233,7 @@ export default class OneCheck extends React.Component {
                         <View style={styles.tableFooterElements}>
                             <MyText style={{maxWidth: "50%", minWidth: "10%"}}
                                     children={t('checkScreen.gunerzindevurulmuscekler')}/>
-                            <MyText style={{maxWidth: "50%", minWidth: "10%"}} children={20}/>
+                            <MyText style={{maxWidth: "50%", minWidth: "10%"}} children={this.state.check.checkCount}/>
                         </View>
                         <View style={styles.tableFooterElements}>
                             <MyText style={{maxWidth: "50%", minWidth: "10%"}}
@@ -215,16 +243,17 @@ export default class OneCheck extends React.Component {
                         <View style={styles.tableFooterElements}>
                             <MyText style={{maxWidth: "50%", minWidth: "10%"}}
                                     children={t('checkScreen.kassaAparatınınZavodNomresi')}/>
-                            <MyText style={{maxWidth: "50%", minWidth: "10%"}} children={152055651561}/>
+                            <MyText style={{maxWidth: "50%", minWidth: "10%"}}
+                                    children={this.state.check.cassaAparatZavod}/>
                         </View>
                         <View style={styles.tableFooterElements}>
                             <MyText style={{maxWidth: "50%", minWidth: "10%"}} children={t('checkScreen.ficsalId')}/>
-                            <MyText style={{maxWidth: "50%", minWidth: "10%"}} children={5161616}/>
+                            <MyText style={{maxWidth: "50%", minWidth: "10%"}} children={this.state.checkid}/>
                         </View>
                         <View style={styles.tableFooterElements}>
                             <MyText style={{maxWidth: "50%", minWidth: "10%"}}
                                     children={t('checkScreen.nmqQeydNomresi')}/>
-                            <MyText style={{maxWidth: "50%", minWidth: "10%"}} children={516891899}/>
+                            <MyText style={{maxWidth: "50%", minWidth: "10%"}} children={this.state.nmqCount}/>
                         </View>
                         <View style={{marginVertical: 5}}/>
                         <Seperator/>
@@ -236,12 +265,26 @@ export default class OneCheck extends React.Component {
     }
 
     renderProducts({item, index}) {
+        function countSum(item) {
+            var result = null
+            var qyt = item.qty ? parseFloat(item.qty) : 1
+            var price = item.price ? parseFloat(item.price) : 0
+            result = qyt * price
+            return result
+        }
+
         return (
-            <View key={index} style={{width: "100%", flexDirection: "row", justifyContent: "space-between"}}>
-                <MyText style={styles.tableBigArena} children={item.name}/>
-                <MyText children={item.qyt}/>
+            <View key={index}
+                  style={{
+                      width: "100%",
+                      flexDirection: "row",
+                      justifyContent: "space-between",
+                      marginVertical: 5
+                  }}>
+                <MyText style={{width: "35%"}} children={item.name}/>
+                <MyText children={item.qty}/>
                 <MyText children={item.price}/>
-                <MyText children={item.sum}/>
+                <MyText children={countSum(item)}/>
             </View>
         )
     }
@@ -334,30 +377,77 @@ export default class OneCheck extends React.Component {
         }
     }
 
+    convertStampDate(unixtimestamp, type) {
+
+        var months_arr = ['Yanvar', 'Fevral', 'Mart', 'Aprel', 'May', 'İyun', 'İyul', 'Avqust', 'Sentyabr', 'Oktyabr', 'Noyabr', 'Dekabr'];
+
+        var date = new Date(unixtimestamp * 1000);
+
+        var year = date.getFullYear();
+
+        var month = months_arr[date.getMonth()];
+
+        var day = date.getDate();
+
+        var hours = date.getHours();
+
+        var minutes = "0" + date.getMinutes();
+
+        var seconds = "0" + date.getSeconds();
+
+        var fulldate = day + ' ' + month + ' ' + 2020 + ' ' + hours + ':' + minutes.substr(-2);
+        if (type == 'hour') {
+            fulldate = hours + ':' + minutes.substr(-2)
+            return fulldate
+        } else if (type == 'date') {
+            fulldate = day + ' ' + month + ' ' + 2020
+            return fulldate
+        } else {
+            return fulldate;
+        }
+    }
+
+    renderPage() {
+        if (this.state.refresh) {
+            return (
+                <View style={[styles.container, styles.center]}>
+                    <ActivityIndicator size="large" color="#7c9d32" animating={true} focusable={true}/>
+                </View>
+            )
+        } else {
+            return (
+                <View style={styles.container}>
+                    <Header style={[styles.bgTransparent, styles.header]}>
+                        <StatusBar style="dark" animated={true} backgroundColor="#fff"/>
+                        <Left style={styles.bgTransparent}>
+                            <StatusBar style="dark" animated={true} backgroundColor="#fff"/>
+                            <TouchableOpacity style={[styles.bgTransparent, {paddingLeft: 10}]}
+                                              onPress={() => this.props.navigation.goBack()}>
+                                <AntDesign name="back" size={24} color="#7c9d32"/>
+                            </TouchableOpacity>
+                        </Left>
+                        <Body style={styles.bgTransparent}>
+                            <StatusBar style="dark" animated={true} backgroundColor="#fff"/>
+                            <Text style={styles.headerBodyText}>{this.convertStampDate(this.state.check.date)}</Text>
+                        </Body>
+                    </Header>
+                    <Content>
+                        <View style={[styles.content, styles.center, styles.bgTransparent]}>
+                            <ScrollView style={styles.bgTransparent}>
+                                {this.renderViews()}
+                            </ScrollView>
+                        </View>
+                    </Content>
+                </View>
+            )
+        }
+    }
+
     render() {
         return (
             <View style={styles.container}>
                 <StatusBar style="dark" animated={true} backgroundColor="#fff"/>
-                <Header style={[styles.bgTransparent, styles.header, styles.center]}>
-                    <StatusBar style="dark" animated={true} backgroundColor="#fff"/>
-                    <Left style={styles.bgTransparent}>
-                        <StatusBar style="dark" animated={true} backgroundColor="#fff"/>
-                        <Button transparent large onPress={() => this.props.navigation.goBack()}>
-                            <AntDesign name="back" size={24} color="#7c9d32"/>
-                        </Button>
-                    </Left>
-                    <Body style={styles.bgTransparent}>
-                        <StatusBar style="dark" animated={true} backgroundColor="#fff"/>
-                        <Text style={styles.headerBodyText}>20.12.2012</Text>
-                    </Body>
-                </Header>
-                <Content>
-                    <View style={[styles.content, styles.center, styles.bgTransparent]}>
-                        <ScrollView style={styles.bgTransparent}>
-                            {this.renderViews()}
-                        </ScrollView>
-                    </View>
-                </Content>
+                {this.renderPage()}
             </View>
         )
     }
@@ -377,12 +467,18 @@ const styles = StyleSheet.create({
     },
     bgTransparent: {
         backgroundColor: "transparent",
+        borderColor: "transparent",
+        shadowColor: "transparent",
+        elevation: 0
     },
     header: {
-        height: width / 5,
+        marginTop: width / 14,
+        paddingBottom: 10,
+        height: width / 6.8,
+        borderColor: "#fff"
     },
     headerTop: {
-        width: width - 50
+        width: width - 30
     },
     headerCenter: {
         marginVertical: 10
@@ -390,7 +486,9 @@ const styles = StyleSheet.create({
     headerBodyText: {
         color: "#7c9d32",
         fontSize: 20,
-        fontWeight: "700"
+        fontWeight: "700",
+        textAlign: "left",
+        paddingLeft: 20
     },
     headerFooter: {
         width: width - 20
@@ -448,20 +546,22 @@ function MyText(props) {
 }
 
 function Seperator(props) {
-    let widthLength = width / 7.25
+    let widthLength = width / 5
 
     function getSymbol(type) {
         var symbols = []
         if (type === "table") {
+            widthLength = width / 4.5
             for (var i = 0; i < widthLength + width / 48; i++) {
                 symbols.push("-")
             }
+
         } else {
             for (var i = 0; i < widthLength; i++) {
                 symbols.push("*")
             }
         }
-        return <Text style={{color: "#000", fontSize: 12, fontWeight: "bold"}}>{symbols}</Text>
+        return <Text style={{color: "#000", fontSize: 12, textAlign: "center", fontWeight: "bold"}}>{symbols}</Text>
     }
 
     return (
@@ -472,14 +572,16 @@ function Seperator(props) {
 }
 
 function QrCode(props) {
-    return (
-        <CustomQRCode
-            content={props.val}
-            size={width / 1.25}
-            color="#000"
-            codeStyle="square"
-            innerEyeStyle="square"
-            outerEyeStyle="square"
-        />
-    );
+    if (props != null) {
+        return (
+            <CustomQRCode
+                content={props.val}
+                size={width / 1.25}
+                color="#000"
+                codeStyle="square"
+                innerEyeStyle="square"
+                outerEyeStyle="square"
+            />
+        );
+    }
 }
