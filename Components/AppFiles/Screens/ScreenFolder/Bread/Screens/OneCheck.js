@@ -17,6 +17,27 @@ import {StatusBar} from "expo-status-bar";
 import firebase from "../../../../Functions/FireBase/firebaseConfig";
 import {AntDesign} from "@expo/vector-icons";
 import {t} from "../../../../Lang";
+import {
+    useFonts,
+    Poppins_100Thin,
+    Poppins_100Thin_Italic,
+    Poppins_200ExtraLight,
+    Poppins_200ExtraLight_Italic,
+    Poppins_300Light,
+    Poppins_300Light_Italic,
+    Poppins_400Regular,
+    Poppins_400Regular_Italic,
+    Poppins_500Medium,
+    Poppins_500Medium_Italic,
+    Poppins_600SemiBold,
+    Poppins_600SemiBold_Italic,
+    Poppins_700Bold,
+    Poppins_700Bold_Italic,
+    Poppins_800ExtraBold,
+    Poppins_800ExtraBold_Italic,
+    Poppins_900Black,
+    Poppins_900Black_Italic,
+} from '@expo-google-fonts/poppins';
 
 let priceAll = 0;
 let edv = 0;
@@ -536,13 +557,27 @@ const styles = StyleSheet.create({
 
 
 function MyText(props) {
-    return (
-        <Text style={[{
-            fontSize: 15,
-            color: "rgba(0,0,0,.8)",
-            textAlign: "center"
-        }, props.style ? props.style : null]}>{props.children}</Text>
-    )
+    let [fontsLoaded] = useFonts({
+        Poppins_400Regular,
+    });
+    if (!fontsLoaded) {
+        return (
+            <Text style={[{
+                fontSize: 15,
+                color: "rgba(0,0,0,.8)",
+                textAlign: "center"
+            }, props.style ? props.style : null]}>{props.children}</Text>
+        )
+    }else{
+        return (
+            <Text style={[{
+                fontSize: 15,
+                color: "rgba(0,0,0,.8)",
+                textAlign: "center",
+                fontFamily:"Poppins_400Regular"
+            }, props.style ? props.style : null]}>{props.children}</Text>
+        )
+    }
 }
 
 function Seperator(props) {

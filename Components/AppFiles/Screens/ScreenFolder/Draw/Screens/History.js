@@ -5,7 +5,8 @@ import {
     ScrollView,
     StyleSheet,
     Dimensions,
-    TouchableOpacity
+    TouchableOpacity,
+    ActivityIndicator
 } from 'react-native';
 import {
     Container,
@@ -17,143 +18,151 @@ import {
     List,
     ListItem,
     DatePicker,
-    Picker
+    Picker, Header
 } from 'native-base';
 import ScreensStandart from '../Component/ScreensStandart';
-import {AntDesign, Entypo, Feather, MaterialIcons} from '@expo/vector-icons';
+import {AntDesign, Feather, FontAwesome, MaterialIcons} from '@expo/vector-icons';
 
 var width = Dimensions.get('window').width;
 var height = Dimensions.get('window').height;
 import {t} from '../../../../Lang';
 import firebase from '../../../../Functions/FireBase/firebaseConfig';
 import {StatusBar} from "expo-status-bar";
+import {Poppins_400Regular, useFonts} from "@expo-google-fonts/poppins";
+import DropdownAlert from "react-native-dropdownalert";
+
+let allPrice = 0
+
+function MyText(props) {
+    let [fontsLoaded] = useFonts({
+        Poppins_400Regular,
+    });
+    if (!fontsLoaded) {
+        return (
+            <Text style={[{
+                fontSize: props.fontSize ? props.textColor : 18,
+                color: props.textColor ? props.textColor : "rgba(0,0,0,.8)",
+            }, props.style ? props.style : null]}>{props.children}</Text>
+        )
+    } else {
+        return (
+            <Text style={[{
+                fontSize: props.fontSize ? props.textColor : 18,
+                color: props.textColor ? props.textColor : "rgba(0,0,0,.8)",
+                fontFamily: "Poppins_400Regular"
+            }, props.style ? props.style : null]}>{props.children}</Text>
+        )
+    }
+}
 
 export default class History extends React.Component {
     constructor(props) {
         super(props);
-        this.state = {chosenDate: new Date()};
-        this.setDate = this.setDate.bind(this);
         this.state = {
-            history: [
-                {
-                    image:
-                        'https://banker.az/wp-content/uploads/2018/02/Kapital_Bank_-e1518595902278.png',
-                    title: 'Bazar Store 1',
-                    price: 80,
-                    date: '24.07.2020',
-                    ficsalId: '#a42565456',
-                },
-                {
-                    image:
-                        'https://banker.az/wp-content/uploads/2018/02/Kapital_Bank_-e1518595902278.png',
-                    title: 'Bazar Store 1',
-                    price: 80,
-                    date: '24.07.2020',
-                    ficsalId: '#a42565456',
-                },
-                {
-                    image:
-                        'https://banker.az/wp-content/uploads/2018/02/Kapital_Bank_-e1518595902278.png',
-                    title: 'Bazar Store 1',
-                    price: 80,
-                    date: '24.07.2020',
-                    ficsalId: '#a42565456',
-                },
-                {
-                    image:
-                        'https://banker.az/wp-content/uploads/2018/02/Kapital_Bank_-e1518595902278.png',
-                    title: 'Bazar Store 1',
-                    price: 80,
-                    date: '24.07.2020',
-                    ficsalId: '#a42565456',
-                },
-                {
-                    image:
-                        'https://banker.az/wp-content/uploads/2018/02/Kapital_Bank_-e1518595902278.png',
-                    title: 'Bazar Store 1',
-                    price: 80,
-                    date: '24.07.2020',
-                    ficsalId: '#a42565456',
-                },
-                {
-                    image:
-                        'https://banker.az/wp-content/uploads/2018/02/Kapital_Bank_-e1518595902278.png',
-                    title: 'Bazar Store 1',
-                    price: 80,
-                    date: '24.07.2020',
-                    ficsalId: '#a42565456',
-                },
-                {
-                    image:
-                        'https://banker.az/wp-content/uploads/2018/02/Kapital_Bank_-e1518595902278.png',
-                    title: 'Bazar Store 1',
-                    price: 80,
-                    date: '24.07.2020',
-                    ficsalId: '#a42565456',
-                },
-                {
-                    image:
-                        'https://banker.az/wp-content/uploads/2018/02/Kapital_Bank_-e1518595902278.png',
-                    title: 'Bazar Store 1',
-                    price: 80,
-                    date: '24.07.2020',
-                    ficsalId: '#a42565456',
-                },
-                {
-                    image:
-                        'https://banker.az/wp-content/uploads/2018/02/Kapital_Bank_-e1518595902278.png',
-                    title: 'Bazar Store 1',
-                    price: 80,
-                    date: '24.07.2020',
-                    ficsalId: '#a42565456',
-                },
-                {
-                    image:
-                        'https://banker.az/wp-content/uploads/2018/02/Kapital_Bank_-e1518595902278.png',
-                    title: 'Bazar Store 1',
-                    price: 80,
-                    date: '24.07.2020',
-                    ficsalId: '#a42565456',
-                },
-                {
-                    image:
-                        'https://banker.az/wp-content/uploads/2018/02/Kapital_Bank_-e1518595902278.png',
-                    title: 'Bazar Store 1',
-                    price: 80,
-                    date: '24.07.2020',
-                    ficsalId: '#a42565456',
-                },
-                {
-                    image:
-                        'https://banker.az/wp-content/uploads/2018/02/Kapital_Bank_-e1518595902278.png',
-                    title: 'Bazar Store 1',
-                    price: 80,
-                    date: '24.07.2020',
-                    ficsalId: '#a42565456',
-                },
-            ],
             checks: null,
+            allMarkets: [
+                {name: "Araz", id: 1},
+                {name: "Bazar Store", id: 2},
+                {name: "Bravo", id: 3}
+            ],
+            firstDate: null,
+            lastDate: null,
+            selectedMarket: null,
+            refresh: true,
+            disableFirst: false,
+            disableLast: false,
+            disableMarket: false
         };
     }
 
-    async getInfo() {
+    getInfo(marketName = null, firstDate = null, lastDate) {
         firebase.database().goOnline();
         var user = firebase.auth().currentUser;
         if (user) {
-            var datas = [];
-            firebase
-                .database()
-                .ref('users/' + user.uid + '/checks')
-                .on('value', (data) => {
-                    data.forEach((data) => {
-                        datas.push(data.val());
+            var checks = [];
+            var checkCount = 0
+            if (marketName != null && firstDate == null && lastDate == null) {
+                firebase
+                    .database()
+                    .ref('users/' + user.uid + '/checks').orderByChild('market').equalTo(marketName)
+                    .limitToFirst(50)
+                    .on('value', (data) => {
+                        data.forEach((data) => {
+                            checks.push(data.val());
+                        });
+                        checkCount = data.numChildren()
+                        if (checkCount > 0) {
+                            this.setState({
+                                checks,
+                            });
+                        } else {
+                            this.setState({
+                                checks: null
+                            });
+                        }
                     });
-                    this.setState({
-                        checks: datas,
+            } else if (marketName == null && firstDate != null && lastDate != null) {
+                firebase
+                    .database()
+                    .ref('users/' + user.uid + '/checks').orderByChild('date').startAt(firstDate).endAt(lastDate)
+                    .limitToFirst(50)
+                    .on('value', (data) => {
+                        data.forEach((data) => {
+                            checks.push(data.val());
+                        });
+                        checkCount = data.numChildren()
+                        if (checkCount > 0) {
+                            this.setState({
+                                checks,
+                            });
+                        } else {
+                            this.setState({
+                                checks: null
+                            });
+                        }
                     });
-                });
-        } else {
-            this.props.navigation.navigate('CreateAccount');
+            } else if (marketName == null && firstDate != null && lastDate == null) {
+                firebase
+                    .database()
+                    .ref('users/' + user.uid + '/checks').orderByChild('date').startAt(firstDate).endAt(Date.now())
+                    .limitToFirst(50)
+                    .on('value', (data) => {
+                        data.forEach((data) => {
+                            checks.push(data.val());
+                        });
+                        checkCount = data.numChildren()
+                        if (checkCount > 0) {
+                            this.setState({
+                                checks,
+                            });
+                        } else {
+                            this.setState({
+                                checks: null
+                            });
+                        }
+                    });
+            } else {
+                firebase
+                    .database()
+                    .ref('users/' + user.uid + '/checks')
+                    .on('value', (data) => {
+                        data.forEach((data) => {
+                            checks.push(data.val());
+                        });
+                        checkCount = data.numChildren()
+                        if (checkCount > 0) {
+                            this.setState({
+                                checks,
+                            });
+                        } else {
+                            this.setState({
+                                checks: null
+                            });
+                        }
+                    });
+            }
+            this.setState({refresh: false})
+            this.renderContentArena()
         }
     }
 
@@ -165,37 +174,138 @@ export default class History extends React.Component {
         firebase.database().goOffline()
     }
 
-    setDate(newDate) {
-        this.setState({chosenDate: newDate});
+    search() {
+        this.dropDownAlertRef.alertWithType('success', t('deleted'))
+        this.setState({refresh: true})
+        if (this.state.selectedMarket != null && this.state.firstDate == null && this.state.lastDate == null) {
+            this.getInfo(this.state.selectedMarket)
+        } else if (this.state.selectedMarket == null && this.state.firstDate != null && this.state.lastDate != null) {
+            var firstDate = new Date(this.state.firstDate).getTime() / 1000
+            var lastDate = new Date(this.state.lastDate).getTime() / 1000
+            this.getInfo(null, firstDate, lastDate)
+        } else if (this.state.selectedMarket == null && this.state.firstDate != null && this.state.lastDate == null) {
+            var firstDate = new Date(this.state.firstDate).getTime() / 1000
+            this.getInfo(null, firstDate, null)
+        } else if (this.state.selectedMarket != null && this.state.firstDate != null && this.state.lastDate != null) {
+            var firstDate = new Date(this.state.firstDate).getTime() / 1000
+            var lastDate = new Date(this.state.lastDate).getTime() / 1000
+            this.getInfo(this.state.selectedMarket, firstDate, lastDate)
+        } else {
+            this.getInfo(null, null, null)
+        }
+    }
+
+    valChang(val, type) {
+        if (type == 'market') {
+            this.setState({disableFirst: !this.state.disableFirst})
+            this.setState({disableLast: !this.state.disableLast})
+            this.setState({selectedMarket: val})
+        } else {
+            this.setState({disableMarket: !this.state.disableMarket})
+            if (type == 'first') {
+                this.setState({firstDate: val})
+            } else if (type == 'last') {
+                this.setState({lastDate: val})
+            }
+        }
+        this.search()
     }
 
     renderList(props) {
-        if (this.state.history !== null) {
-            return this.state.history.map((element,index) => {
+
+        function marketTypeFunc(item) {
+            switch (item.market) {
+                case "Bazar Store":
+                    return <FontAwesome name="cc-visa" size={30} color="#7c9d32"/>
+                    break;
+                case "Araz":
+                    return <FontAwesome name="cc-mastercard" size={30} color="#7c9d32"/>
+                    break;
+                default:
+                    return <FontAwesome name="credit-card" size={30} color="#7c9d32"/>
+            }
+        }
+
+        function convertStampDate(unixtimestamp) {
+
+            var months_arr = ['Yanvar', 'Fevral', 'Mart', 'Aprel', 'May', 'İyun', 'İyul', 'Avqust', 'Sentyabr', 'Oktyabr', 'Noyabr', 'Dekabr'];
+
+            var date = new Date(unixtimestamp * 1000);
+
+            var year = date.getFullYear();
+
+            var month = months_arr[date.getMonth()];
+
+            var day = date.getDate();
+
+            var hours = date.getHours();
+
+            var minutes = "0" + date.getMinutes();
+
+            var seconds = "0" + date.getSeconds();
+
+            var fulldate = day + ' ' + month + ' ' + 2020 + ' ' + hours + ':' + minutes.substr(-2);
+
+            return fulldate;
+        }
+
+        function priceCollector(id) {
+            var user = firebase.auth().currentUser;
+            if (user) {
+                var datas = [];
+                firebase
+                    .database()
+                    .ref('users/' + user.uid + '/checks/' + id + '/products')
+                    .on('value', (data) => {
+                        if (data.numChildren() > 0 && data != null) {
+                            data.forEach((data) => {
+                                datas.push(data.val());
+                            });
+                        }
+                    });
+                return datas
+            }
+        }
+
+        function sumPrice(checkId) {
+            if (checkId != null) {
+                allPrice = 0
+                var checkProducts = priceCollector(checkId)
+                checkProducts.map(element => {
+                    allPrice = allPrice + parseFloat(element.price)
+                })
+            }
+            return parseFloat(allPrice)
+        }
+
+        if (this.state.checks !== null) {
+            return this.state.checks.map((element, index) => {
                 return (
                     <ListItem style={styles.firstList} thumbnail key={index}>
                         <Left>
-                            <Thumbnail
-                                square
-                                source={{
-                                    uri: element.image,
-                                }}
-                                style={styles.thumbImage}
-                            />
+                            {marketTypeFunc(element)}
                         </Left>
                         <Body>
-                            <Text style={styles.listtitle}>{element.title}</Text>
-                            <Text>
-                                {element.price} AZN {element.date}
-                            </Text>
+                            <MyText style={styles.listtitle} children={element.market}/>
+                            <View style={{
+                                width: "80%",
+                                flexDirection: "row",
+                                justifyContent: "space-between",
+                                alignItems: "center",
+                                alignContent: "center"
+                            }}>
+                                <MyText style={{fontSize: 14}} children={sumPrice(element.id) + " AZN "}
+                                />
+                                <MyText style={{fontSize: 14}} children={convertStampDate(element.date)}
+                                />
+                            </View>
                         </Body>
                         <Right>
                             <Button
                                 transparent
                                 onPress={() =>
                                     props.navigate('OneCheck', {
-                                        ficsalId: element.ficsalId,
-                                        title: element.title,
+                                        checkid: element.id,
                                     })
                                 }>
                                 <AntDesign name="eyeo" size={24} color="#7c9d32"/>
@@ -207,86 +317,159 @@ export default class History extends React.Component {
         }
     }
 
+    renderContentArena() {
+        if (this.state.refresh) {
+            return (
+                <View style={{
+                    flex: 3,
+                    alignContent: "center",
+                    alignItems: "center",
+                    justifyContent: "center"
+                }}>
+                    <ActivityIndicator size="large" color="#7c9d32"/>
+                </View>
+            )
+        } else {
+            if (this.state.checks != null) {
+                return (
+                    <View style={{height: height - height / 8, width: width}}>
+                        <ScrollView>
+                            <List style={styles.w100}>
+                                {this.renderList(this.props.navigation)}
+                            </List>
+                        </ScrollView>
+                    </View>
+                )
+            } else {
+                return (
+                    <View style={{
+                        flex: 3,
+                        alignContent: "center",
+                        alignItems: "center",
+                        justifyContent: "center"
+                    }}>
+                        <MyText children={t('noResult')} style={styles.nullObject}/>
+                    </View>
+                )
+            }
+        }
+    }
+
+    renderMarkets() {
+        if (this.state.allMarkets != null) {
+            return this.state.allMarkets.map(market => {
+                return (
+                    <Picker.Item
+                        label={market.name}
+                        value={market.name}
+                        color="#7c9d32"/>
+                )
+            })
+        }
+    }
+
     render() {
-        const thisDay=new Date();
-        const minDateCount=thisDay.getTime()-2592000;
-        const minDate = new Date(minDateCount * 100);
         return (
             <View style={styles.f1}>
-                <StatusBar style="dark" backgroundColor="white"/>
+                <StatusBar backgroundColor="#fff" style="dark"/>
                 <ScreensStandart {...this.props} name={t('history')}/>
+                <DropdownAlert
+                    ref={ref => this.dropDownAlertRef = ref}
+                    useNativeDriver={true}
+                    closeInterval={1000}
+                    zIndex={5000}
+                    updateStatusBar={true}
+                    tapToCloseEnabled={true}
+                    showCancel={true}
+                    elevation={10}
+                    isInteraction={true}/>
                 <Container>
-                    <StatusBar style="dark" backgroundColor="white"/>
-                    <View style={[styles.f1,{height:height,flexDirection:"column",justifyContent:"space-between",alignContent:"center",alignItems:"center"}]}>
-                        <View style={{height:height/8,flexDirection:"column",justifyContent:"space-around",alignContent:"center",alignItems:"center"}}>
+                    <DropdownAlert
+                        ref={ref => this.dropDownAlertRef = ref}
+                        useNativeDriver={true}
+                        closeInterval={1000}
+                        zIndex={5000}
+                        updateStatusBar={true}
+                        tapToCloseEnabled={true}
+                        showCancel={true}
+                        elevation={10}
+                        isInteraction={true}/>
+                    <StatusBar backgroundColor="#fff" style="dark"/>
+                    <View style={[styles.f1, {
+                        height: height,
+                        flexDirection: "column",
+                        justifyContent: "space-between",
+                        alignContent: "center",
+                        alignItems: "center"
+                    }]}>
+                        <View style={{
+                            height: height / 8,
+                            flexDirection: "column",
+                            justifyContent: "space-around",
+                            alignContent: "center",
+                            alignItems: "center"
+                        }}>
                             <View style={styles.contentHeader}>
                                 <View style={styles.contentHeaderColumn}>
                                     <MaterialIcons name="date-range" size={24} color="#7c9d32"/>
                                     <DatePicker
                                         androidMode="calendar"
-                                        defaultDate={thisDay}
                                         locale='az'
-                                        maximumDate={thisDay}
-                                        minimumDate={minDate}
                                         placeHolderText={t('historyStartSelect')}
                                         placeHolderTextStyle={{color: "#7c9d32"}}
                                         textStyle={{color: "#7c9d32", fontSize: 20}}
                                         animationType="slide"
                                         modalTransparent={true}
+                                        onDateChange={(firstDate) => this.valChang(firstDate, 'first')}
                                     />
                                 </View>
                                 <View style={styles.contentHeaderColumn}>
                                     <MaterialIcons name="date-range" size={24} color="#7c9d32"/>
                                     <DatePicker
                                         androidMode="calendar"
-                                        defaultDate={thisDay}
                                         locale='az'
-                                        maximumDate={thisDay}
                                         placeHolderText={t('historyEndSelect')}
                                         placeHolderTextStyle={{color: "#7c9d32"}}
                                         textStyle={{color: "#7c9d32", fontSize: 20}}
                                         animationType="slide"
                                         modalTransparent={true}
+                                        onDateChange={(lastDate) => this.valChang(lastDate, 'last')}
                                     />
                                 </View>
                             </View>
                             <View style={styles.contentHeader}>
                                 <View style={styles.contentHeaderColumn}>
                                     <Picker
-                                        mode="dropdown"
-                                        placeholder={t('language')}
+                                        mode="dialog"
                                         placeholderStyle={{color: '#7c9d32'}}
-                                        placeholderIconColor="#7c9d32"
                                         style={{
                                             color: '#7c9d32',
                                             width: 150,
                                         }}
-                                        selectedValue={this.state.selected}
-                                        onValueChange={(val) => this.onValueChange(val)}>
+                                        selectedValue={this.state.selectedMarket}
+                                        onValueChange={(selectedMarket) => this.valChang(selectedMarket, 'market')}>
                                         <Picker.Item
-                                            label="    Mağaza adı"
+                                            label="Mağaza adı"
                                             color="#7c9d32"
                                             icon={
                                                 <Feather name="check-circle" size={24} color="black"/>
                                             }
-                                            value="az"
+                                            value={null}
                                         />
+                                        {this.renderMarkets()}
                                     </Picker>
                                 </View>
-                                <View style={[styles.contentHeaderColumn,{backgroundColor:"transparent",marginHorizontal:"auto"}]}>
-                                    <TouchableOpacity onPress={()=>alert('Pressed')}>
+                                <View style={[styles.contentHeaderColumn, {
+                                    backgroundColor: "transparent",
+                                    marginHorizontal: "auto"
+                                }]}>
+                                    <TouchableOpacity onPress={() => this.search()}>
                                         <MaterialIcons name="search" size={24} color="#7c9d32"/>
                                     </TouchableOpacity>
                                 </View>
                             </View>
                         </View>
-                        <View style={{height: height-height/8, width: width}}>
-                            <ScrollView>
-                                <List style={styles.w100}>
-                                    {this.renderList(this.props.navigation)}
-                                </List>
-                            </ScrollView>
-                        </View>
+                        {this.renderContentArena()}
                     </View>
                 </Container>
             </View>
@@ -337,5 +520,10 @@ const styles = StyleSheet.create({
         marginTop: 7,
         marginLeft: -15,
         paddingLeft: 0,
+    },
+    nullObject: {
+        color: '#D50000',
+        fontSize: 20,
+        fontWeight: 'bold',
     },
 });

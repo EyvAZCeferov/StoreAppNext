@@ -27,6 +27,31 @@ import {MaterialCommunityIcons} from '@expo/vector-icons';
 import firebase from '../../../../Functions/FireBase/firebaseConfig';
 import {StatusBar} from "expo-status-bar";
 import DropdownAlert from "react-native-dropdownalert";
+import {Poppins_400Regular, useFonts} from "@expo-google-fonts/poppins";
+
+function MyText(props) {
+    let [fontsLoaded] = useFonts({
+        Poppins_400Regular,
+    });
+    if (!fontsLoaded) {
+        return (
+            <Text style={[{
+                fontSize: props.fontSize ? props.textColor : 18,
+                color: props.textColor ? props.textColor : "rgba(0,0,0,.8)",
+                textAlign: "center"
+            }, props.style ? props.style : null]}>{props.children}</Text>
+        )
+    } else {
+        return (
+            <Text style={[{
+                fontSize: props.fontSize ? props.textColor : 18,
+                color: props.textColor ? props.textColor : "rgba(0,0,0,.8)",
+                textAlign: "center",
+                fontFamily: "Poppins_400Regular"
+            }, props.style ? props.style : null]}>{props.children}</Text>
+        )
+    }
+}
 
 export default class ContactUs extends React.Component {
     constructor(props) {
@@ -64,7 +89,7 @@ export default class ContactUs extends React.Component {
                 .ref('contactus/' + id)
                 .set({
                     userId: user.uid,
-                    id:id,
+                    id: id,
                     userEmail: user.email,
                     subject: this.state.subject,
                     message: this.state.message,
@@ -108,9 +133,9 @@ export default class ContactUs extends React.Component {
                             <Col style={styles.colCenter}>
                                 <TouchableOpacity
                                     style={[styles.button, styles.colCenter]}
-                                    transparent 
-                                    onPress={()=>Linking.openURL('mailto:payandwin.az@gmail.com')}
-                                    >
+                                    transparent
+                                    onPress={() => Linking.openURL('mailto:payandwin.az@gmail.com')}
+                                >
                                     <Grid style={styles.colCenter}>
                                         <Row>
                                             <MaterialCommunityIcons
@@ -120,7 +145,7 @@ export default class ContactUs extends React.Component {
                                             />
                                         </Row>
                                         <Row>
-                                            <Text style={styles.text}>G-Mail</Text>
+                                            <MyText style={styles.text} children="G-Mail"/>
                                         </Row>
                                     </Grid>
                                 </TouchableOpacity>
@@ -138,7 +163,7 @@ export default class ContactUs extends React.Component {
                                             />
                                         </Row>
                                         <Row>
-                                            <Text style={styles.text}>Fb Messenger</Text>
+                                            <MyText style={styles.text} children="Fb Messenger"/>
                                         </Row>
                                     </Grid>
                                 </Button>
@@ -152,7 +177,8 @@ export default class ContactUs extends React.Component {
                             ) : (
                                 <View>
                                     <StatusBar backgroundColor="#fff" style="dark"/>
-                                    <KeyboardAwareScrollView style={{backgroundColor: 'transparent',height:600,marginTop: 15}}>
+                                    <KeyboardAwareScrollView
+                                        style={{backgroundColor: 'transparent', height: 600, marginTop: 15}}>
                                         <StatusBar backgroundColor="#fff" style="dark"/>
                                         <View style={{
                                             width: width,
@@ -208,8 +234,9 @@ export default class ContactUs extends React.Component {
                                             alignContent: "center"
                                         }}>
                                             <TouchableOpacity style={styles.buttonStyle}
-                                                              onPress={() => this.sendMessage()}><Text
-                                                style={styles.buttonText}>{t('sendMessageButton')}</Text></TouchableOpacity>
+                                                              onPress={() => this.sendMessage()}><MyText
+                                                style={styles.buttonText}
+                                                children={t('sendMessageButton')}/></TouchableOpacity>
                                         </View>
                                     </KeyboardAwareScrollView>
                                 </View>

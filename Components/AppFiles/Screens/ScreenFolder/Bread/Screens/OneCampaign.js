@@ -28,14 +28,43 @@ var height = Dimensions.get('window').height;
 import firebase from '../../../../Functions/FireBase/firebaseConfig';
 import HTMLView from 'react-native-htmlview';
 import DropdownAlert from "react-native-dropdownalert";
+import {Poppins_400Regular, useFonts} from "@expo-google-fonts/poppins";
+
+function MyText(props) {
+    let [fontsLoaded] = useFonts({
+        Poppins_400Regular,
+    });
+    if (!fontsLoaded) {
+        return (
+            <Text style={[{
+                fontSize: props.fontSize ? props.textColor : 18,
+                color: props.textColor ? props.textColor : "rgba(0,0,0,.8)",
+                textAlign: "center"
+            }, props.style ? props.style : null]}>{props.children}</Text>
+        )
+    } else {
+        return (
+            <Text style={[{
+                fontSize: props.fontSize ? props.textColor : 18,
+                color: props.textColor ? props.textColor : "rgba(0,0,0,.8)",
+                textAlign: "center",
+                fontFamily: "Poppins_400Regular"
+            }, props.style ? props.style : null]}>{props.children}</Text>
+        )
+    }
+}
+
 
 const succesImage = require('../../../../../../assets/images/Alert/tick.png');
 export default class OneCampaign extends React.Component {
-    state = {
-        active: false,
-        oneCampaign: null,
-        newImages: null,
-    };
+    constructor(props) {
+        super(props)
+        this.state = {
+            active: false,
+            oneCampaign: null,
+            newImages: null,
+        };
+    }
 
     getInfo() {
         var user = firebase.auth().currentUser;
@@ -135,10 +164,9 @@ export default class OneCampaign extends React.Component {
                         </Button>
                     </View>
                     <View style={styles.headerBody}>
-                        <Text
-                            style={styles.headerTitle}>
-                            {this.state.oneCampaign != null ? this.name(this.state.oneCampaign) : null}
-                        </Text>
+                        <MyText
+                            style={styles.headerTitle}
+                            children={this.state.oneCampaign != null ? this.name(this.state.oneCampaign) : null}/>
                     </View>
                     <View/>
                 </View>
@@ -157,12 +185,10 @@ export default class OneCampaign extends React.Component {
                                         ) : null}
 
                                         <Body>
-                                            <Text style={styles.titleColor}>
-                                                {this.state.oneCampaign != null ? this.state.oneCampaign.marketName : null}
-                                            </Text>
-                                            <Text note>
-                                                {this.state.oneCampaign != null ? this.state.oneCampaign.created_at : null}
-                                            </Text>
+                                            <MyText style={styles.titleColor}
+                                                    children={this.state.oneCampaign != null ? this.state.oneCampaign.marketName : null}/>
+                                            <MyText textColor="rgba(0,0,0,.5)"
+                                                    children={this.state.oneCampaign != null ? this.state.oneCampaign.created_at : null}/>
                                         </Body>
                                     </Left>
                                 </CardItem>
@@ -180,8 +206,9 @@ export default class OneCampaign extends React.Component {
                                 </CardItem>
                                 <CardItem>
                                     <View style={styles.fabArena}>
-                                        <Text
-                                            style={styles.title}>{this.state.oneCampaign != null ? this.name(this.state.oneCampaign) : null}</Text>
+                                        <MyText
+                                            style={styles.title}
+                                            children={this.state.oneCampaign != null ? this.name(this.state.oneCampaign) : null}/>
                                         <Button
                                             style={styles.shareButton}
                                             onPress={
@@ -280,6 +307,7 @@ const styles = StyleSheet.create({
     textColor: {
         color: '#6d7587',
         fontSize: 17,
+        fontFamily: "Poppins_400Regular",
         padding: 5,
     },
 });

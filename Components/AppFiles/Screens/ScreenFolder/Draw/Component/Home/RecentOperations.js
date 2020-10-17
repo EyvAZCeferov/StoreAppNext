@@ -1,11 +1,11 @@
 import React from 'react';
-import {View, Text, Dimensions, StyleSheet, ActivityIndicator, FlatList} from 'react-native';
+import {View, Text, Dimensions, StyleSheet, ActivityIndicator, FlatList, TouchableOpacity} from 'react-native';
 import {useNavigation} from '@react-navigation/native'
 import {Body, Button, Left, ListItem, Right, Thumbnail} from "native-base";
 import {t} from "../../../../../Lang";
 import firebase from "../../../../../Functions/FireBase/firebaseConfig";
-import {FontAwesome,} from "@expo/vector-icons";
-
+import {AntDesign, FontAwesome, Ionicons} from "@expo/vector-icons";
+import {Poppins_400Regular, useFonts} from "@expo-google-fonts/poppins";
 
 const {width, height} = Dimensions.get('window');
 export default function RecentOperations() {
@@ -16,7 +16,7 @@ export default function RecentOperations() {
     const [refresh, setRefresh] = React.useState(true);
 
     React.useEffect(() => {
-        onHandleRefresh()
+        getInfo()
     }, [])
 
     function getInfo() {
@@ -33,7 +33,7 @@ export default function RecentOperations() {
                         numchild = data.numChildren()
                     })
                 });
-            if (numchild != 0) {
+            if (numchild > 0) {
                 setList(datas)
             } else {
                 setList(null)
@@ -125,17 +125,16 @@ export default function RecentOperations() {
                 key={index}
             >
                 <Left>
-                    {marketTypeFunc()}
+                    <AntDesign name="shoppingcart" color="#7c9d32" size={24}/>
                 </Left>
                 <Body>
-                    <Text style={{fontSize: 22, color: "rgba(0,0,0,.8)"}}>{item.market}</Text>
-                    <Text style={{fontSize: 14, color: "rgba(0,0,0,.6)"}}>
-                        {convertStampDate(item.date)}
-                    </Text>
+                    <MyText style={{fontSize: 22, color: "rgba(0,0,0,.8)", textAlign: "left"}} children={item.market}/>
+                    <MyText style={{fontSize: 14, color: "rgba(0,0,0,.6)", textAlign: "left"}}
+                            children={convertStampDate(item.date)}/>
                 </Body>
                 <Right>
                     <Button transparent>
-                        <Text>{sumPrice(item.id)} AZN</Text>
+                        <MyText children={sumPrice(item.id) + ' AZN'}/>
                     </Button>
                 </Right>
             </ListItem>
@@ -148,17 +147,7 @@ export default function RecentOperations() {
     }
 
     function renderContent() {
-        if (list != null) {
-            return (
-                <FlatList
-                    data={list}
-                    keyExtractor={(index, item) => index.toString()}
-                    renderItem={renderItem}
-                    refreshing={refresh}
-                    onRefresh={onHandleRefresh}
-                />
-            )
-        } else if (list == null) {
+        if (refresh) {
             return (
                 <View style={{
                     width: "100%",
@@ -167,10 +156,51 @@ export default function RecentOperations() {
                     justifyContent: "center",
                     alignContent: "center",
                     alignItems: "center"
-                }}><Text style={styles.noResult}>{t('noResult')}</Text></View>
+                }}>
+                    <ActivityIndicator color="#7c9d32" animating={true} size="large"/>
+                </View>
             )
+        } else {
+            if (list != null) {
+                return (
+                    <FlatList
+                        data={list}
+                        keyExtractor={(index, item) => index.toString()}
+                        renderItem={renderItem}
+                        refreshing={refresh}
+                        onRefresh={onHandleRefresh}
+                    />
+                )
+            } else if (list == null) {
+                return (
+                    <View style={{
+                        width: "100%",
+                        height: "100%",
+                        backgroundColor: "#fff",
+                        flexDirection: "column",
+                        justifyContent: "center",
+                        alignContent: "center",
+                        alignItems: "center"
+                    }}><MyText style={styles.noResult} children={t('noResult')}/>
+                        <TouchableOpacity
+                            style={{
+                                width: 40,
+                                height: 40,
+                                backgroundColor: "#7c9d32",
+                                borderRadius: 20,
+                                marginTop: 20,
+                                alignItems: "center",
+                                alignContent: "center",
+                                justifyContent: "center",
+                                textAlign: "center"
+                            }}
+                            onPress={() => onHandleRefresh()}>
+                            <Ionicons name="md-refresh" color="#fff" size={20}/>
+                        </TouchableOpacity>
+                    </View>
+                )
+            }
         }
-
     }
 
     return (
@@ -186,29 +216,17 @@ export default function RecentOperations() {
                         justifyContent: "space-between",
                         flexDirection: "row",
                     }}>
-                        <Text style={{color: "#7c9d32", marginVertical: 10}}>{t('recentoperations')}</Text>
-                        <Text style={{color: "#7c9d32", marginVertical: 10}}>{t('yesterday')}</Text>
+                        <MyText style={{color: "#7c9d32", marginVertical: 10}} children={t('recentoperations')}/>
+                        <MyText style={{color: "#7c9d32", marginVertical: 10}} children={t('yesterday')}/>
                     </View>
                 </View>
-                <View style={{height: height / 2.25, width: width, paddingBottom: 10}}>
-                    {refresh ? (
-                        <View style={{
-                            width: "100%",
-                            height: "100%",
-                            backgroundColor: "#fff",
-                            justifyContent: "center",
-                            alignContent: "center",
-                            alignItems: "center"
-                        }}>
-                            <ActivityIndicator color="#7c9d32" animating={true} size="large"/>
-                        </View>
-                    ) : renderContent()}
+                <View style={{height: height / 2.25, width: width, marginBottom: 20}}>
+                    {renderContent()}
                 </View>
             </View>
         </View>
     )
 }
-
 
 const styles = StyleSheet.create({
     f1: {
@@ -251,3 +269,27 @@ const styles = StyleSheet.create({
         fontWeight: '700',
     }
 })
+
+function MyText(props) {
+    let [fontsLoaded] = useFonts({
+        Poppins_400Regular,
+    });
+    if (!fontsLoaded) {
+        return (
+            <Text style={[{
+                fontSize: props.fontSize ? props.textColor : 18,
+                color: props.textColor ? props.textColor : "rgba(0,0,0,.8)",
+                textAlign: "center"
+            }, props.style ? props.style : null]}>{props.children}</Text>
+        )
+    } else {
+        return (
+            <Text style={[{
+                fontSize: props.fontSize ? props.textColor : 18,
+                color: props.textColor ? props.textColor : "rgba(0,0,0,.8)",
+                textAlign: "center",
+                fontFamily: "Poppins_400Regular"
+            }, props.style ? props.style : null]}>{props.children}</Text>
+        )
+    }
+}

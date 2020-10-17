@@ -64,7 +64,6 @@ export default class TabMapsView extends React.Component {
         this.getInfo();
     }
 
-
     renderMarker() {
         return this.state.markers.map((element, index) => {
             const {lat, lng} = element.coords;
@@ -80,7 +79,6 @@ export default class TabMapsView extends React.Component {
         })
     }
 
-
     renderMap() {
         if (this.state.latitude != null || this.state.longitude != null) {
             return (
@@ -92,7 +90,7 @@ export default class TabMapsView extends React.Component {
                     zoomControlEnabled={true}
                     zoomTapEnabled={true}
                     showsScale={true}
-                    userLocationAnnotationTitle={firebase.auth().currentUser.name}
+                    userLocationAnnotationTitle={firebase.auth().currentUser.email}
                     showsUserLocation={true}
                     showsTraffic={false}
                     showsPointsOfInterest={false}
@@ -129,10 +127,9 @@ export default class TabMapsView extends React.Component {
                     this.renderMap()
                     : (
                         <View style={styles.container}>
-                            <ActivityIndicator size="large" color="#7c9d32"/>
+                            <ActivityIndicator size="large" focusable={true} animating={true} color="#7c9d32"/>
                         </View>
                     )}
-
             </View>
         );
     }

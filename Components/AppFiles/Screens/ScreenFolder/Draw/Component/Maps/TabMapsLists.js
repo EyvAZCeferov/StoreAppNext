@@ -22,15 +22,42 @@ var width = Dimensions.get('window').width;
 var height = Dimensions.get('window').height;
 import firebase from '../../../../../Functions/FireBase/firebaseConfig';
 import ShimmerPlaceholder from "react-native-shimmer-placeholder";
+import {Poppins_400Regular, useFonts} from "@expo-google-fonts/poppins";
+
+function MyText(props) {
+    let [fontsLoaded] = useFonts({
+        Poppins_400Regular,
+    });
+    if (!fontsLoaded) {
+        return (
+            <Text style={[{
+                fontSize: props.fontSize ? props.textColor : 18,
+                color: props.textColor ? props.textColor : "rgba(0,0,0,.8)",
+            }, props.style ? props.style : null]}>{props.children}</Text>
+        )
+    } else {
+        return (
+            <Text style={[{
+                fontSize: props.fontSize ? props.textColor : 18,
+                color: props.textColor ? props.textColor : "rgba(0,0,0,.8)",
+                fontFamily: "Poppins_400Regular"
+            }, props.style ? props.style : null]}>{props.children}</Text>
+        )
+    }
+}
+
 
 export default class TabMapsLists extends React.Component {
-    state = {
-        latitude: null,
-        longitude: null,
-        maps: null,
-        refreshing: true,
-        loading: true
-    };
+    constructor(props) {
+        super(props);
+        this.state = {
+            latitude: null,
+            longitude: null,
+            maps: null,
+            refreshing: true,
+            loading: true
+        };
+    }
 
     async getInfo() {
         firebase.database().goOnline()
@@ -132,12 +159,12 @@ export default class TabMapsLists extends React.Component {
                     />
                 </Left>
                 <Body>
-                    <Text>{item.name}</Text>
-                    <Text>{item.address}</Text>
+                    <MyText children={item.name}/>
+                    <MyText children={item.address}/>
                 </Body>
                 <Right>
                     <Button transparent>
-                        <Text>{getKilom(item.coords.lat, item.coords.lng, true, false)} </Text>
+                        <MyText children={getKilom(item.coords.lat, item.coords.lng, true, false)} />
                     </Button>
                 </Right>
             </ListItem>

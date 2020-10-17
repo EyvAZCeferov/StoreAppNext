@@ -13,6 +13,31 @@ import firebase from "../../../../../Functions/FireBase/firebaseConfig";
 import {AntDesign} from '@expo/vector-icons';
 import DropdownAlert from "react-native-dropdownalert";
 import {t} from "../../../../../Lang";
+import {Poppins_400Regular, useFonts} from "@expo-google-fonts/poppins";
+
+function MyText(props) {
+    let [fontsLoaded] = useFonts({
+        Poppins_400Regular,
+    });
+    if (!fontsLoaded) {
+        return (
+            <Text style={[{
+                fontSize: props.fontSize ? props.textColor : 18,
+                color: props.textColor ? props.textColor : "rgba(0,0,0,.8)",
+                textAlign: "center"
+            }, props.style ? props.style : null]}>{props.children}</Text>
+        )
+    } else {
+        return (
+            <Text style={[{
+                fontSize: props.fontSize ? props.textColor : 18,
+                color: props.textColor ? props.textColor : "rgba(0,0,0,.8)",
+                textAlign: "center",
+                fontFamily: "Poppins_400Regular"
+            }, props.style ? props.style : null]}>{props.children}</Text>
+        )
+    }
+}
 
 const {width, height} = Dimensions.get("window");
 export default class CardSelector extends React.Component {
@@ -147,10 +172,10 @@ export default class CardSelector extends React.Component {
                             />
                             <View style={styles.content}>
                                 <TouchableOpacity onPress={() => this.goBack()}
-                                                  style={[styles.center, styles.button, styles.goBack]}>
+                                                  style={[styles.button, styles.goBack]}>
                                     <AntDesign name="left" color="#7c9d32" size={25}/>
                                 </TouchableOpacity>
-                                <Text style={styles.title}>Kart seçərək davam edin</Text>
+                                <MyText style={styles.title} children="Kart seçərək davam edin"/>
                                 <Picker
                                     iosHeader="Kart Seç"
                                     mode="dropdown"
@@ -167,7 +192,7 @@ export default class CardSelector extends React.Component {
                                     onPress={() => this.goNext()}
                                     style={[styles.center, styles.button]}
                                 >
-                                    <Text style={styles.buttonTExt}>{t('continue')}</Text>
+                                    <MyText style={styles.buttonTExt} children={t('continue')}/>
                                 </TouchableOpacity>
                             </View>
                         </View>
@@ -203,7 +228,8 @@ const styles = StyleSheet.create({
         borderColor: "#fff",
         borderWidth: 0,
         borderRadius: 0,
-        marginBottom: height / 15
+        marginBottom: height / 15,
+
     },
     buttonTExt: {
         color: "#7c9d32",

@@ -30,13 +30,36 @@ const succesImage = require('../../../../../../assets/images/Alert/tick.png');
 
 import {LiteCreditCardInput} from 'react-native-credit-card-input';
 import ScreensStandart from '../Component/ScreensStandart';
-import {AntDesign, EvilIcons, MaterialCommunityIcons, FontAwesome,FontAwesome5} from '@expo/vector-icons';
+import {AntDesign, EvilIcons, MaterialCommunityIcons, FontAwesome, FontAwesome5} from '@expo/vector-icons';
 import firebase from '../../../../Functions/FireBase/firebaseConfig';
 
 const {width, height} = Dimensions.get('window');
 import {t} from '../../../../Lang';
 import ShimmerPlaceholder from "react-native-shimmer-placeholder";
 import DropdownAlert from "react-native-dropdownalert";
+import {Poppins_400Regular, useFonts} from "@expo-google-fonts/poppins";
+
+function MyText(props) {
+    let [fontsLoaded] = useFonts({
+        Poppins_400Regular,
+    });
+    if (!fontsLoaded) {
+        return (
+            <Text style={[{
+                fontSize: props.fontSize ? props.textColor : 18,
+                color: props.textColor ? props.textColor : "rgba(0,0,0,.8)",
+            }, props.style ? props.style : null]}>{props.children}</Text>
+        )
+    } else {
+        return (
+            <Text style={[{
+                fontSize: props.fontSize ? props.textColor : 18,
+                color: props.textColor ? props.textColor : "rgba(0,0,0,.8)",
+                fontFamily: "Poppins_400Regular"
+            }, props.style ? props.style : null]}>{props.children}</Text>
+        )
+    }
+}
 
 export default class CardsScreen extends React.Component {
     constructor(props) {
@@ -228,10 +251,10 @@ export default class CardsScreen extends React.Component {
                                 </Left>
                                 <Body style={styles.body}>
                                     <View>
-                                        <Text style={styles.cardNumbText}>{item.cardInfo.number}</Text>
+                                        <MyText style={styles.cardNumbText} children={item.cardInfo.number}/>
                                     </View>
                                     <View>
-                                        <Text>{item.cardInfo.cvc} Azn</Text>
+                                        <MyText children={item.cardInfo.cvc + ' Azn'}/>
                                     </View>
                                 </Body>
                                 <Right style={styles.right}>
@@ -361,11 +384,11 @@ export default class CardsScreen extends React.Component {
                     {this.state.cardCount == 0 ||
                     this.state.cards == null ? (
                         <List style={styles.w100}>
-                            <Text style={styles.nullObject}>{t('noResult')}</Text>
+                            <MyText style={styles.nullObject} children={t('noResult')}/>
                         </List>
                     ) : (
                         <ScrollView>
-                            <List style={[styles.w100,{marginBottom:80}]}>
+                            <List style={[styles.w100, {marginBottom: 80}]}>
                                 {this.listComponent()}
                             </List>
                         </ScrollView>
@@ -393,7 +416,7 @@ export default class CardsScreen extends React.Component {
                                 width: width,
                                 height: height,
                             }}>
-                            <StatusBar backgroundColor="#ffffff" style="dark" />
+                            <StatusBar backgroundColor="#ffffff" style="dark"/>
                             <DropdownAlert
                                 ref={ref => this.dropDownAlertRef = ref}
                                 useNativeDriver={true}
@@ -424,7 +447,7 @@ export default class CardsScreen extends React.Component {
                                 }}>
                                     <CardItem header style={styles.cardItemheader}>
                                         <Body>
-                                            <Text style={styles.modalTitle}>{t('addNewCard')}</Text>
+                                            <MyText style={styles.modalTitle} children={t('addNewCard')}/>
                                         </Body>
                                         <Right>
                                             <TouchableOpacity
@@ -468,9 +491,9 @@ export default class CardsScreen extends React.Component {
                                                     style={styles.buttonStyle}
                                                     onPress={this.addCard}
                                                     success>
-                                                    <Text style={styles.buttonText}>
-                                                        {t('addCard')}
-                                                    </Text>
+                                                    <MyText style={styles.buttonText}
+                                                            children={t('addCard')}
+                                                    />
                                                 </Button>
                                             </Item>
                                         </View>

@@ -1,9 +1,33 @@
 import React from 'react'
-import {View, Text, StyleSheet, TouchableOpacity, ImageBackground, Dimensions, Image} from 'react-native';
+import {View, Text, StyleSheet, Dimensions, Image} from 'react-native';
 import AppIntroSlider from 'react-native-app-intro-slider';
 import {AntDesign} from '@expo/vector-icons';
-import AsyncStorage from '@react-native-community/async-storage';
 import {StatusBar} from "expo-status-bar";
+import {Poppins_400Regular, useFonts} from "@expo-google-fonts/poppins";
+
+function MyText(props) {
+    let [fontsLoaded] = useFonts({
+        Poppins_400Regular,
+    });
+    if (!fontsLoaded) {
+        return (
+            <Text style={[{
+                fontSize: props.fontSize ? props.textColor : 18,
+                color: props.textColor ? props.textColor : "rgba(0,0,0,.8)",
+                textAlign: "center"
+            }, props.style ? props.style : null]}>{props.children}</Text>
+        )
+    } else {
+        return (
+            <Text style={[{
+                fontSize: props.fontSize ? props.textColor : 18,
+                color: props.textColor ? props.textColor : "rgba(0,0,0,.8)",
+                textAlign: "center",
+                fontFamily: "Poppins_400Regular"
+            }, props.style ? props.style : null]}>{props.children}</Text>
+        )
+    }
+}
 
 const {width, height} = Dimensions.get('window');
 export default class AppSlider extends React.Component {
@@ -95,8 +119,8 @@ export default class AppSlider extends React.Component {
             <View style={styles.slide} key={index}>
                 <Image source={item.image} resizeMode="cover" style={styles.image}/>
                 <View style={styles.slideContent}>
-                    <Text style={styles.title}>{item.title}</Text>
-                    <Text style={styles.desc}>{item.desc}</Text>
+                    <MyText style={styles.title} children={item.title}/>
+                    <MyText style={styles.desc} children={item.desc}/>
                 </View>
             </View>
         );

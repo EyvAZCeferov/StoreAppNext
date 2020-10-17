@@ -6,12 +6,13 @@ import {LinearGradient} from 'expo-linear-gradient';
 import customStyle from '../../../../../../../assets/Theme';
 import {t} from "../../../../../Lang";
 import firebase from "../../../../../Functions/FireBase/firebaseConfig";
+import {Poppins_400Regular, useFonts} from "@expo-google-fonts/poppins";
 
 const {width, height} = Dimensions.get('window');
 export default function CardOne({index, y, item}) {
     const position = Animated.subtract(index * 200, y);
     const [cardCount, setCardCount] = React.useState(null)
-    const isDissappering = -200;
+    const isDissappering = -180;
     const isTop = 0;
     const isBottom = height - 200;
     const isAppering = height;
@@ -40,6 +41,14 @@ export default function CardOne({index, y, item}) {
                 .on('value', (data) => {
                     digit = digit + data.numChildren()
                 });
+            firebase
+                .database()
+                .ref('users/' + user.uid + '/pinArena')
+                .on('value', (data) => {
+                    if (data.numChildren() != 0) {
+                        digit = digit + 1
+                    }
+                })
             setCardCount(digit)
             renderCards()
         }
@@ -86,8 +95,16 @@ export default function CardOne({index, y, item}) {
             'rgba(52,85,255,0.85)'
         ],
         [
+            'rgb(130,70,155)',
+            'rgba(130,70,155,0.85)'
+        ],
+        [
             'rgb(143,52,255)',
             'rgba(143,52,255,0.85)'
+        ],
+        [
+            'rgb(103,152,255)',
+            'rgba(103,152,255,0.85)'
         ],
         [
             'rgb(255,195,52)',
@@ -96,6 +113,10 @@ export default function CardOne({index, y, item}) {
         [
             'rgb(191,54,12)',
             'rgba(191,54,12,0.85)'
+        ],
+        [
+            'rgb(234,50,29)',
+            'rgba(234,50,29,0.85)'
         ],
         [
             'rgb(78,52,46)',
@@ -128,6 +149,18 @@ export default function CardOne({index, y, item}) {
         [
             'rgb(129,199,132)',
             'rgba(129,199,132,0.85)'
+        ],
+        [
+            'rgb(103,80,101)',
+            'rgba(103,80,101,0.85)'
+        ],
+        [
+            'rgb(1,80,101)',
+            'rgba(1,80,101,0.85)'
+        ],
+        [
+            'rgb(2,123,121)',
+            'rgba(2,123,121,0.85)'
         ]
     ]
 
@@ -135,7 +168,9 @@ export default function CardOne({index, y, item}) {
         var elements = []
         for (let i = 0; i < cardCount; i++) {
             const clear = index == i ? {
-                width: 14.4,
+                width: 15,
+                height: 7,
+                borderRadius: 3,
                 backgroundColor: cardBgColors[i][1]
             } : {backgroundColor: cardBgColors[i][1]}
             elements.push(
@@ -149,15 +184,15 @@ export default function CardOne({index, y, item}) {
         return (
             <View style={{
                 position: "absolute",
-                top: '50%',
-                width: 90,
-                height: 32,
-                flexDirection: "row",
-                justifyContent: "space-between",
+                top: 0,
+                right: 0,
+                width: 40,
+                height: '100%',
+                flexDirection: "column",
+                justifyContent: "space-around",
                 backgroundColor: "transparent",
                 alignItems: "center",
                 alignContent: "center",
-                borderBottomRightRadius: 60,
                 zIndex: 4
             }}>
                 {bounces()}
@@ -178,41 +213,52 @@ export default function CardOne({index, y, item}) {
                             <View style={[styles.leftPattern, styles.bigPattern]}/>
                             <View
                                 style={[styles.leftPattern, styles.littlePattern, {backgroundColor: cardBgColors[index][1]}]}/>
-                            <Text
-                                style={styles.priceText}>{item.cardInfo.cvc ? item.cardInfo.cvc : item.cardInfo.price} ₼</Text>
-                            {cardCountBounces()}
+                            <MyText
+                                style={styles.priceText}
+                                children={item.cardInfo.cvc ? item.cardInfo.cvc + ' ₼' : item.cardInfo.price + ' ₼'}/>
                         </Left>
                         <Right style={styles.right}>
-                            <Text style={styles.rightText}>{item.cardInfo.type}</Text>
+                            <MyText style={styles.rightText} children={item.cardInfo.type}/>
                         </Right>
                     </View>
                     <View style={styles.centerCardNum}>
                         <View>
-                            <Text style={styles.cardNumbText}>{hideNumb(item.cardInfo.number)}</Text>
+                            <MyText style={styles.cardNumbText} children={hideNumb(item.cardInfo.number)}/>
                         </View>
                     </View>
                     <View style={styles.cardInfos}>
                         <View>
                             <Grid>
                                 <Col style={customStyle.padding5}>
-                                    <Text style={styles.gridInfoNameSurnameDynamic}>
-                                        John Doe
-                                    </Text>
-                                    <Text style={[styles.gridInfoNameSurnameDynamic, styles.gridInfoNameSurnameStatic]}>
-                                        {t('namesurname')}
-                                    </Text>
+                                    <MyText
+                                        style={styles.gridInfoNameSurnameDynamic}
+                                        children="John Doe"/>
+                                    <MyText
+                                        style={[styles.gridInfoNameSurnameDynamic, styles.gridInfoNameSurnameStatic]}
+                                        children={t('namesurname')}/>
                                 </Col>
                                 <Col style={styles.gridInfoMonthYear}>
-                                    <Text style={styles.monthYearText}>
-                                        {item.cardInfo.expiry}
-                                    </Text>
-                                    <Text
-                                        style={[styles.monthYearText, styles.monthYearUnderText]}>
-                                        {t('expiry')}
-                                    </Text>
+                                    <MyText style={styles.monthYearText}
+                                            children={item.cardInfo.expiry}/>
+                                    <MyText
+                                        style={[styles.monthYearText, styles.monthYearUnderText]}
+                                        children={t('expiry')}/>
                                 </Col>
                             </Grid>
                         </View>
+                    </View>
+                    <View style={{
+                        height: "70%",
+                        borderColor: "#fff",
+                        width: 40,
+                        position: "absolute",
+                        top: -1,
+                        right: 0,
+                        backgroundColor: "#fff",
+                        borderBottomLeftRadius: 5,
+                        borderTopRightRadius: 15,
+                    }}>
+                        {cardCountBounces()}
                     </View>
                 </LinearGradient>
             </Animated.View>
@@ -246,7 +292,7 @@ const styles = StyleSheet.create({
         width: 350,
     },
     rightSec: {
-        width: 350,
+        width: 290,
         flexDirection: "row",
         alignContent: "center",
         alignItems: "center",
@@ -260,7 +306,7 @@ const styles = StyleSheet.create({
         padding: 0,
         margin: 0,
         width: '50%',
-        height: '90%',
+        height: '80%',
         flexDirection: "row",
         backgroundColor: 'transparent',
         justifyContent: "space-between",
@@ -274,7 +320,7 @@ const styles = StyleSheet.create({
     },
     bigPattern: {
         width: '74%',
-        height: '90%',
+        height: '80%',
         backgroundColor: "#fff",
         zIndex: 2
     },
@@ -282,7 +328,7 @@ const styles = StyleSheet.create({
         position: "absolute",
         top: '11%',
         width: '64%',
-        height: '45%',
+        height: '50%',
         zIndex: 3,
     },
     priceText: {
@@ -291,7 +337,9 @@ const styles = StyleSheet.create({
         width: '55%',
         height: '45%',
         zIndex: 4,
-        fontSize: 20,
+        fontSize: 19,
+        lineHeight: 19,
+        paddingBottom: 0,
         color: "#fff",
         fontWeight: "bold",
         alignContent: "center",
@@ -299,23 +347,26 @@ const styles = StyleSheet.create({
         textAlign: "center"
     },
     cardCount: {
-        width: 7,
-        height: 7,
-        borderRadius: 7,
+        width: 10,
+        height: 5,
+        borderRadius: 2,
         backgroundColor: "transparent",
-        marginRight: 2,
+        marginBottom: 3,
         zIndex: 10,
+        flexDirection: "column",
+        justifyContent: "flex-start",
     },
     right: {
         position: 'absolute',
         top: '19%',
-        right: '4.5%',
+        right: 0,
         padding: 0,
         margin: 0,
         backgroundColor: 'transparent',
     },
     rightText: {
         fontSize: 27,
+        lineHeight: 27,
         color: '#fff',
         fontWeight: 'bold',
         fontStyle: "italic",
@@ -374,3 +425,26 @@ const styles = StyleSheet.create({
         marginLeft: 4,
     },
 });
+
+
+function MyText(props) {
+    let [fontsLoaded] = useFonts({
+        Poppins_400Regular,
+    });
+    if (!fontsLoaded) {
+        return (
+            <Text style={[{
+                fontSize: props.fontSize ? props.textColor : 18,
+                color: props.textColor ? props.textColor : "rgba(0,0,0,.8)",
+            }, props.style ? props.style : null]}>{props.children}</Text>
+        )
+    } else {
+        return (
+            <Text style={[{
+                fontSize: props.fontSize ? props.textColor : 18,
+                color: props.textColor ? props.textColor : "rgba(0,0,0,.8)",
+                fontFamily: "Poppins_400Regular"
+            }, props.style ? props.style : null]}>{props.children}</Text>
+        )
+    }
+}

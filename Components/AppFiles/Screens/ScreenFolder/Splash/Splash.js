@@ -1,8 +1,9 @@
 import React from 'react';
-import {View, ImageBackground} from 'react-native';
+import {View, Image, Dimensions} from 'react-native';
 import {StatusBar} from 'expo-status-bar';
 
-const splashIcon = require('../../../../../assets/icon.png')
+const {width} = Dimensions.get("window")
+const splashIcon = require('../../../../../assets/icon-ios.png')
 export default class Splash extends React.Component {
     constructor(props) {
         super(props);
@@ -12,7 +13,11 @@ export default class Splash extends React.Component {
         return (
             <View style={{flex: 1, justifyContent: "center", alignItems: "center", alignContent: "center"}}>
                 <StatusBar style="dark" backgroundColor="#fff"/>
-                <ImageBackground source={splashIcon} style={{width:190,height:190}} resizeMode="contain"/>
+                <Image
+                    source={splashIcon}
+                    defaultSource={splashIcon}
+                    style={{width: (width / 2) + 1, height: (width / 2) + 1}}
+                />
             </View>
         )
     }

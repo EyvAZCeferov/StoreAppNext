@@ -16,6 +16,31 @@ import DropdownAlert from "react-native-dropdownalert";
 import {t} from "../../../../../Lang";
 import {Camera} from "expo-camera";
 import BarcodeMask from "react-native-barcode-mask";
+import {Poppins_400Regular, useFonts} from "@expo-google-fonts/poppins";
+
+function MyText(props) {
+    let [fontsLoaded] = useFonts({
+        Poppins_400Regular,
+    });
+    if (!fontsLoaded) {
+        return (
+            <Text style={[{
+                fontSize: props.fontSize ? props.textColor : 18,
+                color: props.textColor ? props.textColor : "rgba(0,0,0,.8)",
+                textAlign: "center"
+            }, props.style ? props.style : null]}>{props.children}</Text>
+        )
+    } else {
+        return (
+            <Text style={[{
+                fontSize: props.fontSize ? props.textColor : 18,
+                color: props.textColor ? props.textColor : "rgba(0,0,0,.8)",
+                textAlign: "center",
+                fontFamily: "Poppins_400Regular"
+            }, props.style ? props.style : null]}>{props.children}</Text>
+        )
+    }
+}
 
 const {width, height} = Dimensions.get("window");
 export default class PayWelcome extends React.Component {
@@ -48,10 +73,19 @@ export default class PayWelcome extends React.Component {
 
     setId() {
         let id = this.makeid(15);
+        setTimeout(() => {
+            id = this.makeid(15)
+        }, 10000)
         this.setState({checkid: id})
     }
 
     componentDidMount() {
+        this.setState({checkid: null})
+        this.getMarkets()
+    }
+
+    componentWillMount() {
+        this.setState({checkid: null})
         this.getMarkets()
     }
 
@@ -131,7 +165,6 @@ export default class PayWelcome extends React.Component {
 
     qrCodeScanned(item) {
         this.setState({openQr: false})
-        console.log(item)
     }
 
     render() {
@@ -162,7 +195,7 @@ export default class PayWelcome extends React.Component {
                                                   style={[styles.button, styles.goBack]}>
                                     <AntDesign name="left" color="#7c9d32" size={25}/>
                                 </TouchableOpacity>
-                                <Text style={styles.title}>Marketi seçərək davam edin</Text>
+                                <MyText style={styles.title} children="Marketi seçərək davam edin"/>
                                 <Picker
                                     iosHeader="Market Seç"
                                     mode="dialog"
@@ -173,7 +206,7 @@ export default class PayWelcome extends React.Component {
                                                  value=""/>
                                     {this.renderMarkets()}
                                 </Picker>
-                                <Text style={styles.qrCodeScan}>və ya Qr Kodu Oxudun</Text>
+                                <MyText style={styles.qrCodeScan} children="və ya Qr Kodu Oxudun"/>
                                 <TouchableOpacity
                                     onPress={() => this.setState({openQr: true})}
                                     style={[styles.center, styles.button, styles.goBack]}
@@ -184,14 +217,14 @@ export default class PayWelcome extends React.Component {
                                     onPress={() => this.goNext()}
                                     style={[styles.center, styles.button]}
                                 >
-                                    <Text style={styles.buttonTExt}>{t('continue')}</Text>
+                                    <MyText style={styles.buttonTExt} children={t('continue')}/>
                                 </TouchableOpacity>
                             </View>
                         </View>
                     )
                 }
                 <Modal visible={this.state.openQr} animated={true} animationType="slide" statusBarTranslucent={true}
-                       onRequestClose={() => alert('closed')} hardwareAccelerated={true} transparent={false}
+                       hardwareAccelerated={true} transparent={false}
                        presentationStyle="fullScreen" supportedOrientations="portrait">
                     <StatusBar backgroundColor="#fff" style="dark"/>
                     <DropdownAlert

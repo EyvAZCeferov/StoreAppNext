@@ -38,6 +38,31 @@ import {StatusBar} from "expo-status-bar";
 import DropdownAlert from "react-native-dropdownalert";
 import AsyncStorage from "@react-native-community/async-storage";
 import * as LocalAuthentication from "expo-local-authentication";
+import {Poppins_400Regular, useFonts} from "@expo-google-fonts/poppins";
+
+function MyText(props) {
+    let [fontsLoaded] = useFonts({
+        Poppins_400Regular,
+    });
+    if (!fontsLoaded) {
+        return (
+            <Text style={[{
+                fontSize: props.fontSize ? props.textColor : 18,
+                color: props.textColor ? props.textColor : "rgba(0,0,0,.8)",
+                textAlign: "center"
+            }, props.style ? props.style : null]}>{props.children}</Text>
+        )
+    } else {
+        return (
+            <Text style={[{
+                fontSize: props.fontSize ? props.textColor : 18,
+                color: props.textColor ? props.textColor : "rgba(0,0,0,.8)",
+                textAlign: "center",
+                fontFamily: "Poppins_400Regular"
+            }, props.style ? props.style : null]}>{props.children}</Text>
+        )
+    }
+}
 
 export default class Settings extends React.Component {
     constructor(props) {
@@ -192,7 +217,7 @@ export default class Settings extends React.Component {
                         <View style={styles.content}>
                             <List style={styles.lists}>
                                 <ListItem style={styles.listitemDivider} itemDivider>
-                                    <Text style={styles.listitemDividerText}>{t('general')}</Text>
+                                    <MyText style={styles.listitemDividerText} children={t('general')}/>
                                 </ListItem>
                                 <ListItem style={styles.listitemDivider} itemDivider>
                                     <Entypo name="language" size={24} color="#6d7587"/>
@@ -258,9 +283,7 @@ export default class Settings extends React.Component {
                                     </Picker>
                                 </ListItem>
                                 <ListItem style={styles.listitemDivider} itemDivider>
-                                    <Text style={styles.listitemDividerText}>
-                                        {t('security')}
-                                    </Text>
+                                    <MyText style={styles.listitemDividerText} children={t('security')}/>
                                 </ListItem>
                                 <ListItem
                                     style={[styles.listitem, styles.active]}
@@ -275,9 +298,9 @@ export default class Settings extends React.Component {
                                         />
                                     </Left>
                                     <Body style={styles.body}>
-                                        <Text style={styles.text}>
-                                            {t('changetheloginpassword')}
-                                        </Text>
+                                        <MyText style={styles.text}
+                                                children={t('changetheloginpassword')}
+                                        />
                                     </Body>
                                 </ListItem>
                                 {this.state.hasFingerPrintHardware ? (
@@ -286,15 +309,15 @@ export default class Settings extends React.Component {
                                             <Entypo name="fingerprint" size={24} color="#6d7587"/>
                                         </Left>
                                         <Body style={styles.body}>
-                                            <Text style={styles.text}>{t('fingerprintlogin')}</Text>
+                                            <MyText style={styles.text} children={t('fingerprintlogin')}/>
                                         </Body>
                                         {this.renderFingerStat()}
                                     </ListItem>
                                 ) : null}
                                 <ListItem style={styles.listitemDivider} itemDivider last>
-                                    <Text style={styles.listitemDividerText}>
-                                        {t('abouttheapplication')}
-                                    </Text>
+                                    <MyText style={styles.listitemDividerText}
+                                            children={t('abouttheapplication')}
+                                    />
                                 </ListItem>
                                 <ListItem
                                     style={styles.listitem}
@@ -308,9 +331,9 @@ export default class Settings extends React.Component {
                                     <Body
                                         style={styles.body}
                                     >
-                                        <Text style={styles.text}>
-                                            {t('termsofuseoftheapplication')}
-                                        </Text>
+                                        <MyText style={styles.text}
+                                                children={t('termsofuseoftheapplication')}
+                                        />
                                     </Body>
                                 </ListItem>
                                 <ListItem
@@ -318,9 +341,9 @@ export default class Settings extends React.Component {
                                     itemDivider
                                     last
                                     onPress={() => this.props.navigation.navigate('TermOfUses')}>
-                                    <Text style={styles.listitemDividerText}>
-                                        {t('versionoftheapplication')}
-                                    </Text>
+                                    <MyText style={styles.listitemDividerText}
+                                            children={t('versionoftheapplication')}
+                                    />
                                 </ListItem>
                                 <ListItem style={styles.listitem} icon>
                                     <Left style={styles.left}>
@@ -331,7 +354,7 @@ export default class Settings extends React.Component {
                                         />
                                     </Left>
                                     <Body style={styles.body}>
-                                        <Text style={styles.text}>{t('version')} 1.0.0</Text>
+                                        <MyText style={styles.text} children={t('version') + ' 1.0.0'}/>
                                     </Body>
                                 </ListItem>
                             </List>

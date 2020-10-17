@@ -15,9 +15,33 @@ const icon = require('../../../../../../assets/icon.png');
 import firebase from '../../../../Functions/FireBase/firebaseConfig';
 import {StatusBar} from "expo-status-bar";
 import DropdownAlert from "react-native-dropdownalert";
-import {CreateAccContext} from '../../../../Functions/Hooks/Authentication/CreateAccount/CreateAccContext';
+import {Poppins_400Regular, useFonts} from "@expo-google-fonts/poppins";
 
 const succesImage = require('../../../../../../assets/images/Alert/tick.png');
+
+function MyText(props) {
+    let [fontsLoaded] = useFonts({
+        Poppins_400Regular,
+    });
+    if (!fontsLoaded) {
+        return (
+            <Text style={[{
+                fontSize: props.fontSize ? props.textColor : 18,
+                color: props.textColor ? props.textColor : "rgba(0,0,0,.8)",
+                textAlign: "center"
+            }, props.style ? props.style : null]}>{props.children}</Text>
+        )
+    } else {
+        return (
+            <Text style={[{
+                fontSize: props.fontSize ? props.textColor : 18,
+                color: props.textColor ? props.textColor : "rgba(0,0,0,.8)",
+                textAlign: "center",
+                fontFamily: "Poppins_400Regular"
+            }, props.style ? props.style : null]}>{props.children}</Text>
+        )
+    }
+}
 
 export default class CreateAccount extends React.Component {
     constructor(props) {
@@ -29,8 +53,6 @@ export default class CreateAccount extends React.Component {
             data: [],
         };
     }
-
-    static contextType = CreateAccContext
 
     makeid(length) {
         var result = '';
@@ -50,7 +72,6 @@ export default class CreateAccount extends React.Component {
         if (this.state.phoneNumb !== null) {
             const user = {
                 bonuses: null,
-                pleaseCreateAcc: "dontCreate",
                 cards: {
                     cardId: {
                         cardId: cardId,
@@ -67,8 +88,6 @@ export default class CreateAccount extends React.Component {
                     push_id: null,
                 }
             };
-            const {userData, setUserData} = this.context
-            setUserData(user)
             this.props.navigation.navigate('SetPass', {prevPage: "CreateAccount"})
         }
     };
@@ -99,7 +118,7 @@ export default class CreateAccount extends React.Component {
                         <View>
                             <View style={styles.center}>
                                 <Image source={icon} style={[styles.logo, styles.mt5]}/>
-                                <Text style={styles.title}>{t('payandwinregister')}</Text>
+                                <MyText style={styles.title} children={t('payandwinregister')}/>
                             </View>
                         </View>
                         <View>
@@ -148,9 +167,8 @@ export default class CreateAccount extends React.Component {
                                             onPress={this.signUp}
                                             success
                                             rounded>
-                                            <Text style={styles.continueButtonText}>
-                                                {t('continue')}
-                                            </Text>
+                                            <MyText style={styles.continueButtonText}
+                                                    children={t('continue')}/>
                                         </Button>
                                     </Item>
                                     <Item style={styles.itemStyle}>
@@ -159,7 +177,7 @@ export default class CreateAccount extends React.Component {
                                             transparent
                                             onPress={() => this.props.navigation.navigate('Login')}
                                         >
-                                            <Text style={styles.buttonText}>{t('backLogin')}</Text>
+                                            <MyText style={styles.buttonText} children={t('backLogin')}/>
                                         </Button>
                                     </Item>
                                 </Form>

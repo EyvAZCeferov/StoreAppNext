@@ -30,6 +30,7 @@ import SetFinger from '../ScreenFolder/Auth/Screens/LocalAuth/SetFinger'
 import Splash from "../ScreenFolder/Splash/Splash";
 import SetPass from "../ScreenFolder/Auth/Screens/LocalAuth/SetPass";
 import CardSelector from "../ScreenFolder/Bread/Components/PayStart/CardSelector";
+import PinAbout from "../ScreenFolder/Bread/Components/Pin/PinAbout";
 //Keyboard Aware ScrollView
 //ScreenContainer
 const ScreenContainer = ({children}) => (
@@ -97,6 +98,12 @@ export const AccSettings = (props) => (
 export const Bonusy = (props) => (
     <ScreenContainer>
         <Bonuses {...props} />
+    </ScreenContainer>
+);
+
+export const PinAbouts = (props) => (
+    <ScreenContainer>
+        <PinAbout {...props} />
     </ScreenContainer>
 );
 

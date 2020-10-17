@@ -5,8 +5,36 @@ import {Body, Button, Left, List, ListItem, Right} from "native-base";
 import {t} from "../../../../../Lang";
 import {AntDesign, Feather, Entypo} from "@expo/vector-icons";
 import DropdownAlert from "react-native-dropdownalert";
+import {Poppins_400Regular, useFonts} from "@expo-google-fonts/poppins";
 
+let lastPrice = null
+let pinprice = null
 const {width, height} = Dimensions.get('window');
+
+function MyText(props) {
+    let [fontsLoaded] = useFonts({
+        Poppins_400Regular,
+    });
+    if (!fontsLoaded) {
+        return (
+            <Text style={[{
+                fontSize: props.fontSize ? props.textColor : 18,
+                color: props.textColor ? props.textColor : "rgba(0,0,0,.8)",
+                textAlign: "center"
+            }, props.style ? props.style : null]}>{props.children}</Text>
+        )
+    } else {
+        return (
+            <Text style={[{
+                fontSize: props.fontSize ? props.textColor : 18,
+                color: props.textColor ? props.textColor : "rgba(0,0,0,.8)",
+                textAlign: "center",
+                fontFamily: "Poppins_400Regular"
+            }, props.style ? props.style : null]}>{props.children}</Text>
+        )
+    }
+}
+
 export default class RecentOperation extends React.Component {
     constructor(props) {
         super(props);
@@ -117,7 +145,7 @@ export default class RecentOperation extends React.Component {
                     elevation={10}
                     isInteraction={true}
                 />
-                <Text style={styles.nullObject}>{t('noResult')}</Text>
+                <MyText style={styles.nullObject} children={t('noResult')}/>
                 <View style={{
                     backgroundColor: "#fff",
                     width: width,
@@ -182,12 +210,44 @@ export default class RecentOperation extends React.Component {
         );
     }
 
+    price() {
+        if (this.state.checks != null && this.state.checksCount > 0) {
+            this.state.checks.map(element => {
+                var elementPrice = parseFloat(element.price);
+                lastPrice = lastPrice + elementPrice;
+            })
+        }
+        return parseFloat(lastPrice);
+    }
+
     updateShopping(d) {
         firebase.database().goOnline();
         let user = firebase.auth().currentUser;
         firebase.database().ref('users/' + user.uid + '/checks/' + this.state.checkid).update({
             date: d
         })
+        var rums = 0
+        let resultSummary = this.price()
+        firebase.database().ref('users/' + user.uid + '/pinArena/1')
+            .on('value', (data) => {
+                var datas = data.toJSON()
+                pinprice = parseFloat(datas.cardInfo.price)
+                rums = data.numChildren()
+            })
+        if (rums != 0) {
+            var pice = parseFloat(pinprice) + parseFloat(resultSummary / 10)
+            firebase.database().ref('users/' + user.uid + '/pinArena/1/cardInfo').update({
+                price: pice
+            })
+            var date = Date.now()
+            firebase.database().ref('users/' + user.uid + '/pinArena/1/shoppings/' + this.state.checkid).set({
+                checks: this.state.checks,
+                checkId: this.props.checkid,
+                price: resultSummary,
+                bonuse: resultSummary / 10,
+                date: date.toLocaleString()
+            })
+        }
     }
 
     go() {
@@ -318,18 +378,15 @@ export default class RecentOperation extends React.Component {
         return (
             <ListItem thumbnail key={index} style={styles.listItem}>
                 <Left style={{borderColor: "transparent"}}>
-                    <AntDesign name="shoppingcart" style={{paddingLeft: 10}} size={25} color="#7c9d32"/>
+                    <AntDesign name="shoppingcart" style={{paddingLeft: 10}} size={24} color="#7c9d32"/>
                 </Left>
                 <Body style={{borderColor: "transparent"}}>
                     <View style={styles.listNameCount}>
-                        <Text style={styles.listTitle}>{item.name}</Text>
-                        <Text style={styles.listSubtitle}>
-                            &nbsp;&nbsp;&nbsp;&nbsp; {t('qty')} - {item.qty ? item.qty : 1}
-                        </Text>
+                        <MyText style={styles.listTitle} children={item.name}/>
+                        <MyText style={styles.listSubtitle}
+                                children={"&nbsp;&nbsp;&nbsp;&nbsp; " + t('qty') + item.qty ? item.qty : 1}/>
                     </View>
-                    <Text note numberOfLines={1}>
-                        {item.price} Azn
-                    </Text>
+                    <MyText textColor="rgba(0,0,0,.6)" children={item.price + " Azn"}/>
                 </Body>
                 <Right style={{borderColor: "transparent"}}>
                     <Button transparent onPress={() => deleteItem(item.barcode)}>

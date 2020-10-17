@@ -2,10 +2,34 @@ import React from 'react';
 import {View, Text, StyleSheet, Dimensions} from 'react-native';
 import firebase from "../../../../../Functions/FireBase/firebaseConfig";
 import {StatusBar} from 'expo-status-bar';
+import {Poppins_400Regular, useFonts} from "@expo-google-fonts/poppins";
 
 const {width, height} = Dimensions.get('window')
 let lastPrice = 0
 let edvhesabla = 0
+
+function MyText(props) {
+    let [fontsLoaded] = useFonts({
+        Poppins_400Regular,
+    });
+    if (!fontsLoaded) {
+        return (
+            <Text style={[{
+                fontSize: props.fontSize ? props.textColor : 18,
+                color: props.textColor ? props.textColor : "rgba(0,0,0,.8)",
+            }, props.style ? props.style : null]}>{props.children}</Text>
+        )
+    } else {
+        return (
+            <Text style={[{
+                fontSize: props.fontSize ? props.textColor : 18,
+                color: props.textColor ? props.textColor : "rgba(0,0,0,.8)",
+                fontFamily: "Poppins_400Regular"
+            }, props.style ? props.style : null]}>{props.children}</Text>
+        )
+    }
+}
+
 export default class PayCards extends React.Component {
     constructor(props) {
         super(props);
@@ -114,7 +138,6 @@ export default class PayCards extends React.Component {
         }
     }
 
-
     lastBalance(card) {
         if (card != null) {
             let result = 0
@@ -143,23 +166,24 @@ export default class PayCards extends React.Component {
                     paddingHorizontal: 15
                 }}>
                     <View>
-                        <Text style={{
+                        <MyText style={{
                             fontSize: 21,
                             fontWeight: "bold",
                             color: "#000",
                             marginTop: 14
-                        }}>Kart Haqqında</Text>
+                        }} children="Kart Haqqında"/>
                         <View style={{
                             width: '100%',
                             marginTop: 5,
                             flexDirection: "column-reverse",
                             justifyContent: "center"
                         }}>
-                            <Text style={{color: "rgba(0,0,0,.5)", fontSize: 14}}>Kart Nömrəsi</Text>
-                            <Text style={{
+                            <MyText style={{color: "rgba(0,0,0,.5)", fontSize: 14}} children="Kart Nömrəsi"/>
+                            <MyText style={{
                                 color: "#000",
                                 fontSize: 18
-                            }}>{this.state.cards != null ? this.hideNumb(this.state.cards.cardInfo.number) : '*********'} </Text>
+                            }}
+                                    children={this.state.cards != null ? this.hideNumb(this.state.cards.cardInfo.number) : '*********'}/>¶
                         </View>
                         <View style={{marginTop: 15}}/>
                         <View style={{
@@ -168,11 +192,12 @@ export default class PayCards extends React.Component {
                             flexDirection: "column-reverse",
                             justifyContent: "space-around"
                         }}>
-                            <Text style={{color: "rgba(0,0,0,.5)", fontSize: 14}}>Balans</Text>
-                            <Text style={{
+                            <MyText style={{color: "rgba(0,0,0,.5)", fontSize: 14}} children="Balans"/>
+                            <MyText style={{
                                 color: "#000",
                                 fontSize: 18
-                            }}>{this.state.cards != null ? this.balance(this.state.cards.cardInfo) : 0} ₼</Text>
+                            }}
+                                    children={this.state.cards != null ? this.balance(this.state.cards.cardInfo) + '₼' : 0 + '₼'}/>
                         </View>
                     </View>
                 </View>
@@ -192,8 +217,8 @@ export default class PayCards extends React.Component {
                 paddingHorizontal: 8,
                 paddingVertical: 3
             }}>
-                <Text style={{fontSize: 20, fontWeight: "bold", color: "#fff", marginTop: 20}}>Yekun
-                    Məbləğ</Text>
+                <MyText style={{fontSize: 20, fontWeight: "bold", color: "#fff", marginTop: 20}} children="Yekun
+                    Məbləğ"/>
                 <Text
                     style={{
                         color: "rgba(255,255,255,.5)",
@@ -202,24 +227,25 @@ export default class PayCards extends React.Component {
                         marginTop: 2,
                     }}>{this.state.priceAll} ₼</Text>
                 <View style={{marginTop: 5, marginLeft: 5}}>
-                    <Text style={{color: "#fff", fontSize: 20, fontWeight: "bold"}}>Qalan Məbləğ</Text>
-                    <Text
+                    <MyText style={{color: "#fff", fontSize: 20, fontWeight: "bold"}} children="Qalan Məbləğ"/>
+                    <MyText
                         style={{
                             color: "rgba(255,255,255,.5)",
                             fontSize: 17,
                             marginLeft: 5,
                             marginTop: 2,
-                        }}>{this.state.cards != null ? this.lastBalance(this.state.cards.cardInfo) : 0} ₼</Text>
+                        }}
+                        children={this.state.cards != null ? this.lastBalance(this.state.cards.cardInfo) + "₼" : 0 + "₼"}/>
                 </View>
                 <View style={{marginTop: 5, marginLeft: 5}}>
-                    <Text style={{color: "#fff", fontSize: 20, fontWeight: "bold"}}>Ədv %</Text>
-                    <Text
+                    <MyText style={{color: "#fff", fontSize: 20, fontWeight: "bold"}} children="Ədv %"/>
+                    <MyText
                         style={{
                             color: "rgba(255,255,255,.5)",
                             fontSize: 17,
                             marginLeft: 5,
                             marginTop: 2,
-                        }}>{this.state.edv} ₼</Text>
+                        }} children={this.state.edv + '₼'}/>
                 </View>
             </View>
         )

@@ -27,6 +27,31 @@ var width = Dimensions.get('window').width;
 const icon = require('../../../../../../assets/icon.png');
 import firebase from '../../../../Functions/FireBase/firebaseConfig';
 import DropdownAlert from "react-native-dropdownalert";
+import {Poppins_400Regular, useFonts} from "@expo-google-fonts/poppins";
+
+function MyText(props) {
+    let [fontsLoaded] = useFonts({
+        Poppins_400Regular,
+    });
+    if (!fontsLoaded) {
+        return (
+            <Text style={[{
+                fontSize: props.fontSize ? props.textColor : 18,
+                color: props.textColor ? props.textColor : "rgba(0,0,0,.8)",
+                textAlign: "center"
+            }, props.style ? props.style : null]}>{props.children}</Text>
+        )
+    } else {
+        return (
+            <Text style={[{
+                fontSize: props.fontSize ? props.textColor : 18,
+                color: props.textColor ? props.textColor : "rgba(0,0,0,.8)",
+                textAlign: "center",
+                fontFamily: "Poppins_400Regular"
+            }, props.style ? props.style : null]}>{props.children}</Text>
+        )
+    }
+}
 
 export default class ForgotPassword extends React.Component {
     constructor(props) {
@@ -84,9 +109,8 @@ export default class ForgotPassword extends React.Component {
                             <View>
                                 <View>
                                     <View>
-                                        <Text style={customStyle.centerPageName}>
-                                            {t('forgetPass')}
-                                        </Text>
+                                        <MyText style={customStyle.centerPageName}
+                                                children={t('forgetPass')}/>
                                     </View>
                                     <View>
                                         <Form style={styles.form}>
@@ -114,9 +138,9 @@ export default class ForgotPassword extends React.Component {
                                                 customStyle.mHor15,
                                                 customStyle.brad8,
                                             ]}>
-                                            <Text style={[styles.buttonText, {color: '#fff'}]}>
-                                                {t('continue').toUpperCase()}
-                                            </Text>
+                                            <MyText style={[styles.buttonText, {color: '#fff'}]}
+                                                    children={t('continue').toUpperCase()}
+                                            />
                                         </Button>
                                     </View>
 
@@ -133,9 +157,9 @@ export default class ForgotPassword extends React.Component {
                                                 customStyle.mHor15,
                                                 customStyle.brad8,
                                             ]}>
-                                            <Text style={[styles.buttonText, {color: '#7c9d32'}]}>
-                                                {t('backLogin').toUpperCase()}
-                                            </Text>
+                                            <MyText style={[styles.buttonText, {color: '#7c9d32'}]}
+                                                    children={t('backLogin').toUpperCase()}
+                                            />
                                         </Button>
                                     </View>
                                 </View>

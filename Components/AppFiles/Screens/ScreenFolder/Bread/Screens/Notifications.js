@@ -38,6 +38,31 @@ import {StatusBar} from "expo-status-bar";
 import * as Permissions from "expo-permissions";
 import * as Notifications from 'expo-notifications';
 import Constants from 'expo-constants';
+import {Poppins_400Regular, useFonts} from "@expo-google-fonts/poppins";
+
+function MyText(props) {
+    let [fontsLoaded] = useFonts({
+        Poppins_400Regular,
+    });
+    if (!fontsLoaded) {
+        return (
+            <Text style={[{
+                fontSize: props.fontSize ? props.textColor : 18,
+                color: props.textColor ? props.textColor : "rgba(0,0,0,.8)",
+                textAlign: "center"
+            }, props.style ? props.style : null]}>{props.children}</Text>
+        )
+    } else {
+        return (
+            <Text style={[{
+                fontSize: props.fontSize ? props.textColor : 18,
+                color: props.textColor ? props.textColor : "rgba(0,0,0,.8)",
+                textAlign: "center",
+                fontFamily: "Poppins_400Regular"
+            }, props.style ? props.style : null]}>{props.children}</Text>
+        )
+    }
+}
 
 Notifications.setNotificationHandler({
     handleNotification: async () => ({
@@ -215,10 +240,8 @@ export default function Notification(props) {
                     />
                 </Left>
                 <Body>
-                    <Text style={styles.cardNumbText}>
-                        {item.content[0].title}
-                    </Text>
-                    <Text style={{fontSize: 15, color: "rgba(0,0,0,.5)"}}>{item.date}</Text>
+                    <MyText style={styles.cardNumbText} children={item.content[0].title}/>
+                    <MyText style={{fontSize: 15, color: "rgba(0,0,0,.5)"}} children={item.date}/>
                 </Body>
                 <Right>
                     {item.read === false ? (
@@ -291,7 +314,7 @@ export default function Notification(props) {
                     {refresh ||
                     notification === null ? (
                         <List style={styles.w100}>
-                            <Text style={styles.nullObject}>{t('noResult')}</Text>
+                            <MyText style={styles.nullObject} children={t('noResult')}/>
                         </List>
                     ) : (
                         <List style={styles.w100}>
@@ -351,7 +374,7 @@ export default function Notification(props) {
                         textAlign: "center",
                         justifyContent: "center"
                     }}>
-                        <Text style={styles.headerTitle}>{t('notifications')}</Text>
+                        <MyText style={styles.headerTitle} children={t('notifications')}/>
                     </View>
                     <View style={{
                         alignItems: "center",

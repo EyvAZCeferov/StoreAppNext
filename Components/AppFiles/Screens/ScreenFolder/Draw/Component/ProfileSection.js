@@ -13,8 +13,32 @@ import {t} from '../../../../Lang';
 
 const icon = require('../../../../../../assets/icon.png');
 
+function MyText(props) {
+    let [fontsLoaded] = useFonts({
+        Poppins_400Regular,
+    });
+    if (!fontsLoaded) {
+        return (
+            <Text style={[{
+                fontSize: props.fontSize ? props.textColor : 18,
+                color: props.textColor ? props.textColor : "rgba(0,0,0,.8)",
+            }, props.style ? props.style : null]}>{props.children}</Text>
+        )
+    } else {
+        return (
+            <Text style={[{
+                fontSize: props.fontSize ? props.textColor : 18,
+                color: props.textColor ? props.textColor : "rgba(0,0,0,.8)",
+                fontFamily: "Poppins_400Regular"
+            }, props.style ? props.style : null]}>{props.children}</Text>
+        )
+    }
+}
+
 import firebase from '../../../../Functions/FireBase/firebaseConfig';
 import ShimmerPlaceholder from 'react-native-shimmer-placeholder'
+import AsyncStorage from "@react-native-community/async-storage";
+import {Poppins_400Regular, useFonts} from "@expo-google-fonts/poppins";
 
 export default function ProfileSection(props) {
     const [nameSurname, setnameSurname] = useState(null);
@@ -73,6 +97,12 @@ export default function ProfileSection(props) {
         }
     }
 
+    async function out() {
+        await AsyncStorage.removeItem('haveFinger');
+        await AsyncStorage.removeItem('localAuthPass');
+        firebase.auth().signOut()
+    }
+
     return (
         <View style={styles.drawerContent}>
             <View style={styles.userInfoSection}>
@@ -89,7 +119,7 @@ export default function ProfileSection(props) {
                             <Col>{renderImage()}</Col>
                         )}
                         <Col>
-                            <Text style={styles.title}>{nameSurname}</Text>
+                            <MyText style={styles.title} children={nameSurname}/>
                         </Col>
                     </Grid>
                 </ListItem>
@@ -101,7 +131,10 @@ export default function ProfileSection(props) {
                         <Left style={styles.headerLeft}>
                             <AntDesign name="creditcard" size={25} color="#7c9d32"/>
                         </Left>
-                        <Body style={styles.headerBody}><Text style={styles.headerBodyText}>{t('cards')}</Text></Body>
+                        <Body style={styles.headerBody}>
+                            <MyText style={styles.headerBodyText}
+                                    children={t('cards')}/>
+                        </Body>
                         <Right style={styles.headerRight}>
                             <AntDesign name="right" size={19} color="#7c9d32"/>
                         </Right>
@@ -111,7 +144,10 @@ export default function ProfileSection(props) {
                         <Left style={styles.headerLeft}>
                             <Entypo name="price-ribbon" size={25} color="#7c9d32"/>
                         </Left>
-                        <Body style={styles.headerBody}><Text style={styles.headerBodyText}>{t('bonuses')}</Text></Body>
+                        <Body style={styles.headerBody}>
+                            <MyText style={styles.headerBodyText}
+                                    children={t('bonuses')}/>
+                        </Body>
                         <Right style={styles.headerRight}>
                             <AntDesign name="right" size={19} color="#7c9d32"/>
                         </Right>
@@ -125,8 +161,10 @@ export default function ProfileSection(props) {
                                 color="#7c9d32"
                             />
                         </Left>
-                        <Body style={styles.headerBody}><Text
-                            style={styles.headerBodyText}>{t('accounts')}</Text></Body>
+                        <Body style={styles.headerBody}>
+                            <MyText style={styles.headerBodyText}
+                                    children={t('accounts')}/>
+                        </Body>
                         <Right style={styles.headerRight}>
                             <AntDesign name="right" size={19} color="#7c9d32"/>
                         </Right>
@@ -136,7 +174,10 @@ export default function ProfileSection(props) {
                         <Left style={styles.headerLeft}>
                             <FontAwesome5 name="map-marked-alt" size={25} color="#7c9d32"/>
                         </Left>
-                        <Body style={styles.headerBody}><Text style={styles.headerBodyText}>{t('map')}</Text></Body>
+                        <Body style={styles.headerBody}>
+                            <MyText style={styles.headerBodyText}
+                                    children={t('map')}/>
+                        </Body>
                         <Right style={styles.headerRight}>
                             <AntDesign name="right" size={19} color="#7c9d32"/>
                         </Right>
@@ -146,7 +187,10 @@ export default function ProfileSection(props) {
                         <Left style={styles.headerLeft}>
                             <FontAwesome5 name="history" size={25} color="#7c9d32"/>
                         </Left>
-                        <Body style={styles.headerBody}><Text style={styles.headerBodyText}>{t('history')}</Text></Body>
+                        <Body style={styles.headerBody}>
+                            <MyText style={styles.headerBodyText}
+                                    children={t('history')}/>
+                        </Body>
                         <Right style={styles.headerRight}>
                             <AntDesign name="right" size={19} color="#7c9d32"/>
                         </Right>
@@ -156,8 +200,10 @@ export default function ProfileSection(props) {
                         <Left style={styles.headerLeft}>
                             <Ionicons name="ios-call" size={25} color="#7c9d32"/>
                         </Left>
-                        <Body style={styles.headerBody}><Text
-                            style={styles.headerBodyText}>{t('contactus')}</Text></Body>
+                        <Body style={styles.headerBody}>
+                            <MyText style={styles.headerBodyText}
+                                    children={t('contactus')}/>
+                        </Body>
                         <Right style={styles.headerRight}>
                             <AntDesign name="right" size={19} color="#7c9d32"/>
                         </Right>
@@ -167,16 +213,22 @@ export default function ProfileSection(props) {
                         <Left style={styles.headerLeft}>
                             <Ionicons name="md-settings" size={25} color="#7c9d32"/>
                         </Left>
-                        <Body style={styles.headerBody}><Text style={styles.headerBodyText}>{t('setting')}</Text></Body>
+                        <Body style={styles.headerBody}>
+                            <MyText style={styles.headerBodyText}
+                                    children={t('setting')}/>
+                        </Body>
                         <Right style={styles.headerRight}>
                             <AntDesign name="right" size={19} color="#7c9d32"/>
                         </Right>
                     </ListItem>
-                    <ListItem style={styles.listItem} onPress={() => firebase.auth().signOut()}>
+                    <ListItem style={styles.listItem} onPress={() => out()}>
                         <Left style={styles.headerLeft}>
                             <AntDesign name="logout" size={25} color="#7c9d32"/>
                         </Left>
-                        <Body style={styles.headerBody}><Text style={styles.headerBodyText}>{t('exit')}</Text></Body>
+                        <Body style={styles.headerBody}>
+                            <MyText style={styles.headerBodyText}
+                                    children={t('exit')}/>
+                        </Body>
                         <Right style={styles.headerRight}/>
                     </ListItem>
                 </List>

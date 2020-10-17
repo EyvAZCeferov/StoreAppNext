@@ -9,7 +9,7 @@
   },
   "dependencies": {
     "@codler/react-native-keyboard-aware-scroll-view": "^1.0.1",
-    "@expo-google-fonts/roboto": "^0.1.0",
+    "@expo-google-fonts/poppins": "^0.1.0",
     "@expo/vector-icons": "^10.2.0",
     "@expo/webpack-config": "^0.12.23",
     "@mapbox/polyline": "^1.1.1",

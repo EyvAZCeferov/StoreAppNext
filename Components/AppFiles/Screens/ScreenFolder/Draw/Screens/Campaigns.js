@@ -26,15 +26,44 @@ import * as Localization from 'expo-localization';
 
 import firebase from '../../../../Functions/FireBase/firebaseConfig';
 import ShimmerPlaceholder from "react-native-shimmer-placeholder";
+import {Poppins_400Regular, useFonts} from "@expo-google-fonts/poppins";
 
 var width = Dimensions.get('window').width;
 var height = Dimensions.get('window').height;
+
+function MyText(props) {
+    let [fontsLoaded] = useFonts({
+        Poppins_400Regular,
+    });
+    if (!fontsLoaded) {
+        return (
+            <Text style={[{
+                fontSize: props.fontSize ? props.textColor : 18,
+                color: props.textColor ? props.textColor : "rgba(0,0,0,.8)",
+                textAlign: "center"
+            }, props.style ? props.style : null]}>{props.children}</Text>
+        )
+    } else {
+        return (
+            <Text style={[{
+                fontSize: props.fontSize ? props.textColor : 18,
+                color: props.textColor ? props.textColor : "rgba(0,0,0,.8)",
+                textAlign: "center",
+                fontFamily: "Poppins_400Regular"
+            }, props.style ? props.style : null]}>{props.children}</Text>
+        )
+    }
+}
+
 export default class Campaigns extends React.Component {
-    state = {
-        serviceData: null,
-        newsData: null,
-        refresh: true,
-    };
+    constructor(props) {
+        super(props);
+        this.state = {
+            serviceData: null,
+            newsData: null,
+            refresh: true,
+        };
+    }
 
     getInfo() {
         firebase.database().goOnline();
@@ -121,10 +150,10 @@ export default class Campaigns extends React.Component {
                         marginTop: 5,
                         backgroundColor: "rgba(0,0,0,.3)"
                     }}>
-                        <Text
-                            style={{fontSize: 20, fontWeight: "bold", color: "#fff", width: "100%", marginTop: 20}}>
-                            {serviceName(item)}
-                        </Text>
+                        <MyText
+                            style={{fontSize: 20, fontWeight: "bold", color: "#fff", width: "100%", marginTop: 20}}
+                            children={serviceName(item)}
+                        />
                     </View>
                 </TouchableOpacity>
             </View>
@@ -156,8 +185,8 @@ export default class Campaigns extends React.Component {
                                 />
                             </Left>
                             <Body style={styles.body}>
-                                <Text style={styles.titleColor}>{item.marketName}</Text>
-                                <Text note>{item.created_at}</Text>
+                                <MyText style={styles.titleColor} children={item.marketName}/>
+                                <MyText note children={item.created_at}/>
                             </Body>
                             <Right>
                                 <Button
@@ -193,7 +222,7 @@ export default class Campaigns extends React.Component {
                         </CardItem>
                         <CardItem footer>
                             <Body>
-                                <Text style={styles.subTitle}>{name(item)}</Text>
+                                <MyText style={styles.subTitle} children={name(item)}/>
                             </Body>
                         </CardItem>
                     </Card>

@@ -9,9 +9,6 @@ import {
 import {
     Thumbnail,
     Header,
-    Left,
-    Right,
-    Body,
     Button,
 } from 'native-base';
 import {AntDesign} from '@expo/vector-icons';
@@ -23,6 +20,31 @@ import HTMLView from 'react-native-htmlview';
 import {t} from '../../../../Lang';
 import {StatusBar} from "expo-status-bar";
 import * as Localization from "expo-localization";
+import {Poppins_400Regular, useFonts} from "@expo-google-fonts/poppins";
+
+function MyText(props) {
+    let [fontsLoaded] = useFonts({
+        Poppins_400Regular,
+    });
+    if (!fontsLoaded) {
+        return (
+            <Text style={[{
+                fontSize: props.fontSize ? props.textColor : 18,
+                color: props.textColor ? props.textColor : "rgba(0,0,0,.8)",
+                textAlign: "center"
+            }, props.style ? props.style : null]}>{props.children}</Text>
+        )
+    } else {
+        return (
+            <Text style={[{
+                fontSize: props.fontSize ? props.textColor : 18,
+                color: props.textColor ? props.textColor : "rgba(0,0,0,.8)",
+                textAlign: "center",
+                fontFamily: "Poppins_400Regular"
+            }, props.style ? props.style : null]}>{props.children}</Text>
+        )
+    }
+}
 
 export default class TermOfUses extends React.Component {
     constructor(props) {
@@ -71,7 +93,7 @@ export default class TermOfUses extends React.Component {
                         </Button>
                     </View>
                     <View style={styles.headerBody}>
-                        <Text style={styles.headerTitle}>{t('termsofuseoftheapplication')}</Text>
+                        <MyText style={styles.headerTitle} children={t('termsofuseoftheapplication')}/>
                     </View>
                     <View/>
                 </Header>
@@ -81,7 +103,7 @@ export default class TermOfUses extends React.Component {
                             source={{uri: this.state.datas.icon}}
                             style={styles.icon}
                         />
-                        <Text style={{
+                        <MyText style={{
                             fontSize: 20,
                             fontWeight: "bold",
                             color: '#010101',
@@ -89,9 +111,7 @@ export default class TermOfUses extends React.Component {
                             height: 20,
                             textAlign: "center",
                             marginBottom: 10
-                        }}>
-                            Pay And Way
-                        </Text>
+                        }} children="Pay And Way"/>
                         <HTMLView
                             value={this.langConvert(this.state.datas)}
                             stylesheet={styles.textColor}
@@ -138,5 +158,6 @@ const styles = StyleSheet.create({
     },
     textColor: {
         color: '#6d7587',
+        fontFamily: "Poppins_400Regular"
     },
 });

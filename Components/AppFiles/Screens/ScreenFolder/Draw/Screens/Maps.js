@@ -1,6 +1,6 @@
 import React from 'react';
 import {StyleSheet, Dimensions, View} from 'react-native';
-import {Tabs, Tab, Header} from 'native-base';
+import {Tabs, Tab} from 'native-base';
 import TabMapsLists from '../Component/Maps/TabMapsLists';
 import TabMapsView from '../Component/Maps/TabMapsView';
 import ScreensStandart from '../Component/ScreensStandart';

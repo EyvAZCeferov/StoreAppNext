@@ -6,6 +6,7 @@ import {AntDesign} from '@expo/vector-icons';
 import {t} from '../../../../Lang';
 import {QRCode as CustomQRCode} from "react-native-custom-qr-codes-expo";
 import {StatusBar} from "expo-status-bar";
+import {Poppins_400Regular, useFonts} from "@expo-google-fonts/poppins";
 
 var width = Dimensions.get('window').width;
 var height = Dimensions.get('window').height;
@@ -22,6 +23,30 @@ function Simple(props) {
             outerEyeStyle="square"
         />
     );
+}
+
+function MyText(props) {
+    let [fontsLoaded] = useFonts({
+        Poppins_400Regular,
+    });
+    if (!fontsLoaded) {
+        return (
+            <Text style={[{
+                fontSize: props.fontSize ? props.textColor : 18,
+                color: props.textColor ? props.textColor : "rgba(0,0,0,.8)",
+                textAlign: "center"
+            }, props.style ? props.style : null]}>{props.children}</Text>
+        )
+    } else {
+        return (
+            <Text style={[{
+                fontSize: props.fontSize ? props.textColor : 18,
+                color: props.textColor ? props.textColor : "rgba(0,0,0,.8)",
+                textAlign: "center",
+                fontFamily: "Poppins_400Regular"
+            }, props.style ? props.style : null]}>{props.children}</Text>
+        )
+    }
 }
 
 export default class PayThanks extends React.Component {
@@ -55,10 +80,9 @@ export default class PayThanks extends React.Component {
                         <View style={styles.barcode}>
                             <Simple {...this.props} link={this.state.link}/>
                         </View>
-                        <Text style={[styles.icon, styles.title]}>
-                            {t('thanksBuying')}
-                        </Text>
-                        <Text style={styles.subtitle}>{t('scanCode')}</Text>
+                        <MyText style={[styles.icon, styles.title]}
+                                children={t('thanksBuying')}/>
+                        <MyText style={styles.subtitle} children={t('scanCode')}/>
                         <View style={styles.centerItems}>
                             <Button
                                 rounded
@@ -67,7 +91,7 @@ export default class PayThanks extends React.Component {
                                 style={styles.btn}
                                 onPress={() => this.props.navigation.navigate('Tabs', {screen: "Home"})}>
                                 <AntDesign name="home" size={24} color="black"/>
-                                <Text style={styles.btnText}>{t('returnHome')}</Text>
+                                <MyText style={styles.btnText} children={t('returnHome')}/>
                             </Button>
                         </View>
                     </View>

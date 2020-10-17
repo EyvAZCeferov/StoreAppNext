@@ -4,9 +4,33 @@ import {Thumbnail} from 'native-base';
 
 var width = Dimensions.get('window').width;
 const icon = require('../../../../../../../../../assets/icon.png');
-import customStyle from '../../../../../../../../../assets/Theme';
 import {StatusBar} from "expo-status-bar";
 import {t} from "../../../../../../../Lang";
+import {Poppins_400Regular, useFonts} from "@expo-google-fonts/poppins";
+
+function MyText(props) {
+    let [fontsLoaded] = useFonts({
+        Poppins_400Regular,
+    });
+    if (!fontsLoaded) {
+        return (
+            <Text style={[{
+                fontSize: props.fontSize ? props.textColor : 18,
+                color: props.textColor ? props.textColor : "rgba(0,0,0,.8)",
+                textAlign: "center"
+            }, props.style ? props.style : null]}>{props.children}</Text>
+        )
+    } else {
+        return (
+            <Text style={[{
+                fontSize: props.fontSize ? props.textColor : 18,
+                color: props.textColor ? props.textColor : "rgba(0,0,0,.8)",
+                textAlign: "center",
+                fontFamily: "Poppins_400Regular"
+            }, props.style ? props.style : null]}>{props.children}</Text>
+        )
+    }
+}
 
 export default class ProgramLockHeader extends React.Component {
     constructor(props) {
@@ -42,7 +66,7 @@ export default class ProgramLockHeader extends React.Component {
                                 uri: this.state.pp,
                             }}
                         />
-                        <Text style={styles.title}>{this.state.name}</Text>
+                        <MyText style={styles.title} children={this.state.name}/>
                     </View>
                 </View>
             )
@@ -54,7 +78,7 @@ export default class ProgramLockHeader extends React.Component {
                             rounded
                             source={icon}
                         />
-                        <Text style={styles.title}>{t('namesurname')}</Text>
+                        <MyText style={styles.title} children={t('namesurname')}/>
                     </View>
                 </View>
             )

@@ -16,6 +16,29 @@ import {FontAwesome, Ionicons} from '@expo/vector-icons';
 import * as Localization from "expo-localization";
 import {t} from "../../../../Lang";
 import {Body, Button, Card, CardItem, Left, Right, Thumbnail} from "native-base";
+import {Poppins_400Regular, useFonts} from "@expo-google-fonts/poppins";
+
+function MyText(props) {
+    let [fontsLoaded] = useFonts({
+        Poppins_400Regular,
+    });
+    if (!fontsLoaded) {
+        return (
+            <Text style={[{
+                fontSize: props.fontSize ? props.textColor : 18,
+                color: props.textColor ? props.textColor : "rgba(0,0,0,.8)",
+            }, props.style ? props.style : null]}>{props.children}</Text>
+        )
+    } else {
+        return (
+            <Text style={[{
+                fontSize: props.fontSize ? props.textColor : 18,
+                color: props.textColor ? props.textColor : "rgba(0,0,0,.8)",
+                fontFamily: "Poppins_400Regular"
+            }, props.style ? props.style : null]}>{props.children}</Text>
+        )
+    }
+}
 
 const {width, height} = Dimensions.get('window');
 export default class OneService extends React.Component {
@@ -120,8 +143,8 @@ export default class OneService extends React.Component {
                             />
                         </Left>
                         <Body style={styles.body}>
-                            <Text style={styles.titleColor}>{item.marketName}</Text>
-                            <Text note>{item.created_at}</Text>
+                            <MyText style={styles.titleColor} children={item.marketName}/>
+                            <MyText textColor="rgba(0,0,0,0,.5)" children={item.created_at}/>
                         </Body>
                         <Right>
                             <Button
@@ -157,7 +180,7 @@ export default class OneService extends React.Component {
                     </CardItem>
                     <CardItem footer>
                         <Body>
-                            <Text style={styles.subTitle}>{name(item)}</Text>
+                            <MyText style={styles.subTitle} children={name(item)}/>
                         </Body>
                     </CardItem>
                 </Card>
@@ -178,8 +201,9 @@ export default class OneService extends React.Component {
                             <Ionicons name="ios-arrow-back" size={24} color="#7c9d32"/>
                         </TouchableOpacity>
                         <View style={styles.headerBody}>
-                            <Text
-                                style={styles.headerBodyText}>{this.state.refresh ? null : this.name(this.state.oneService)}</Text>
+                            <MyText
+                                children={this.state.refresh ? null : this.name(this.state.oneService)}
+                                style={styles.headerBodyText}/>
                         </View>
                         <View/>
                     </View>
@@ -205,13 +229,13 @@ export default class OneService extends React.Component {
                                 style={{width: width / 2, height: '100%'}}/>
                         )}
                         {this.state.refresh ? null : (
-                            <Text style={{
+                            <MyText style={{
                                 color: "#010101",
                                 fontSize: 25,
                                 fontWeight: "bold",
                                 width: width / 2,
                                 textAlign: "center",
-                            }}>{this.name(this.state.oneService)}</Text>
+                            }} children={this.name(this.state.oneService)}/>
                         )}
                     </View>
                     <View style={styles.otherPost}>
@@ -225,12 +249,12 @@ export default class OneService extends React.Component {
                                     justifyContent: "center",
                                     backgroundColor: "transparent"
                                 }}>
-                                    <Text style={{
+                                    <MyText style={{
                                         color: "red",
                                         fontSize: 25,
                                         textAlign: "center",
                                         fontWeight: "bold"
-                                    }}>{t('noResult')}</Text>
+                                    }} children={t('noResult')}/>
                                 </View>
                             ) : (
                                 <FlatList

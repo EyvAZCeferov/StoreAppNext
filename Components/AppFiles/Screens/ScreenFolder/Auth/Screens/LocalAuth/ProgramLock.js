@@ -85,7 +85,6 @@ export default class ProgramLock extends React.Component {
 
     completed() {
         const {notOpen, setNotOpen} = this.context
-
         this.dropDownAlertRef.alertWithType('success', t('signedIn'));
         setNotOpen(false)
     }
@@ -224,6 +223,7 @@ const styles = StyleSheet.create({
     },
     footer: {
         height: 70,
+        marginBottom: 15,
         left: 0,
         right: 0,
         width: width,

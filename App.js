@@ -9,7 +9,6 @@ import {AntDesign} from "@expo/vector-icons";
 import AsyncStorage from '@react-native-community/async-storage';
 import * as Network from 'expo-network'
 import {ProgramLockContext} from './Components/AppFiles/Functions/Hooks/Authentication/Lock/ProgramLockContext';
-import {CreateAccContext} from './Components/AppFiles/Functions/Hooks/Authentication/CreateAccount/CreateAccContext';
 
 enableScreens();
 import {Alert} from 'react-native'
@@ -42,7 +41,8 @@ import {
     SetPassword,
     SplashScreen,
     PayWel,
-    SelectCard
+    SelectCard,
+    PinAbouts
 } from "./Components/AppFiles/Screens/CallScreen";
 
 import AppSlider from './Components/AppFiles/Screens/ScreenFolder/AppIntro/AppSlider'
@@ -56,13 +56,23 @@ const AuthStackScreen = (props) => (
             component={Login}
         />
         <AuthStack.Screen
-            name="CreateAccount"
-            {...props}
-            component={RegisterStackScreen}
-        />
-        <AuthStack.Screen
             name="ForgotPass"
             component={ForgotPass}
+            {...props}
+        />
+        <AuthStack.Screen
+            name="Create"
+            component={Register}
+            {...props}
+        />
+        <AuthStack.Screen
+            name="SetPass"
+            component={SetPassword}
+            {...props}
+        />
+        <AuthStack.Screen
+            name="SetFinger"
+            component={SetFing}
             {...props}
         />
     </AuthStack.Navigator>
@@ -73,29 +83,6 @@ const HomeStack = createStackNavigator();
 const StartShoppingStack = createStackNavigator();
 const CampaignStack = createStackNavigator();
 const ProfileStack = createStackNavigator();
-const RegisterStack = createStackNavigator();
-
-function RegisterStackScreen(props) {
-    return (
-        <RegisterStack.Navigator headerMode="none" initialRouteName="Create">
-            <RegisterStack.Screen
-                name="Create"
-                component={Register}
-                {...props}
-            />
-            <RegisterStack.Screen
-                name="SetPass"
-                component={SetPassword}
-                {...props}
-            />
-            <RegisterStack.Screen
-                name="SetFinger"
-                component={SetFing}
-                {...props}
-            />
-        </RegisterStack.Navigator>
-    )
-}
 
 const HomeStackScreen = (props) => (
     <HomeStack.Navigator headerMode="none">
@@ -123,9 +110,10 @@ const ProfileStackScreen = (props) => (
 const OtherStacks = createStackNavigator();
 
 const OtherScreen = () => (
-    <OtherStacks.Navigator headerMode="none">
+    <OtherStacks.Navigator headerMode="none" screenOptions={{animationEnabled: false}}>
         <OtherStacks.Screen name="AccountSettings" component={AccSettings}/>
         <OtherStacks.Screen name="Bonuses" component={Bonusy}/>
+        <OtherStacks.Screen name="PinAbout" component={PinAbouts}/>
         <OtherStacks.Screen name="Cards" component={Cards}/>
         <OtherStacks.Screen name="Map" component={Map}/>
         <OtherStacks.Screen name="Histories" component={Histories}/>
@@ -139,9 +127,10 @@ const OtherScreen = () => (
         <OtherStacks.Screen name="Notification" component={Notify}/>
         <OtherStacks.Screen name="SelectCard" component={SelectCard}/>
         <OtherStacks.Screen name="Buy" component={Barcode}/>
-        <OtherStacks.Screen name="Barcode" options={{animationEnabled: true, animationTypeForReplac: "push"}}
+        <OtherStacks.Screen name="Barcode" options={{animationEnabled: true, animationTypeForReplac: "pop"}}
                             component={BarcodeScanDo}/>
-        <OtherStacks.Screen name="PayThanks" component={PayEnd}/>
+        <OtherStacks.Screen name="PayThanks" component={PayEnd}
+                            options={{animationEnabled: true, animationTypeForReplace: "pop"}}/>
     </OtherStacks.Navigator>
 )
 
@@ -205,9 +194,8 @@ const ProgramLockScreens = (props) => (
     </ProgramLockStack.Navigator>
 )
 
-
 function PreView(props) {
-    return <Check/>
+    return <PinAbout/>
 }
 
 export default function (props) {
@@ -285,23 +273,42 @@ export default function (props) {
             }, 100)
         }, [])
 
-        return user ? <AuthVerify {...props} /> : (
-            <CreateAccContext.Provider value={{userData, setUserData}}>
-                <AuthStackScreen {...props}/>
-            </CreateAccContext.Provider>
-        );
+        return user ? <AuthVerify {...props} /> : <AuthStackScreen {...props}/>
+    }
+
+    async function getStatusLogin() {
+        var haveFingStarter = null
+        var LocalAuthStarter = null
+        var lastStatStarter = []
+        AsyncStorage.getItem('haveFinger').then((a) => {
+            if (a != null) {
+                haveFingStarter = a
+            }
+        });
+        await AsyncStorage.getItem('localAuthPass').then((b) => {
+            if (b != null) {
+                LocalAuthStarter = b
+            }
+        });
+        lastStatStarter.push(haveFingStarter)
+        lastStatStarter.push(LocalAuthStarter)
+        return haveFingStarter
     }
 
     React.useEffect(() => {
+        getNetStat()
         console.disableYellowBox = true;
         getLang()
         getfirstOpen()
-        getNetStat()
         getFirstOpened()
         firebase.auth().onAuthStateChanged(function (user) {
             if (user) {
+                var statuses = getStatusLogin()
+                console.log(statuses)
                 setUser(user.uid);
             } else {
+                var statuses = getStatusLogin()
+                console.log(statuses)
                 setUser(null);
             }
         });

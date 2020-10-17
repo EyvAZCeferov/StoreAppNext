@@ -27,6 +27,31 @@ import firebase from '../../../../Functions/FireBase/firebaseConfig';
 import {StatusBar} from "expo-status-bar";
 import DropdownAlert from "react-native-dropdownalert";
 import AsyncStorage from "@react-native-community/async-storage";
+import {Poppins_400Regular, useFonts} from "@expo-google-fonts/poppins";
+
+function MyText(props) {
+    let [fontsLoaded] = useFonts({
+        Poppins_400Regular,
+    });
+    if (!fontsLoaded) {
+        return (
+            <Text style={[{
+                fontSize: props.fontSize ? props.textColor : 18,
+                color: props.textColor ? props.textColor : "rgba(0,0,0,.8)",
+                textAlign: "center"
+            }, props.style ? props.style : null]}>{props.children}</Text>
+        )
+    } else {
+        return (
+            <Text style={[{
+                fontSize: props.fontSize ? props.textColor : 18,
+                color: props.textColor ? props.textColor : "rgba(0,0,0,.8)",
+                textAlign: "center",
+                fontFamily: "Poppins_400Regular"
+            }, props.style ? props.style : null]}>{props.children}</Text>
+        )
+    }
+}
 
 export default class LoginScreen extends React.Component {
     constructor(props) {
@@ -37,14 +62,16 @@ export default class LoginScreen extends React.Component {
         };
     }
 
-    login = () => {
+    login = async () => {
         Keyboard.dismiss();
         firebase
             .auth()
             .signInWithEmailAndPassword(this.state.phoneNumb, this.state.password)
             .then(
-                () => {
+                async () => {
                     this.dropDownAlertRef.alertWithType('success', t('signedIn'));
+                    await AsyncStorage.removeItem('haveFinger');
+                    await AsyncStorage.removeItem('localAuthPass');
                 },
                 (err) => {
                     this.dropDownAlertRef.alertWithType('error', err.message);
@@ -87,9 +114,9 @@ export default class LoginScreen extends React.Component {
                         <View>
                             <View>
                                 <View>
-                                    <Text style={customStyle.centerPageName}>
+                                    <MyText style={customStyle.centerPageName}>
                                         {t('signIn')}
-                                    </Text>
+                                    </MyText>
                                 </View>
                                 <View>
                                     <Form style={styles.form}>
@@ -119,13 +146,13 @@ export default class LoginScreen extends React.Component {
                                 <View style={customStyle.pVer15}>
                                     <View style={[{flexDirection: "row"}, customStyle.pHor15]}>
                                         <View style={customStyle.pHor15}>
-                                            <Text
+                                            <MyText
                                                 style={[styles.remember, styles.forgotPass]}
                                                 onPress={() =>
                                                     this.props.navigation.navigate('ForgotPass')
                                                 }>
                                                 {t('forgetPass')}
-                                            </Text>
+                                            </MyText>
                                         </View>
                                     </View>
                                 </View>
@@ -141,9 +168,9 @@ export default class LoginScreen extends React.Component {
                                             customStyle.mHor15,
                                             customStyle.brad8,
                                         ]}>
-                                        <Text style={[styles.buttonText, {color: '#fff'}]}>
+                                        <MyText style={[styles.buttonText, {color: '#fff'}]}>
                                             {t('signIn').toUpperCase()}
-                                        </Text>
+                                        </MyText>
                                     </Button>
                                 </View>
 
@@ -162,9 +189,9 @@ export default class LoginScreen extends React.Component {
                                             customStyle.mHor15,
                                             customStyle.brad8,
                                         ]}>
-                                        <Text style={[styles.buttonText, {color: '#7c9d32'}]}>
+                                        <MyText style={[styles.buttonText, {color: '#7c9d32'}]}>
                                             {t('createAccount').toUpperCase()}
-                                        </Text>
+                                        </MyText>
                                     </Button>
                                 </View>
                             </View>

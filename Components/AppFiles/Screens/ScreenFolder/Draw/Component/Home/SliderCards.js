@@ -22,6 +22,16 @@ export default function SliderCards({props}) {
                 });
             firebase
                 .database()
+                .ref('users/' + user.uid + '/pinArena')
+                .on('value', (data) => {
+                    if (data.numChildren() != 0) {
+                        data.forEach((data) => {
+                            datas.push(data.val());
+                        });
+                    }
+                })
+            firebase
+                .database()
                 .ref('users/' + user.uid + '/bonuses')
                 .on('value', (data) => {
                     data.forEach((data) => {
@@ -38,6 +48,9 @@ export default function SliderCards({props}) {
 
     React.useEffect(() => {
         getInfo();
+        setInterval(() => {
+            getInfo()
+        }, 13000)
     }, []);
 
     function onHandleRefresh() {
@@ -57,6 +70,10 @@ export default function SliderCards({props}) {
         )
     }
 
+    function ComponentSep() {
+        return <View/>
+    }
+
     function renderCards() {
         return (
             <View
@@ -67,17 +84,18 @@ export default function SliderCards({props}) {
                 }}>
                 <AnimatedFlatlist
                     vertical={true}
-                    scrollEventThrottle={19}
+                    scrollEventThrottle={30}
                     windowSize={width}
                     bounces={false}
                     showsVerticalScrollIndicator={false}
                     loop={false}
                     refreshing={refreshing}
                     onRefresh={onHandleRefresh}
-                    backgroundColor="#fff"
                     data={cards}
                     keyExtractor={(item, index) => index.toString()}
                     renderItem={renderCardOne}
+                    disableVirtualization
+                    ItemSeperatorComponent={ComponentSep}
                     {...{onScroll}}
                 />
             </View>
@@ -90,7 +108,8 @@ export default function SliderCards({props}) {
             <View>
                 {refreshing ? (
                     <View style={{
-                        flex: 1,
+                        width: width,
+                        height: height / 2,
                         justifyContent: "center",
                         alignItems: "center",
                         alignContent: "center"

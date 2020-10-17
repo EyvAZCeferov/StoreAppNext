@@ -24,7 +24,6 @@ export default class BarCodeReader extends React.Component {
         if (params.checkid != null && params.selectedCard != null) {
             this.setState({refresh: false})
             this.renderArena()
-            console.log('Barcode Readers')
         }
     }
 

@@ -25,9 +25,34 @@ import * as Permissions from 'expo-permissions';
 import {Feather} from '@expo/vector-icons';
 import {StatusBar} from "expo-status-bar";
 import DropdownAlert from "react-native-dropdownalert";
+import {Poppins_400Regular, useFonts} from "@expo-google-fonts/poppins";
 
 var width = Dimensions.get('window').width;
 const succesImage = require('../../../../../../assets/images/Alert/tick.png');
+
+function MyText(props) {
+    let [fontsLoaded] = useFonts({
+        Poppins_400Regular,
+    });
+    if (!fontsLoaded) {
+        return (
+            <Text style={[{
+                fontSize: props.fontSize ? props.textColor : 18,
+                color: props.textColor ? props.textColor : "rgba(0,0,0,.8)",
+                textAlign: "center"
+            }, props.style ? props.style : null]}>{props.children}</Text>
+        )
+    } else {
+        return (
+            <Text style={[{
+                fontSize: props.fontSize ? props.textColor : 18,
+                color: props.textColor ? props.textColor : "rgba(0,0,0,.8)",
+                textAlign: "center",
+                fontFamily: "Poppins_400Regular"
+            }, props.style ? props.style : null]}>{props.children}</Text>
+        )
+    }
+}
 
 export default class AccountSettings extends React.Component {
     state = {
@@ -71,10 +96,10 @@ export default class AccountSettings extends React.Component {
                     if (newData.profPic != null) {
                         this.setState({
                             profPic: newData.profPic,
-                            isReady:true
+                            isReady: true
                         });
                     } else {
-                        this.setState({profPic: null,isReady:true});
+                        this.setState({profPic: null, isReady: true});
                     }
                     this.renderImage();
                     this.setState({email: newData.email});
@@ -118,7 +143,7 @@ export default class AccountSettings extends React.Component {
                 this.dropDownAlertRef.alertWithType('info', t('ppNotChoised'));
             }
             if (result.type == 'image') {
-                this.setState({isReady:false});
+                this.setState({isReady: false});
                 var user = firebase.auth().currentUser;
                 if (user) {
                     const response = await fetch(result.uri);
@@ -217,107 +242,112 @@ export default class AccountSettings extends React.Component {
                 />
                 <ScreensStandart {...this.props} name={t('mypersonalinformation')}/>
                 {this.state.isReady ? (
- <View>
-                    <View style={styles.header}>
-                        <StatusBar backgroundColor="#fff" style="dark"/>
-                        <View style={customStyle.headerArena}>
-                            <View style={styles.imagePickerArena}>
-                                <View style={styles.imageArena}>
-                                    {this.state.profPic === null ||
-                                    this.state.profPic == null ? (
-                                        <Thumbnail
-                                            style={styles.image}
-                                            source={{
-                                                uri:
-                                                    'https://firebasestorage.googleapis.com/v0/b/storeapp1-ea810.appspot.com/o/WP%2F11111111111111111111111111111111111111111.png?alt=media&token=5f0aa05e-6eaf-4945-a5f4-c9b0f917892f',
-                                            }}
-                                        />
-                                    ) : (
-                                        this.renderImage()
-                                    )}
+                    <View>
+                        <View style={styles.header}>
+                            <StatusBar backgroundColor="#fff" style="dark"/>
+                            <View style={customStyle.headerArena}>
+                                <View style={styles.imagePickerArena}>
+                                    <View style={styles.imageArena}>
+                                        {this.state.profPic === null ||
+                                        this.state.profPic == null ? (
+                                            <Thumbnail
+                                                style={styles.image}
+                                                source={{
+                                                    uri:
+                                                        'https://firebasestorage.googleapis.com/v0/b/storeapp1-ea810.appspot.com/o/WP%2F11111111111111111111111111111111111111111.png?alt=media&token=5f0aa05e-6eaf-4945-a5f4-c9b0f917892f',
+                                                }}
+                                            />
+                                        ) : (
+                                            this.renderImage()
+                                        )}
+                                    </View>
+                                    <View style={styles.pickerArena}>
+                                        <Button style={{padding: 10, marginLeft: 10}} danger rounded small
+                                                onPress={this._pickImage}>
+                                            <Feather name="edit" size={18} color="#fff"/>
+                                        </Button>
+                                    </View>
                                 </View>
-                                <View style={styles.pickerArena}>
-                                    <Button style={{padding: 10, marginLeft: 10}} danger rounded small
-                                            onPress={this._pickImage}>
-                                        <Feather name="edit" size={18} color="#fff"/>
-                                    </Button>
-                                </View>
-                            </View>
-                            <Text style={styles.nameSurname}>
-                                {this.state.nameSurname != null
+                                <MyText style={styles.nameSurname} children={this.state.nameSurname != null
                                     ? this.state.nameSurname
                                     : t('namesurname')}
-                            </Text>
+                                />
+                            </View>
+                        </View>
+                        <View style={customStyle.f1}>
+                            <StatusBar backgroundColor="#fff" style="dark"/>
+                            <Content style={styles.content}>
+                                <StatusBar backgroundColor="#fff" style="dark"/>
+                                <Form style={[customStyle.m0p0, customStyle.centerItems]}>
+                                    <Item style={styles.itemStyle}>
+                                        <Input
+                                            style={styles.inputstyle}
+                                            keyboardType="numeric"
+                                            placeholder={t('phoneNumb')}
+                                            keyboardShouldPersistTaps="handled"
+                                            onChangeText={(text) =>
+                                                this.setState({telephoneNumb: text})
+                                            }
+                                            value={
+                                                this.state.telephoneNumb != null
+                                                    ? this.state.telephoneNumb
+                                                    : t('phoneNumb')
+                                            }
+                                            defaultValue={
+                                                this.state.telephoneNumb != null
+                                                    ? this.state.telephoneNumb
+                                                    : t('phoneNumb')
+                                            }
+                                        />
+                                    </Item>
+                                    <Item style={styles.itemStyle}>
+                                        <Input
+                                            style={styles.inputstyle}
+                                            keyboardType="email"
+                                            keyboardShouldPersistTaps="handled"
+                                            placeholder={t('email')}
+                                            onChangeText={(text) => this.setState({email: text})}
+                                            value={
+                                                this.state.email != null
+                                                    ? this.state.email
+                                                    : t('email')
+                                            }
+                                            defaultValue={
+                                                this.state.email != null
+                                                    ? this.state.email
+                                                    : t('email')
+                                            }
+                                        />
+                                    </Item>
+                                    <Item style={styles.itemStyle}>
+                                        <Button
+                                            rounded
+                                            style={styles.buttonStyle}
+                                            onPress={this.updateAccount}
+                                            success>
+                                            <MyText style={styles.buttonText}
+                                                    children={t('refreshButton')}
+                                            />
+                                        </Button>
+                                    </Item>
+                                </Form>
+                            </Content>
                         </View>
                     </View>
-                    <View style={customStyle.f1}>
+                ) : (
+                    <View style={{
+                        flex: 1,
+                        justifyContent: 'center',
+                        alignContent: 'center',
+                        alignItems: 'center',
+                        textAlign: 'center'
+                    }}>
                         <StatusBar backgroundColor="#fff" style="dark"/>
-                        <Content style={styles.content}>
-                            <StatusBar backgroundColor="#fff" style="dark"/>
-                            <Form style={[customStyle.m0p0, customStyle.centerItems]}>
-                                <Item style={styles.itemStyle}>
-                                    <Input
-                                        style={styles.inputstyle}
-                                        keyboardType="numeric"
-                                        placeholder={t('phoneNumb')}
-                                        keyboardShouldPersistTaps="handled"
-                                        onChangeText={(text) =>
-                                            this.setState({telephoneNumb: text})
-                                        }
-                                        value={
-                                            this.state.telephoneNumb != null
-                                                ? this.state.telephoneNumb
-                                                : t('phoneNumb')
-                                        }
-                                        defaultValue={
-                                            this.state.telephoneNumb != null
-                                                ? this.state.telephoneNumb
-                                                : t('phoneNumb')
-                                        }
-                                    />
-                                </Item>
-                                <Item style={styles.itemStyle}>
-                                    <Input
-                                        style={styles.inputstyle}
-                                        keyboardType="email"
-                                        keyboardShouldPersistTaps="handled"
-                                        placeholder={t('email')}
-                                        onChangeText={(text) => this.setState({email: text})}
-                                        value={
-                                            this.state.email != null
-                                                ? this.state.email
-                                                : t('email')
-                                        }
-                                        defaultValue={
-                                            this.state.email != null
-                                                ? this.state.email
-                                                : t('email')
-                                        }
-                                    />
-                                </Item>
-                                <Item style={styles.itemStyle}>
-                                    <Button
-                                        rounded
-                                        style={styles.buttonStyle}
-                                        onPress={this.updateAccount}
-                                        success>
-                                        <Text style={styles.buttonText}>
-                                            {t('refreshButton')}
-                                        </Text>
-                                    </Button>
-                                </Item>
-                            </Form>
-                        </Content>
-                    </View>
-                </View>
-                ):(
-                    <View style={{flex:1,justifyContent:'center',alignContent:'center' ,alignItems:'center',textAlign:'center' }}>
-                        <StatusBar backgroundColor="#fff" style="dark"/>
-                        <ActivityIndicator size="large" color="#7c9d32" />
+                        <ActivityIndicator size="large" color="#7c9d32"/>
                     </View>
 
-                ) }
-               
+                )}
+
             </View>
         );
     }
