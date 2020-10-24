@@ -100,7 +100,7 @@ export default class PinAbout extends React.Component {
 
             var months_arr = ['Yanvar', 'Fevral', 'Mart', 'Aprel', 'May', 'İyun', 'İyul', 'Avqust', 'Sentyabr', 'Oktyabr', 'Noyabr', 'Dekabr'];
 
-            var date = new Date(unixtimestamp * 1000);
+            var date = new Date(unixtimestamp * 1);
 
             var year = date.getFullYear();
 
@@ -114,7 +114,7 @@ export default class PinAbout extends React.Component {
 
             var seconds = "0" + date.getSeconds();
 
-            var fulldate = day + ' ' + month + ' ' + 2020 + ' ' + hours + ':' + minutes.substr(-2);
+            var fulldate = day + ' ' + month + ' ' + year + ' ' + hours + ':' + minutes.substr(-2);
 
             return fulldate;
         }
@@ -136,7 +136,7 @@ export default class PinAbout extends React.Component {
                     <MyText children={convertStampDate(item.date)} style={{textAlign: "left"}}/>
                 </View>
                 <View>
-                    <MyText textColor="#7c9d32" style={{fontWeight: "bold"}} children={"+ " + item.price}/>
+                    <MyText textColor="#7c9d32" style={{fontWeight: "bold"}} children={"+ " + item.price/10}/>
                 </View>
             </ListItem>
         )
@@ -204,8 +204,7 @@ export default class PinAbout extends React.Component {
                                 <View style={{flexDirection: "row", justifyContent: "space-between", width: width}}>
                                     <TouchableOpacity style={{paddingLeft: width / 23}}
                                                       onPress={() => this.props.navigation.goBack()}>
-                                        <AntDesign name="back" color="#fff"
-                                                   size={24}/>
+                                        <AntDesign name="left" size={25} color="#fff"/>
                                     </TouchableOpacity>
                                     {this.renderImage(usDatas)}
                                     <View style={{width: width / 9}}/>

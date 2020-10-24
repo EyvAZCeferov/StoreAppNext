@@ -71,13 +71,15 @@ export default class PayCards extends React.Component {
                 })
                 this.countEDV()
                 this.renderTopPanel()
-            } else {
-                this.props.navigation.goBack();
             }
         }
     }
 
     componentWillMount() {
+        this.getInfo()
+    }
+
+    componentDidMount() {
         this.getInfo()
         setInterval(() => {
             this.getInfo()
@@ -183,7 +185,7 @@ export default class PayCards extends React.Component {
                                 color: "#000",
                                 fontSize: 18
                             }}
-                                    children={this.state.cards != null ? this.hideNumb(this.state.cards.cardInfo.number) : '*********'}/>¶
+                                    children={this.state.cards != null ? this.hideNumb(this.state.cards.cardInfo.number) : '*********'}/>
                         </View>
                         <View style={{marginTop: 15}}/>
                         <View style={{

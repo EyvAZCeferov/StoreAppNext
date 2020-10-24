@@ -16,7 +16,7 @@ export default class Splash extends React.Component {
                 <Image
                     source={splashIcon}
                     defaultSource={splashIcon}
-                    style={{width: (width / 2) + 1, height: (width / 2) + 1}}
+                    style={{width: 140, height: 140}}
                 />
             </View>
         )

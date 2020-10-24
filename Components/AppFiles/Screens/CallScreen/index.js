@@ -31,6 +31,7 @@ import Splash from "../ScreenFolder/Splash/Splash";
 import SetPass from "../ScreenFolder/Auth/Screens/LocalAuth/SetPass";
 import CardSelector from "../ScreenFolder/Bread/Components/PayStart/CardSelector";
 import PinAbout from "../ScreenFolder/Bread/Components/Pin/PinAbout";
+import NotifyInform from "../ScreenFolder/Bread/Components/Notify/NotifyInform";
 //Keyboard Aware ScrollView
 //ScreenContainer
 const ScreenContainer = ({children}) => (
@@ -178,6 +179,12 @@ export const PayEnd = (props) => (
 export const Notify = (props) => (
     <ScreenContainer>
         <Notifications {...props} />
+    </ScreenContainer>
+);
+
+export const NotifyAbout = (props) => (
+    <ScreenContainer>
+        <NotifyInform {...props} />
     </ScreenContainer>
 );
 

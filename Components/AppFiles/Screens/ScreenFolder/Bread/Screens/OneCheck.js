@@ -19,24 +19,7 @@ import {AntDesign} from "@expo/vector-icons";
 import {t} from "../../../../Lang";
 import {
     useFonts,
-    Poppins_100Thin,
-    Poppins_100Thin_Italic,
-    Poppins_200ExtraLight,
-    Poppins_200ExtraLight_Italic,
-    Poppins_300Light,
-    Poppins_300Light_Italic,
     Poppins_400Regular,
-    Poppins_400Regular_Italic,
-    Poppins_500Medium,
-    Poppins_500Medium_Italic,
-    Poppins_600SemiBold,
-    Poppins_600SemiBold_Italic,
-    Poppins_700Bold,
-    Poppins_700Bold_Italic,
-    Poppins_800ExtraBold,
-    Poppins_800ExtraBold_Italic,
-    Poppins_900Black,
-    Poppins_900Black_Italic,
 } from '@expo-google-fonts/poppins';
 
 let priceAll = 0;
@@ -402,7 +385,7 @@ export default class OneCheck extends React.Component {
 
         var months_arr = ['Yanvar', 'Fevral', 'Mart', 'Aprel', 'May', 'İyun', 'İyul', 'Avqust', 'Sentyabr', 'Oktyabr', 'Noyabr', 'Dekabr'];
 
-        var date = new Date(unixtimestamp * 1000);
+        var date = new Date(unixtimestamp * 1);
 
         var year = date.getFullYear();
 
@@ -416,7 +399,7 @@ export default class OneCheck extends React.Component {
 
         var seconds = "0" + date.getSeconds();
 
-        var fulldate = day + ' ' + month + ' ' + 2020 + ' ' + hours + ':' + minutes.substr(-2);
+        var fulldate = day + ' ' + month + ' ' + year + ' ' + hours + ':' + minutes.substr(-2);
         if (type == 'hour') {
             fulldate = hours + ':' + minutes.substr(-2)
             return fulldate

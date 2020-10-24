@@ -42,10 +42,11 @@ import {
     SplashScreen,
     PayWel,
     SelectCard,
-    PinAbouts
+    PinAbouts, NotifyAbout
 } from "./Components/AppFiles/Screens/CallScreen";
 
 import AppSlider from './Components/AppFiles/Screens/ScreenFolder/AppIntro/AppSlider'
+import NotifyInform from "./Components/AppFiles/Screens/ScreenFolder/Bread/Components/Notify/NotifyInform";
 
 const AuthStack = createStackNavigator();
 const AuthStackScreen = (props) => (
@@ -125,6 +126,7 @@ const OtherScreen = () => (
         <OtherStacks.Screen name="OneService" component={Service}/>
         <OtherStacks.Screen name="OneCheck" component={Check}/>
         <OtherStacks.Screen name="Notification" component={Notify}/>
+        <OtherStacks.Screen name="AboutNotify" component={NotifyAbout}/>
         <OtherStacks.Screen name="SelectCard" component={SelectCard}/>
         <OtherStacks.Screen name="Buy" component={Barcode}/>
         <OtherStacks.Screen name="Barcode" options={{animationEnabled: true, animationTypeForReplac: "pop"}}
@@ -195,7 +197,7 @@ const ProgramLockScreens = (props) => (
 )
 
 function PreView(props) {
-    return <PinAbout/>
+    return <NotifyInform/>
 }
 
 export default function (props) {

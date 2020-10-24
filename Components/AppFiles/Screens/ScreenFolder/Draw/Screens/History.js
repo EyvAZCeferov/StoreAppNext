@@ -102,9 +102,12 @@ export default class History extends React.Component {
                         }
                     });
             } else if (marketName == null && firstDate != null && lastDate != null) {
+                console.log('LastDate ' + lastDate)
                 firebase
                     .database()
-                    .ref('users/' + user.uid + '/checks').orderByChild('date').startAt(firstDate).endAt(lastDate)
+                    .ref('users/' + user.uid + '/checks')
+                    .orderByChild('date')
+                    .startAt(firstDate).endAt(lastDate)
                     .limitToFirst(50)
                     .on('value', (data) => {
                         data.forEach((data) => {
@@ -124,7 +127,9 @@ export default class History extends React.Component {
             } else if (marketName == null && firstDate != null && lastDate == null) {
                 firebase
                     .database()
-                    .ref('users/' + user.uid + '/checks').orderByChild('date').startAt(firstDate).endAt(Date.now())
+                    .ref('users/' + user.uid + '/checks')
+                    .orderByChild('date')
+                    .startAt(firstDate)
                     .limitToFirst(50)
                     .on('value', (data) => {
                         data.forEach((data) => {
@@ -174,41 +179,43 @@ export default class History extends React.Component {
         firebase.database().goOffline()
     }
 
-    search() {
-        this.dropDownAlertRef.alertWithType('success', t('deleted'))
+    search(market = null) {
         this.setState({refresh: true})
-        if (this.state.selectedMarket != null && this.state.firstDate == null && this.state.lastDate == null) {
-            this.getInfo(this.state.selectedMarket)
-        } else if (this.state.selectedMarket == null && this.state.firstDate != null && this.state.lastDate != null) {
-            var firstDate = new Date(this.state.firstDate).getTime() / 1000
-            var lastDate = new Date(this.state.lastDate).getTime() / 1000
-            this.getInfo(null, firstDate, lastDate)
-        } else if (this.state.selectedMarket == null && this.state.firstDate != null && this.state.lastDate == null) {
-            var firstDate = new Date(this.state.firstDate).getTime() / 1000
-            this.getInfo(null, firstDate, null)
-        } else if (this.state.selectedMarket != null && this.state.firstDate != null && this.state.lastDate != null) {
-            var firstDate = new Date(this.state.firstDate).getTime() / 1000
-            var lastDate = new Date(this.state.lastDate).getTime() / 1000
-            this.getInfo(this.state.selectedMarket, firstDate, lastDate)
+        if (market != null) {
+            this.getInfo(market, null, null)
         } else {
-            this.getInfo(null, null, null)
+            if (this.state.selectedMarket === null && this.state.firstDate != null && this.state.lastDate != null) {
+                var firstDate = new Date(this.state.firstDate).getTime() / 1
+                var lastDate = new Date(this.state.lastDate).getTime() / 1
+                this.getInfo(null, firstDate, lastDate)
+            } else if (this.state.selectedMarket === null && this.state.firstDate != null && this.state.lastDate == null) {
+                var firstDate = new Date(this.state.firstDate).getTime() / 1
+                this.getInfo(null, firstDate, null)
+            } else if (this.state.selectedMarket != null && this.state.firstDate != null && this.state.lastDate != null) {
+                this.dropDownAlertRef.alertWithType('info', 'Market Ve ya Tarix Secin')
+            } else {
+                this.getInfo(null, null, null)
+            }
         }
     }
 
     valChang(val, type) {
-        if (type == 'market') {
-            this.setState({disableFirst: !this.state.disableFirst})
-            this.setState({disableLast: !this.state.disableLast})
-            this.setState({selectedMarket: val})
+        if (type === 'market') {
+            this.setState({
+                disableFirst: !this.state.disableFirst,
+                disableLast: !this.state.disableLast,
+                selectedMarket: val
+            })
+            this.search(val)
         } else {
             this.setState({disableMarket: !this.state.disableMarket})
-            if (type == 'first') {
+            if (type === 'first') {
                 this.setState({firstDate: val})
             } else if (type == 'last') {
                 this.setState({lastDate: val})
             }
+            this.search()
         }
-        this.search()
     }
 
     renderList(props) {
@@ -230,7 +237,7 @@ export default class History extends React.Component {
 
             var months_arr = ['Yanvar', 'Fevral', 'Mart', 'Aprel', 'May', 'İyun', 'İyul', 'Avqust', 'Sentyabr', 'Oktyabr', 'Noyabr', 'Dekabr'];
 
-            var date = new Date(unixtimestamp * 1000);
+            var date = new Date(unixtimestamp * 1);
 
             var year = date.getFullYear();
 
@@ -244,7 +251,7 @@ export default class History extends React.Component {
 
             var seconds = "0" + date.getSeconds();
 
-            var fulldate = day + ' ' + month + ' ' + 2020 + ' ' + hours + ':' + minutes.substr(-2);
+            var fulldate = day + ' ' + month + ' ' + year + ' ' + hours + ':' + minutes.substr(-2);
 
             return fulldate;
         }
@@ -280,6 +287,7 @@ export default class History extends React.Component {
 
         if (this.state.checks !== null) {
             return this.state.checks.map((element, index) => {
+                console.log('Bizim date ' + element.date)
                 return (
                     <ListItem style={styles.firstList} thumbnail key={index}>
                         <Left>
@@ -420,6 +428,7 @@ export default class History extends React.Component {
                                         textStyle={{color: "#7c9d32", fontSize: 20}}
                                         animationType="slide"
                                         modalTransparent={true}
+                                        disabled={this.state.disableFirst}
                                         onDateChange={(firstDate) => this.valChang(firstDate, 'first')}
                                     />
                                 </View>
@@ -433,6 +442,7 @@ export default class History extends React.Component {
                                         textStyle={{color: "#7c9d32", fontSize: 20}}
                                         animationType="slide"
                                         modalTransparent={true}
+                                        disabled={this.state.disableLast}
                                         onDateChange={(lastDate) => this.valChang(lastDate, 'last')}
                                     />
                                 </View>
@@ -447,25 +457,15 @@ export default class History extends React.Component {
                                             width: 150,
                                         }}
                                         selectedValue={this.state.selectedMarket}
+                                        disabled={this.state.disableMarket}
                                         onValueChange={(selectedMarket) => this.valChang(selectedMarket, 'market')}>
                                         <Picker.Item
                                             label="Mağaza adı"
                                             color="#7c9d32"
-                                            icon={
-                                                <Feather name="check-circle" size={24} color="black"/>
-                                            }
                                             value={null}
                                         />
                                         {this.renderMarkets()}
                                     </Picker>
-                                </View>
-                                <View style={[styles.contentHeaderColumn, {
-                                    backgroundColor: "transparent",
-                                    marginHorizontal: "auto"
-                                }]}>
-                                    <TouchableOpacity onPress={() => this.search()}>
-                                        <MaterialIcons name="search" size={24} color="#7c9d32"/>
-                                    </TouchableOpacity>
                                 </View>
                             </View>
                         </View>

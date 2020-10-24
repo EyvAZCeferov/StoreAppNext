@@ -92,7 +92,7 @@ export default function RecentOperations() {
 
             var months_arr = ['Yanvar', 'Fevral', 'Mart', 'Aprel', 'May', 'İyun', 'İyul', 'Avqust', 'Sentyabr', 'Oktyabr', 'Noyabr', 'Dekabr'];
 
-            var date = new Date(unixtimestamp * 1000);
+            var date = new Date(unixtimestamp * 1);
 
             var year = date.getFullYear();
 
@@ -106,7 +106,7 @@ export default function RecentOperations() {
 
             var seconds = "0" + date.getSeconds();
 
-            var fulldate = day + ' ' + month + ' ' + 2020 + ' ' + hours + ':' + minutes.substr(-2);
+            var fulldate = day + ' ' + month + ' ' + year + ' ' + hours + ':' + minutes.substr(-2);
 
             return fulldate;
         }

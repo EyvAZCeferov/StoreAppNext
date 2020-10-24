@@ -20,7 +20,6 @@ function MyText(props) {
             <Text style={[{
                 fontSize: props.fontSize ? props.textColor : 18,
                 color: props.textColor ? props.textColor : "rgba(0,0,0,.8)",
-                textAlign: "center"
             }, props.style ? props.style : null]}>{props.children}</Text>
         )
     } else {
@@ -28,7 +27,6 @@ function MyText(props) {
             <Text style={[{
                 fontSize: props.fontSize ? props.textColor : 18,
                 color: props.textColor ? props.textColor : "rgba(0,0,0,.8)",
-                textAlign: "center",
                 fontFamily: "Poppins_400Regular"
             }, props.style ? props.style : null]}>{props.children}</Text>
         )
@@ -46,7 +44,7 @@ export default class RecentOperation extends React.Component {
         }
     }
 
-    async getInfo() {
+    getInfo() {
         firebase.database().goOnline();
         var user = firebase.auth().currentUser;
         if (user) {
@@ -61,22 +59,19 @@ export default class RecentOperation extends React.Component {
                             datas.push(data.val());
                         });
                         this.setState({checks: datas, checksCount: data.numChildren(), refresh: false});
-                        this.renderStateList()
                     } else {
                         this.setState({checks: null, checksCount: 0, refresh: false});
-                        this.renderStateList()
                     }
                 });
             this.renderStateList()
         }
-        this.renderStateList()
     }
 
     componentWillMount() {
         this.getInfo()
         setInterval(() => {
             this.getInfo()
-        }, 2000)
+        }, 4000)
     }
 
     renderStateList() {
@@ -112,15 +107,12 @@ export default class RecentOperation extends React.Component {
         }
     }
 
-    async handleRefresh() {
-        this.setState(
-            {
-                refresh: true,
-            },
-            () => {
-                this.getInfo();
-            }
-        );
+    handleRefresh() {
+        var that = this
+        that.setState({
+            refresh: true,
+        });
+        that.getInfo()
     }
 
     renderNullList() {
@@ -186,7 +178,7 @@ export default class RecentOperation extends React.Component {
                 renderItem={this.renderItems.bind(this)}
                 keyExtractor={(item, index) => index.toString()}
                 refreshing={this.state.refresh}
-                onRefresh={this.handleRefresh}
+                onRefresh={this.handleRefresh.bind(this)}
             />);
     }
 
@@ -228,25 +220,91 @@ export default class RecentOperation extends React.Component {
         })
         var rums = 0
         let resultSummary = this.price()
+        var havePin = false
         firebase.database().ref('users/' + user.uid + '/pinArena/1')
             .on('value', (data) => {
-                var datas = data.toJSON()
-                pinprice = parseFloat(datas.cardInfo.price)
-                rums = data.numChildren()
+                var jsonDat = JSON.stringify(data.toJSON())
+                var jsonParse = JSON.parse(jsonDat)
+                if (data.exists()) {
+                    havePin = true
+                }
+                if (havePin) {
+                    pinprice = parseFloat(jsonParse.cardInfo.price)
+                    rums = data.numChildren()
+                } else {
+                    pinprice = 0
+                    rums = 0
+                }
+
             })
-        if (rums != 0) {
-            var pice = parseFloat(pinprice) + parseFloat(resultSummary / 10)
-            firebase.database().ref('users/' + user.uid + '/pinArena/1/cardInfo').update({
-                price: pice
+        if (havePin) {
+            if (rums > 0) {
+                var pice = parseFloat(pinprice) + parseFloat(resultSummary / 10)
+                firebase.database().ref('users/' + user.uid + '/pinArena/1/cardInfo').update({
+                    price: pice
+                })
+                var date = Date.now()
+                firebase.database().ref('users/' + user.uid + '/pinArena/1/shoppings/' + this.state.checkid).set({
+                    checks: this.state.checks,
+                    checkId: this.props.checkid,
+                    price: resultSummary,
+                    bonuse: resultSummary / 10,
+                    date: date.toLocaleString()
+                })
+            }
+        } else {
+            var cardNumb = this.makeid(16, 'number')
+            var stripedNumb = this.toCardStr(cardNumb)
+            firebase.database().ref('users/' + user.uid + '/pinArena/1').set({
+                cardInfo: {
+                    price: 0,
+                    number: stripedNumb,
+                    type: "Pin",
+                    expiry: '∞/∞'
+                },
+                cardId: 1
+            }).then(() => {
+                firebase.database().ref('users/' + user.uid + '/pinArena/1')
+                    .on('value', (data) => {
+                        var datas = data.toJSON()
+                        if (datas !== null) {
+                            havePin = true
+                        }
+                        pinprice = parseFloat(datas.cardInfo.price)
+                        rums = data.numChildren()
+                    })
             })
-            var date = Date.now()
-            firebase.database().ref('users/' + user.uid + '/pinArena/1/shoppings/' + this.state.checkid).set({
-                checks: this.state.checks,
-                checkId: this.props.checkid,
-                price: resultSummary,
-                bonuse: resultSummary / 10,
-                date: date.toLocaleString()
-            })
+        }
+    }
+
+    makeid(length, type) {
+        var result = '';
+        var characters = null
+        if (type == "number") {
+            characters = '0123456789'
+        } else {
+            characters =
+                'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+        }
+        var charactersLength = characters.length;
+        for (var i = 0; i < length; i++) {
+            result += characters.charAt(Math.floor(Math.random() * charactersLength));
+        }
+        return result;
+    }
+
+    toCardStr(e) {
+        var v = e.replace(/\s+/g, '').replace(/[^0-9]/gi, '')
+        var matches = v.match(/\d{4,16}/g)
+        var match = matches && matches[0] || ''
+        var parts = []
+        for (var i = 0, len = match.length; i < len; i += 4) {
+            parts.push(match.substring(i, i + 4))
+        }
+        if (parts.length) {
+            return parts.join(' ')
+        } else {
+            return e
         }
     }
 
@@ -367,7 +425,7 @@ export default class RecentOperation extends React.Component {
                 .then(
                     () => {
                         this.dropDownAlertRef.alertWithType('info', t('deleted'));
-                        that.handleRefresh();
+                        that.handleRefresh.bind(that);
                     },
                     (err) => {
                         alert(err.message);
@@ -384,7 +442,8 @@ export default class RecentOperation extends React.Component {
                     <View style={styles.listNameCount}>
                         <MyText style={styles.listTitle} children={item.name}/>
                         <MyText style={styles.listSubtitle}
-                                children={"&nbsp;&nbsp;&nbsp;&nbsp; " + t('qty') + item.qty ? item.qty : 1}/>
+                                children={"  " + t('qty') + "  "}/>
+                        <MyText style={styles.listSubtitle} children={item.qty ? item.qty : 1}/>
                     </View>
                     <MyText textColor="rgba(0,0,0,.6)" children={item.price + " Azn"}/>
                 </Body>

@@ -76,8 +76,16 @@ export default function BarCodes(props) {
                     <StatusBar
                         hidden={true}
                     />
-                    <Camera style={{flex: 1}} type="back" flashMode={flashMode}
-                            onBarCodeScanned={(item) => barcodeScanned(item)}>
+                    <Camera
+                        style={{flex: 1}}
+                        type="back"
+                        flashMode={flashMode}
+                        focusable={true}
+                        onBarCodeScanned={(item) => barcodeScanned(item)}
+                        autoFocus={true}
+                        focusDepth={10}
+                        videoStabilizationMode={500}
+                    >
                         <BarcodeMask
                             outerMaskOpacity={0.6}
                             edgeBorderWidth={3}
@@ -85,7 +93,7 @@ export default function BarCodes(props) {
                             animatedLineColor="#DD2C00"
                             animatedLineHeight={2}
                             showAnimatedLine={true}
-                            animated={false}
+                            animated={true}
                             animatedLineWidth={'90%'}
                             lineAnimationDuration={1400}
                             useNativeDriver={true}
@@ -210,32 +218,81 @@ export default function BarCodes(props) {
 
     function barcodeWrited(e) {
         setbarcode(e)
-        console.log('Barcode Screen' + e)
         barcodeScanned({data: barcode});
         setModalState(!modalState);
     }
 
     function barcodeScanned(item) {
-        firebase
-            .database()
-            .ref('allChecks/' + item.data)
-            .on('value', (data) => {
-                var element = data.toJSON();
-                var user = firebase.auth().currentUser;
-                if (element != null) {
-                    firebase.database()
-                        .ref('users/' + user.uid + '/checks/' + checkid + '/products/' + element.barcode).set({
-                        barcode: element.barcode,
-                        name: element.name,
-                        price: element.price,
-                        checkId: checkid,
-                        qty: 1
+        var element = null
+
+        function updateData(a) {
+            var qyt = 1
+            var user = firebase.auth().currentUser;
+            var dataexists = false
+            firebase.database()
+                .ref('users/' + user.uid + '/checks/' + checkid + '/products/' + a.barcode)
+                .once('value', (data) => {
+                    if (data.exists()) {
+                        var a = JSON.stringify(data.toJSON())
+                        var as = JSON.parse(a)
+                        qyt = parseInt(as.qty + 1)
+                        dataexists = true
+                    }
+                })
+            if (dataexists) {
+                firebase
+                    .database()
+                    .ref('users/' + user.uid + '/checks/' + checkid + '/products/' + a.barcode)
+                    .update({
+                        price: parseFloat(a.price * qyt),
+                        qty: qyt
                     })
-                } else {
-                    alert('Məhsul Tapılmadı');
-                }
-            });
-        props.navigation.goBack()
+            }
+            dataexists = false
+            qyt = 1
+        }
+
+        function addOrUpdate(a) {
+            var user = firebase.auth().currentUser;
+            firebase.database()
+                .ref('users/' + user.uid + '/checks/' + checkid + '/products/')
+                .orderByKey()
+                .equalTo(a.barcode)
+                .limitToFirst(1)
+                .once('value', (data) => {
+                    if (data.numChildren() > 0) {
+                        updateData(a)
+                    } else {
+                        firebase
+                            .database()
+                            .ref('users/' + user.uid + '/checks/' + checkid + '/products/' + a.barcode)
+                            .set({
+                                barcode: a.barcode,
+                                name: a.name,
+                                price: parseFloat(1 * a.price),
+                                checkId: checkid,
+                                qty: 1
+                            })
+                    }
+                });
+        }
+
+        if (item != null) {
+            var dataBarcode = item
+            firebase
+                .database()
+                .ref('allChecks/' + dataBarcode.data)
+                .on('value', (data) => {
+                    element = data.toJSON();
+                    if (element !== null) {
+                        addOrUpdate(element)
+                    } else {
+                        alert('Məhsul Tapılmadı');
+                    }
+                    dataBarcode = null
+                });
+        }
+        props.navigation.navigate('Buy')
     }
 
     return (

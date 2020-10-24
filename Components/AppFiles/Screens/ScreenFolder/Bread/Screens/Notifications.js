@@ -7,7 +7,6 @@ import {
     View,
     FlatList,
     Alert,
-    Modal,
     Platform
 } from 'react-native';
 import {
@@ -21,8 +20,6 @@ import {
     Content,
     Container,
     Header,
-    Card,
-    CardItem,
 } from 'native-base';
 import firebase from '../../../../Functions/FireBase/firebaseConfig';
 import {t} from '../../../../Lang';
@@ -49,7 +46,6 @@ function MyText(props) {
             <Text style={[{
                 fontSize: props.fontSize ? props.textColor : 18,
                 color: props.textColor ? props.textColor : "rgba(0,0,0,.8)",
-                textAlign: "center"
             }, props.style ? props.style : null]}>{props.children}</Text>
         )
     } else {
@@ -57,7 +53,6 @@ function MyText(props) {
             <Text style={[{
                 fontSize: props.fontSize ? props.textColor : 18,
                 color: props.textColor ? props.textColor : "rgba(0,0,0,.8)",
-                textAlign: "center",
                 fontFamily: "Poppins_400Regular"
             }, props.style ? props.style : null]}>{props.children}</Text>
         )
@@ -177,51 +172,6 @@ export default function Notification(props) {
         getInfo()
     }
 
-    const [bool, setBool] = React.useState(false)
-
-    function viewInfo(index) {
-        setBool(true)
-        return (
-            <View key={index} style={{
-                backgroundColor: "red",
-                justifyContent: "center",
-                alignContent: "center",
-                alignItems: "center",
-                width: width,
-                height: height,
-                position: "absolute",
-                top: 0,
-                left: 0,
-                right: 0,
-            }}>
-                <Modal
-                    style={{width: width / 2, height: height / 2, backgroundColor: "#fff"}}
-                    animationType="slide"
-                    transparent={true}
-                    visible={true}
-                >
-                    <Card>
-                        <CardItem header>
-                            <Body>
-                                <Text>ArazStore notify </Text>
-                            </Body>
-                            <Right>
-                                <Button transparent onPress={() => setBool(false)}>
-                                    <AntDesign name="close" size={24} color="#D50000"/>
-                                </Button>
-                            </Right>
-                        </CardItem>
-                        <CardItem>
-                            <Body>
-                                <Text>100 azn lik alış veriş etdiniz</Text>
-                            </Body>
-                        </CardItem>
-                    </Card>
-                </Modal>
-            </View>
-        );
-    }
-
     function renderItem2({item, index}) {
 
         return (
@@ -229,7 +179,12 @@ export default function Notification(props) {
                 style={styles.firstList}
                 thumbnail
                 key={index}
-                onPress={() => viewInfo(index)}>
+                onPress={(index)=>props.navigation.navigate("OtherPages", {
+                    screen: 'AboutNotify',
+                    params: {
+                        uid: index,
+                    }
+                })}>
                 <Left>
                     <Thumbnail
                         square
@@ -365,7 +320,7 @@ export default function Notification(props) {
                             }}
                             transparent
                             onPress={() => props.navigation.goBack()}>
-                            <AntDesign name="back" size={24} color="#7c9d32"/>
+                            <AntDesign name="left" size={24} color="#7c9d32"/>
                         </Button>
                     </View>
                     <View style={{

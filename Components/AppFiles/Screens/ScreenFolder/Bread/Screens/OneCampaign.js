@@ -39,7 +39,6 @@ function MyText(props) {
             <Text style={[{
                 fontSize: props.fontSize ? props.textColor : 18,
                 color: props.textColor ? props.textColor : "rgba(0,0,0,.8)",
-                textAlign: "center"
             }, props.style ? props.style : null]}>{props.children}</Text>
         )
     } else {
@@ -47,7 +46,6 @@ function MyText(props) {
             <Text style={[{
                 fontSize: props.fontSize ? props.textColor : 18,
                 color: props.textColor ? props.textColor : "rgba(0,0,0,.8)",
-                textAlign: "center",
                 fontFamily: "Poppins_400Regular"
             }, props.style ? props.style : null]}>{props.children}</Text>
         )

@@ -134,7 +134,7 @@ export default class CardsScreen extends React.Component {
 
         function deleteYes(index) {
             var user = firebase.auth().currentUser;
-            if (that.cardCount < 2 || that.cardCount == 1 || that.cardCount === 1) {
+            if (that.state.cardCount < 2 || that.state.cardCount == 1 || that.state.cardCount === 1) {
                 that.dropDownAlertRef.alertWithType('error', t('minimalCard'));
             } else {
                 firebase

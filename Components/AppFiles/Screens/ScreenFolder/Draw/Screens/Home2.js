@@ -78,14 +78,13 @@ export default class Home2 extends React.Component {
     }
 }
 
-const
-    styles = StyleSheet.create({
+const styles = StyleSheet.create({
         header: {
             backgroundColor: '#fff',
             paddingTop: 5,
-            paddingBottom: 1,
-            minHeight: 70,
-            maxHeight: 100,
+            paddingBottom: 0,
+            minHeight: 30,
+            maxHeight: 70,
             justifyContent: 'center',
             alignContent: 'center',
             alignItems: 'center',
