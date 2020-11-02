@@ -77,8 +77,6 @@ export default class TabMapsLists extends React.Component {
                         loading: false,
                     });
                 });
-        } else {
-            this.props.navigation.navigate('Home');
         }
     }
 

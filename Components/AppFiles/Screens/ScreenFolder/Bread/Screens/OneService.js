@@ -93,8 +93,6 @@ export default class OneService extends React.Component {
                             refresh: false
                         })
                     })
-            } else {
-                this.props.navigation.navigate('Home');
             }
         }
     }

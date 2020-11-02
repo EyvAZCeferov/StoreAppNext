@@ -16,6 +16,7 @@ import firebase from '../../../../Functions/FireBase/firebaseConfig';
 import {StatusBar} from "expo-status-bar";
 import DropdownAlert from "react-native-dropdownalert";
 import {Poppins_400Regular, useFonts} from "@expo-google-fonts/poppins";
+import AsyncStorage from "@react-native-community/async-storage";
 
 const succesImage = require('../../../../../../assets/images/Alert/tick.png');
 
@@ -65,30 +66,39 @@ export default class CreateAccount extends React.Component {
         return result;
     }
 
-    signUp = () => {
+    signUp = async () => {
         Keyboard.dismiss();
         let cardId = this.makeid(15)
-        let uid = firebase.database().key
         if (this.state.phoneNumb !== null) {
-            const user = {
-                bonuses: null,
-                cards: {
-                    cardId: {
-                        cardId: cardId,
-                        cardPass: this.state.pincode,
-                        cardInfo: this.state.cardInfos,
-                    },
-                },
-                checks: null,
-                notifications: null,
-                userInfos: {
-                    email: this.state.phoneNumb,
-                    uid: uid,
-                    profPic: null,
-                    push_id: null,
+            const cardDatas = {
+                cardId: cardId,
+                cardPass: this.state.pincode,
+                cardInfo: this.state.cardInfos,
+            }
+            await AsyncStorage.setItem('haveFinger', '');
+            await AsyncStorage.setItem('localAuthPass', '');
+            firebase.auth()
+                .createUserWithEmailAndPassword(this.state.phoneNumb, this.state.pincode).then(() => {
+                    var user = firebase.auth().currentUser;
+                    console.log(user)
+                    firebase.database()
+                        .ref('users/' + user.uid)
+                        .set({
+                            bonuses: null,
+                            checks: null,
+                            notifications: null,
+                            userInfos: {
+                                email: this.state.phoneNumb,
+                                uid: user.uid,
+                                profPic: null,
+                                push_id: null,
+                            }
+                        });
+                    firebase.database()
+                        .ref('users/' + user.uid + '/cards/' + cardId)
+                        .set(cardDatas);
                 }
-            };
-            this.props.navigation.navigate('SetPass', {prevPage: "CreateAccount"})
+            )
         }
     };
 
@@ -132,11 +142,9 @@ export default class CreateAccount extends React.Component {
                                             style={styles.inputstyle}
                                             placeholder={t('phoneNumb')}
                                             placeholderTextColor="#6d7587"
-                                            autoCompleteType="tel"
                                             autoCorrect={false}
                                             maxLength={15}
                                             selectionColor="#7c9d32"
-                                            textContentType="telephoneNumber"
                                             onChangeText={(text) => this.setState({phoneNumb: text})}
                                         />
                                     </Item>
@@ -164,7 +172,7 @@ export default class CreateAccount extends React.Component {
                                     <Item style={styles.itemStyle}>
                                         <Button
                                             style={styles.buttonStyle}
-                                            onPress={this.signUp}
+                                            onPress={() => this.signUp()}
                                             success
                                             rounded>
                                             <MyText style={styles.continueButtonText}

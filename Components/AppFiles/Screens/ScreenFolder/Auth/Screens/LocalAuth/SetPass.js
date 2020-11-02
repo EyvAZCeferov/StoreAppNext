@@ -18,11 +18,12 @@ import SetPassHeader from "./Components/SetPass/SetPassHeader";
 import {StatusBar} from "expo-status-bar";
 import CodeFieldSetPass from "./Components/SetPass/CodeFieldSetPass";
 import {t} from "../../../../../Lang";
-import {CreateAccContext} from "../../../../../Functions/Hooks/Authentication/CreateAccount/CreateAccContext";
 import * as LocalAuthentication from "expo-local-authentication";
+import {PasswordSetAndFingerSetContext} from "../../../../../Functions/Hooks/Authentication/FingerAndSetPass/PasswordSetAndFingerSetContext";
 
 var reqems = '';
 export default class SetPass extends React.Component {
+    static contextType = PasswordSetAndFingerSetContext
 
     constructor(props) {
         super(props);
@@ -33,7 +34,6 @@ export default class SetPass extends React.Component {
         }
     }
 
-    static contextType = CreateAccContext
 
     async getStat() {
         await AsyncStorage.getItem('haveFinger').then((a) => {
@@ -57,8 +57,7 @@ export default class SetPass extends React.Component {
     }
 
     async resetStat() {
-        await AsyncStorage.removeItem('haveFinger')
-        await AsyncStorage.removeItem('localAuthPass')
+        this.getStat()
     }
 
     funcStat() {
@@ -77,12 +76,22 @@ export default class SetPass extends React.Component {
         if (this.state.pass1 !== '' && this.state.pass2 !== '') {
             if (this.state.pass1 === this.state.pass2) {
                 await AsyncStorage.setItem('localAuthPass', this.state.pass1);
-                if (params.prevPage == 'Settings') {
-                    this.props.navigation.navigate('Settings')
-                    this.dropDownAlertRef.alertWithType('success', t('changed'));
-                } else if (params.prevPage == 'CreateAccount') {
-                    this.props.navigation.navigate('SetFinger')
-                    this.dropDownAlertRef.alertWithType('success', t('added'));
+                if (this.state.setFinger) {
+                    if (params) {
+                        if (params.prevPage == 'Settings') {
+                            this.props.navigation.navigate('Settings')
+                        }
+                    }
+                    const {haveLocalAuth, sethaveLocalAuth} = this.context
+                    sethaveLocalAuth(false)
+                } else {
+                    if (params) {
+                        if (params.prevPage == 'Settings') {
+                            this.props.navigation.navigate('Settings')
+                        }
+                    }
+                    const {haveLocalAuth, sethaveLocalAuth} = this.context
+                    sethaveLocalAuth(false)
                 }
             }
         }

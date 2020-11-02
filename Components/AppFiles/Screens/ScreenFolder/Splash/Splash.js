@@ -1,8 +1,7 @@
 import React from 'react';
-import {View, Image, Dimensions} from 'react-native';
+import {View, Image} from 'react-native';
 import {StatusBar} from 'expo-status-bar';
 
-const {width} = Dimensions.get("window")
 const splashIcon = require('../../../../../assets/icon-ios.png')
 export default class Splash extends React.Component {
     constructor(props) {

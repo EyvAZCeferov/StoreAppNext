@@ -41,8 +41,6 @@ export default function SliderCards({props}) {
             setcards(datas)
             setrefreshing(false)
             renderBody();
-        } else {
-            props.navigation.navigate('Home');
         }
     }
 

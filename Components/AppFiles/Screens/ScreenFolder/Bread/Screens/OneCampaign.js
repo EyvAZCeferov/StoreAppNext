@@ -87,8 +87,6 @@ export default class OneCampaign extends React.Component {
                     }
                     this.setState({newImages: datas});
                 });
-        } else {
-            this.props.navigation.navigate('Home');
         }
     }
 

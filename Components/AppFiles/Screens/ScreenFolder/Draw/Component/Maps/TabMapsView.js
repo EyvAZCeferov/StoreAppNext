@@ -54,8 +54,6 @@ export default class TabMapsView extends React.Component {
                         ready: true,
                     });
                 });
-        } else {
-            this.props.navigation.navigate('Home');
         }
     }
 

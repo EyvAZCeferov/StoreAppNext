@@ -95,8 +95,6 @@ export default class Campaigns extends React.Component {
                         refresh: false
                     });
                 });
-        } else {
-            this.props.navigation.navigate('Home');
         }
     }
 

@@ -16,23 +16,28 @@
     </select>
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="64eff0f2-a29f-4a6e-8bcc-bb9791a422d7" name="Default Changelist" comment="History And Font">
-      <change afterPath="$PROJECT_DIR$/Components/AppFiles/Screens/ScreenFolder/Bread/Components/Notify/NotifyInform.js" afterDir="false" />
+    <list default="true" id="64eff0f2-a29f-4a6e-8bcc-bb9791a422d7" name="Default Changelist" comment="History,Check Page, Unix Timestamp function, barcode scan, NotifyInform.js and etc.">
+      <change afterPath="$PROJECT_DIR$/Components/AppFiles/Functions/Hooks/Authentication/FingerAndSetPass/PasswordSetAndFingerSetContext.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/App.js" beforeDir="false" afterPath="$PROJECT_DIR$/App.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Components/AppFiles/Screens/CallScreen/index.js" beforeDir="false" afterPath="$PROJECT_DIR$/Components/AppFiles/Screens/CallScreen/index.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Components/AppFiles/Screens/ScreenFolder/Bread/Components/PayStart/Paying.js" beforeDir="false" afterPath="$PROJECT_DIR$/Components/AppFiles/Screens/ScreenFolder/Bread/Components/PayStart/Paying.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Components/AppFiles/Screens/ScreenFolder/Bread/Components/PayStart/RecentOperation.js" beforeDir="false" afterPath="$PROJECT_DIR$/Components/AppFiles/Screens/ScreenFolder/Bread/Components/PayStart/RecentOperation.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Components/AppFiles/Screens/ScreenFolder/Bread/Components/Pin/PinAbout.js" beforeDir="false" afterPath="$PROJECT_DIR$/Components/AppFiles/Screens/ScreenFolder/Bread/Components/Pin/PinAbout.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Components/AppFiles/Screens/ScreenFolder/Bread/Screens/BarCodes.js" beforeDir="false" afterPath="$PROJECT_DIR$/Components/AppFiles/Screens/ScreenFolder/Bread/Screens/BarCodes.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Components/AppFiles/Screens/ScreenFolder/Bread/Screens/BarcodeReader.js" beforeDir="false" afterPath="$PROJECT_DIR$/Components/AppFiles/Screens/ScreenFolder/Bread/Screens/BarcodeReader.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Components/AppFiles/Screens/ScreenFolder/Auth/Screens/CreateAccount.js" beforeDir="false" afterPath="$PROJECT_DIR$/Components/AppFiles/Screens/ScreenFolder/Auth/Screens/CreateAccount.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Components/AppFiles/Screens/ScreenFolder/Auth/Screens/ForgotPassword.js" beforeDir="false" afterPath="$PROJECT_DIR$/Components/AppFiles/Screens/ScreenFolder/Auth/Screens/ForgotPassword.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Components/AppFiles/Screens/ScreenFolder/Auth/Screens/LocalAuth/Components/ProgramLock/ProgramLockHeader.js" beforeDir="false" afterPath="$PROJECT_DIR$/Components/AppFiles/Screens/ScreenFolder/Auth/Screens/LocalAuth/Components/ProgramLock/ProgramLockHeader.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Components/AppFiles/Screens/ScreenFolder/Auth/Screens/LocalAuth/ProgramLock.js" beforeDir="false" afterPath="$PROJECT_DIR$/Components/AppFiles/Screens/ScreenFolder/Auth/Screens/LocalAuth/ProgramLock.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Components/AppFiles/Screens/ScreenFolder/Auth/Screens/LocalAuth/SetFinger.js" beforeDir="false" afterPath="$PROJECT_DIR$/Components/AppFiles/Screens/ScreenFolder/Auth/Screens/LocalAuth/SetFinger.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Components/AppFiles/Screens/ScreenFolder/Auth/Screens/LocalAuth/SetPass.js" beforeDir="false" afterPath="$PROJECT_DIR$/Components/AppFiles/Screens/ScreenFolder/Auth/Screens/LocalAuth/SetPass.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Components/AppFiles/Screens/ScreenFolder/Auth/Screens/LoginScreen.js" beforeDir="false" afterPath="$PROJECT_DIR$/Components/AppFiles/Screens/ScreenFolder/Auth/Screens/LoginScreen.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Components/AppFiles/Screens/ScreenFolder/Bread/Screens/Notifications.js" beforeDir="false" afterPath="$PROJECT_DIR$/Components/AppFiles/Screens/ScreenFolder/Bread/Screens/Notifications.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Components/AppFiles/Screens/ScreenFolder/Bread/Screens/OneCampaign.js" beforeDir="false" afterPath="$PROJECT_DIR$/Components/AppFiles/Screens/ScreenFolder/Bread/Screens/OneCampaign.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Components/AppFiles/Screens/ScreenFolder/Bread/Screens/OneCheck.js" beforeDir="false" afterPath="$PROJECT_DIR$/Components/AppFiles/Screens/ScreenFolder/Bread/Screens/OneCheck.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Components/AppFiles/Screens/ScreenFolder/Draw/Component/Home/RecentOperations.js" beforeDir="false" afterPath="$PROJECT_DIR$/Components/AppFiles/Screens/ScreenFolder/Draw/Component/Home/RecentOperations.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Components/AppFiles/Screens/ScreenFolder/Bread/Screens/OneService.js" beforeDir="false" afterPath="$PROJECT_DIR$/Components/AppFiles/Screens/ScreenFolder/Bread/Screens/OneService.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Components/AppFiles/Screens/ScreenFolder/Draw/Component/Home/SliderCards.js" beforeDir="false" afterPath="$PROJECT_DIR$/Components/AppFiles/Screens/ScreenFolder/Draw/Component/Home/SliderCards.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Components/AppFiles/Screens/ScreenFolder/Draw/Component/Maps/TabMapsLists.js" beforeDir="false" afterPath="$PROJECT_DIR$/Components/AppFiles/Screens/ScreenFolder/Draw/Component/Maps/TabMapsLists.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Components/AppFiles/Screens/ScreenFolder/Draw/Component/Maps/TabMapsView.js" beforeDir="false" afterPath="$PROJECT_DIR$/Components/AppFiles/Screens/ScreenFolder/Draw/Component/Maps/TabMapsView.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Components/AppFiles/Screens/ScreenFolder/Draw/Component/ProfileSection.js" beforeDir="false" afterPath="$PROJECT_DIR$/Components/AppFiles/Screens/ScreenFolder/Draw/Component/ProfileSection.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Components/AppFiles/Screens/ScreenFolder/Draw/Screens/AccountSettings.js" beforeDir="false" afterPath="$PROJECT_DIR$/Components/AppFiles/Screens/ScreenFolder/Draw/Screens/AccountSettings.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Components/AppFiles/Screens/ScreenFolder/Draw/Screens/Bonuses.js" beforeDir="false" afterPath="$PROJECT_DIR$/Components/AppFiles/Screens/ScreenFolder/Draw/Screens/Bonuses.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Components/AppFiles/Screens/ScreenFolder/Draw/Screens/Campaigns.js" beforeDir="false" afterPath="$PROJECT_DIR$/Components/AppFiles/Screens/ScreenFolder/Draw/Screens/Campaigns.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Components/AppFiles/Screens/ScreenFolder/Draw/Screens/CardsScreen.js" beforeDir="false" afterPath="$PROJECT_DIR$/Components/AppFiles/Screens/ScreenFolder/Draw/Screens/CardsScreen.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Components/AppFiles/Screens/ScreenFolder/Draw/Screens/History.js" beforeDir="false" afterPath="$PROJECT_DIR$/Components/AppFiles/Screens/ScreenFolder/Draw/Screens/History.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Components/AppFiles/Screens/ScreenFolder/Draw/Screens/Home2.js" beforeDir="false" afterPath="$PROJECT_DIR$/Components/AppFiles/Screens/ScreenFolder/Draw/Screens/Home2.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Components/AppFiles/Screens/ScreenFolder/Draw/Screens/Settings.js" beforeDir="false" afterPath="$PROJECT_DIR$/Components/AppFiles/Screens/ScreenFolder/Draw/Screens/Settings.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Components/AppFiles/Screens/ScreenFolder/Splash/Splash.js" beforeDir="false" afterPath="$PROJECT_DIR$/Components/AppFiles/Screens/ScreenFolder/Splash/Splash.js" afterDir="false" />
     </list>
@@ -108,13 +113,13 @@
     <property name="ts.external.directory.path" value="C:\Program Files\JetBrains\WebStorm 2020.1.2\plugins\JavaScriptLanguage\jsLanguageServicesImpl\external" />
   </component>
   <component name="RecentsManager">
-    <key name="MoveFile.RECENT_KEYS">
-      <recent name="E:\Projeler3\xamp\htdocs\elcinSayts\elcinPrograms\SnackExpo\storeApp2\EditableTrue\StoreAPPnext\Components\AppFiles\Screens\ScreenFolder\Auth\Screens\LocalAuth\Components\ProgramLock" />
-    </key>
     <key name="CopyFile.RECENT_KEYS">
       <recent name="E:\Projeler3\xamp\htdocs\elcinSayts\elcinPrograms\SnackExpo\storeApp2\EditableTrue\StoreAPPnext\Components\AppFiles\Functions\FireBase" />
       <recent name="E:\Projeler3\xamp\htdocs\elcinSayts\elcinPrograms\SnackExpo\storeApp2\EditableTrue\StoreAPPnext\Components\AppFiles\Screens\ScreenFolder\Auth\Screens\LocalAuth\Components\SetPass" />
       <recent name="E:\Projeler3\xamp\htdocs\elcinSayts\elcinPrograms\SnackExpo\storeApp2\EditableTrue\StoreAPPnext\Components\AppFiles\Screens\ScreenFolder\Auth\Screens\LocalAuth\Components" />
+    </key>
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="E:\Projeler3\xamp\htdocs\elcinSayts\elcinPrograms\SnackExpo\storeApp2\EditableTrue\StoreAPPnext\Components\AppFiles\Screens\ScreenFolder\Auth\Screens\LocalAuth\Components\ProgramLock" />
     </key>
   </component>
   <component name="SvnConfiguration">
@@ -204,7 +209,11 @@
       <workItem from="1602928518558" duration="5526000" />
       <workItem from="1602959198092" duration="10284000" />
       <workItem from="1603140247508" duration="4875000" />
-      <workItem from="1603525794453" duration="10103000" />
+      <workItem from="1603525794453" duration="10274000" />
+      <workItem from="1603568341150" duration="851000" />
+      <workItem from="1603612871086" duration="3558000" />
+      <workItem from="1603737324798" duration="6882000" />
+      <workItem from="1603958994583" duration="6289000" />
     </task>
     <task id="LOCAL-00001" summary="Fles">
       <created>1599058921979</created>
@@ -283,7 +292,14 @@
       <option name="project" value="LOCAL" />
       <updated>1602935289064</updated>
     </task>
-    <option name="localTasksCounter" value="12" />
+    <task id="LOCAL-00012" summary="History,Check Page, Unix Timestamp function, barcode scan, NotifyInform.js and etc.">
+      <created>1603538633096</created>
+      <option name="number" value="00012" />
+      <option name="presentableId" value="LOCAL-00012" />
+      <option name="project" value="LOCAL" />
+      <updated>1603538633096</updated>
+    </task>
+    <option name="localTasksCounter" value="13" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -324,7 +340,8 @@
     <MESSAGE value="Create Account All Functions" />
     <MESSAGE value="Check View Ready" />
     <MESSAGE value="History And Font" />
-    <option name="LAST_COMMIT_MESSAGE" value="History And Font" />
+    <MESSAGE value="History,Check Page, Unix Timestamp function, barcode scan, NotifyInform.js and etc." />
+    <option name="LAST_COMMIT_MESSAGE" value="History,Check Page, Unix Timestamp function, barcode scan, NotifyInform.js and etc." />
   </component>
   <component name="WindowStateProjectService">
     <state x="570" y="204" key="#Notifications" timestamp="1598798096992">
@@ -367,11 +384,11 @@
       <screen x="0" y="0" width="1366" height="738" />
     </state>
     <state x="184" y="0" key="SettingsEditor/0.0.1366.738@0.0.1366.738" timestamp="1600514495412" />
-    <state x="275" y="85" key="Vcs.Push.Dialog.v2" timestamp="1602935383943">
+    <state x="275" y="85" key="Vcs.Push.Dialog.v2" timestamp="1603538680140">
       <screen x="0" y="0" width="1366" height="768" />
     </state>
     <state x="275" y="82" key="Vcs.Push.Dialog.v2/0.0.1366.738@0.0.1366.738" timestamp="1602020058950" />
-    <state x="275" y="85" key="Vcs.Push.Dialog.v2/0.0.1366.768@0.0.1366.768" timestamp="1602935383943" />
+    <state x="275" y="85" key="Vcs.Push.Dialog.v2/0.0.1366.768@0.0.1366.768" timestamp="1603538680140" />
     <state x="490" y="278" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2" timestamp="1598105305632">
       <screen x="0" y="0" width="1366" height="738" />
     </state>

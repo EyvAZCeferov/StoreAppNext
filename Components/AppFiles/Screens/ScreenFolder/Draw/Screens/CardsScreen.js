@@ -97,7 +97,6 @@ export default class CardsScreen extends React.Component {
                 });
         } else {
             this.listComponent();
-            this.props.navigation.navigate('Home');
         }
     }
 

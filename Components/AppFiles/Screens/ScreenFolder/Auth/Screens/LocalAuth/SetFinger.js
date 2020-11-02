@@ -1,55 +1,74 @@
 import React from 'react';
-import {View, Text, StyleSheet, Dimensions, TouchableOpacity} from 'react-native';
+import {View, Text, StyleSheet, Dimensions, TouchableOpacity, ActivityIndicator} from 'react-native';
 import {StatusBar} from "expo-status-bar";
 import {AntDesign, Entypo} from '@expo/vector-icons'
 import {t} from "../../../../../Lang";
 import AsyncStorage from '@react-native-community/async-storage';
 import * as LocalAuthentication from "expo-local-authentication";
-import {
-    CreateAccContext,
-} from "../../../../../Functions/Hooks/Authentication/CreateAccount/CreateAccContext";
+import {PasswordSetAndFingerSetContext} from "../../../../../Functions/Hooks/Authentication/FingerAndSetPass/PasswordSetAndFingerSetContext";
 
 const {width, height} = Dimensions.get("window");
 
 export default class SetFinger extends React.Component {
+    static contextType = PasswordSetAndFingerSetContext
+
     constructor(props) {
         super(props);
         this.state = {
-            setFinger: false
+            setFinger: false,
+            refresh: true
         }
     }
 
-    static contextType = CreateAccContext
-
     componentDidMount() {
+        this.setState({refresh: true})
         this.getStat()
     }
 
     async getStat() {
-        await AsyncStorage.getItem('haveFinger').then((a) => {
-            if (a != null) {
+        await AsyncStorage.setItem('haveFinger', '')
+        AsyncStorage.getItem('haveFinger').then((a) => {
+            if (a !== null) {
                 this.setState({setFinger: true})
-                console.log(a)
             } else {
-                this.hasHardware()
+                hasHardware()
             }
         });
-    }
 
-    async onScanned() {
-        alert('Scanned')
-        await AsyncStorage.setItem('haveFinger', 'Haved');
-        const {userData, setUserData} = this.context
-        setUserData({pleaseCreateAcc: "Create"})
-        this.setState({setFinger: true})
+        async function hasHardware() {
+            let permission = await LocalAuthentication.hasHardwareAsync()
+            if (permission) {
+                let type = await LocalAuthentication.supportedAuthenticationTypesAsync();
+                let isFinger = type.includes(1)
+                if (isFinger) {
+                    let enroll = await LocalAuthentication.isEnrolledAsync();
+                    if (enroll) {
+                        let authenticate = await LocalAuthentication.authenticateAsync({
+                            disableDeviceFallback: true,
+                            cancelLabel: t('cancel'),
+                            promptMessage: t('fingerprintlogin'),
+                            fallbackLabel: t('fingerprintlogin')
+                        });
+                        if (authenticate !== null) {
+                            if (authenticate.success) {
+                                await AsyncStorage.setItem('haveFinger', 'Haved');
+                                const {haveLocalAuth, sethaveLocalAuth} = this.context
+                                sethaveLocalAuth(false)
+                                this.setState({setFinger: true})
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        this.setState({refresh: false})
     }
 
     async onCancel() {
-        alert('Canced')
         await AsyncStorage.setItem('haveFinger', null)
-        const {userData, setUserData} = this.context
-        setUserData({pleaseCreateAcc: "Create"})
-        console.log(userData)
+        const {haveLocalAuth, sethaveLocalAuth} = this.context
+        sethaveLocalAuth(false)
     }
 
     renderStateIcon() {
@@ -64,56 +83,42 @@ export default class SetFinger extends React.Component {
         }
     }
 
-    async hasHardware() {
-        let permission = await LocalAuthentication.hasHardwareAsync()
-        if (permission) {
-            let type = await LocalAuthentication.supportedAuthenticationTypesAsync(1);
-            let isFinger = type.includes(1)
-            if (isFinger) {
-                this.callFinger();
-            }
-        }
-    }
-
-    async callFinger() {
-        let enroll = await LocalAuthentication.isEnrolledAsync();
-        if (enroll) {
-            let authenticate = await LocalAuthentication.authenticateAsync({
-                disableDeviceFallback: true,
-                cancelLabel: t('cancel'),
-                promptMessage: t('fingerprintlogin'),
-                fallbackLabel: t('fingerprintlogin')
-            });
-            if (authenticate != null) {
-                if (authenticate.success) {
-                    this.onScanned();
-                }
-            }
+    renderContent() {
+        if (this.state.refresh) {
+            return (
+                <View style={{flex: 1, justifyContent: "center", alignItems: "center", alignContent: "center"}}>
+                    <StatusBar backgroundColor="#fff" style="dark"/>
+                    <ActivityIndicator size="large" color="#7c9d32"/>
+                </View>
+            )
+        } else {
+            return (
+                <View style={styles.container}>
+                    <StatusBar backgroundColor="#7c9d32" style="light"/>
+                    <View style={styles.panel}>
+                        <View style={styles.topPanel}>
+                            <TouchableOpacity onPress={() => this.onCancel()} style={styles.cancelButton}>
+                                <AntDesign name="close" color="#fff" size={30}/>
+                            </TouchableOpacity>
+                        </View>
+                    </View>
+                    <View style={[styles.panel, {height: height / 4}]}>
+                        {this.renderStateIcon()}
+                    </View>
+                    <View style={styles.panel}>
+                        <Text
+                            style={styles.desc}>{t('fingerprintaccesstotheapplicationUseyourfingerprinttologin')}</Text>
+                    </View>
+                    <View style={styles.panel}/>
+                </View>
+            )
         }
     }
 
     render() {
         return (
-            <View style={styles.container}>
-                <StatusBar backgroundColor="#7c9d32" style="light"/>
-                <View style={styles.panel}>
-                    <StatusBar backgroundColor="#7c9d32" style="light"/>
-                    <View style={styles.topPanel}>
-                        <TouchableOpacity onPress={() => this.onCancel()} style={styles.cancelButton}>
-                            <AntDesign name="close" color="#fff" size={30}/>
-                        </TouchableOpacity>
-                    </View>
-                </View>
-                <View style={[styles.panel, {height: height / 4}]}>
-                    <StatusBar backgroundColor="#7c9d32" style="light"/>
-                    {this.renderStateIcon()}
-                </View>
-                <View style={styles.panel}>
-                    <StatusBar backgroundColor="#7c9d32" style="light"/>
-                    <Text
-                        style={styles.desc}>{t('fingerprintaccesstotheapplicationUseyourfingerprinttologin')}</Text>
-                </View>
-                <View style={styles.panel}/>
+            <View>
+                {this.renderContent()}
             </View>
         )
     }

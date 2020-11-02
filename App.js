@@ -9,6 +9,7 @@ import {AntDesign} from "@expo/vector-icons";
 import AsyncStorage from '@react-native-community/async-storage';
 import * as Network from 'expo-network'
 import {ProgramLockContext} from './Components/AppFiles/Functions/Hooks/Authentication/Lock/ProgramLockContext';
+import {PasswordSetAndFingerSetContext} from "./Components/AppFiles/Functions/Hooks/Authentication/FingerAndSetPass/PasswordSetAndFingerSetContext";
 
 enableScreens();
 import {Alert} from 'react-native'
@@ -47,8 +48,10 @@ import {
 
 import AppSlider from './Components/AppFiles/Screens/ScreenFolder/AppIntro/AppSlider'
 import NotifyInform from "./Components/AppFiles/Screens/ScreenFolder/Bread/Components/Notify/NotifyInform";
+import * as LocalAuthentication from "expo-local-authentication";
 
 const AuthStack = createStackNavigator();
+const LocalAuthStack = createStackNavigator();
 const AuthStackScreen = (props) => (
     <AuthStack.Navigator headerMode="none">
         <AuthStack.Screen
@@ -66,17 +69,22 @@ const AuthStackScreen = (props) => (
             component={Register}
             {...props}
         />
-        <AuthStack.Screen
+    </AuthStack.Navigator>
+);
+
+const LocalAuthStackScreen = (props) => (
+    <LocalAuthStack.Navigator headerMode="SetPass">
+        <LocalAuthStack.Screen
             name="SetPass"
             component={SetPassword}
             {...props}
         />
-        <AuthStack.Screen
+        <LocalAuthStack.Screen
             name="SetFinger"
             component={SetFing}
             {...props}
         />
-    </AuthStack.Navigator>
+    </LocalAuthStack.Navigator>
 );
 
 const Tabs = createMaterialBottomTabNavigator();
@@ -203,29 +211,23 @@ function PreView(props) {
 export default function (props) {
     const [firstOpenSlider, setfirstOpenSlider] = React.useState(null);
     const [user, setUser] = React.useState(null);
+    const [haveLocalAuth, sethaveLocalAuth] = React.useState(false)
 
     async function getNetStat() {
         let status = await Network.getNetworkStateAsync();
-        if (!status.isConnected && !status.isInternetReachable) {
+        if (!status.isConnected || !status.isInternetReachable) {
             Alert.alert(
                 'İnternet Xətası',
                 "İnternetə qoşulub təkrar yoxlayın",
                 [
                     {
                         text: t('cancel'),
-                        onPress: () => console.log('Cancel Pressed'),
                         style: 'cancel',
                     },
                 ],
                 {cancelable: true}
             );
         }
-    }
-
-    async function getfirstOpen() {
-        AsyncStorage.getItem('firstOp').then((a) => {
-            setfirstOpenSlider(a)
-        });
     }
 
     function changeStat() {
@@ -235,7 +237,14 @@ export default function (props) {
         });
     }
 
-    function getFirstOpened() {
+    function getfirstOpen() {
+        AsyncStorage.getItem('firstOp').then((a) => {
+            setfirstOpenSlider(a)
+        });
+    }
+
+    function getFirstOpened(props) {
+
         return firstOpenSlider == null ? <AppSlider callfunc={() => changeStat()} {...props} /> :
             <NavigateAuth {...props} />;
     }
@@ -256,45 +265,83 @@ export default function (props) {
             <Screen {...props} />;
     }
 
-    function NavigateAuth(props) {
-        const [userData, setUserData] = React.useState(null);
+    let localAuthP = null
+    let fingerLock = null
+
+    function StatusFingerPrintSetPass(props) {
+
+        async function hasHardware() {
+            let permission = await LocalAuthentication.hasHardwareAsync()
+            if (permission) {
+                let type = await LocalAuthentication.supportedAuthenticationTypesAsync(1);
+                let isFinger = type.includes(1)
+                if (isFinger) {
+                    return true
+                }
+            }
+        }
+
+        function getStatusFingerAndProgramLock() {
+            var fingerStat = hasHardware()
+            AsyncStorage.getItem('localAuthPass').then((a) => {
+                if (a !== null) {
+                    localAuthP = a
+                } else {
+                    localAuthP = null
+                }
+                console.log('Password Stat ' + a)
+            });
+            if (fingerStat) {
+                AsyncStorage.getItem('haveFinger').then((b) => {
+                    if (b == 'Haved') {
+                        fingerLock = 'Haved'
+                    } else if (b == 'Not Haved') {
+                        fingerLock = 'Not Haved'
+                    } else {
+                        fingerLock = null
+                    }
+                    console.log('Finger Stat ' + b)
+                });
+            } else {
+                fingerLock = null
+            }
+        }
+
+        function getStatusLogin() {
+            getStatusFingerAndProgramLock()
+            var statHardWare = hasHardware()
+            if (statHardWare) {
+                if (localAuthP !== null && fingerLock == 'Haved') {
+                    sethaveLocalAuth(false)
+                } else if (localAuthP !== null && fingerLock == 'Not Haved') {
+                    sethaveLocalAuth(false)
+                } else {
+                    sethaveLocalAuth(true)
+                }
+            } else {
+                AsyncStorage.getItem('localAuthPass').then((a) => {
+                    if (a !== null) {
+                        sethaveLocalAuth(false)
+                    } else {
+                        sethaveLocalAuth(true)
+                    }
+                });
+            }
+        }
 
         React.useEffect(() => {
-            setInterval(() => {
-                if (userData != null) {
-                    if (userData.pleaseCreateAcc === "Create") {
-                        firebase.auth().createUserWithEmailAndPassword(userData.userInfos.email, userData.cards.cardId.cardPass).then(data => {
-                            var user = firebase.auth().currentUser;
-                            firebase
-                                .database()
-                                .ref('users/' + user.uid).set({userData})
-                            setUser(userData)
-                        })
-                    }
-                }
-            }, 100)
+            getStatusLogin()
         }, [])
 
-        return user ? <AuthVerify {...props} /> : <AuthStackScreen {...props}/>
+        return haveLocalAuth ? <AuthVerify {...props} /> :
+            (<PasswordSetAndFingerSetContext.Provider value={{haveLocalAuth, sethaveLocalAuth}}>
+                    <LocalAuthStackScreen {...props} />
+                </PasswordSetAndFingerSetContext.Provider>
+            )
     }
 
-    async function getStatusLogin() {
-        var haveFingStarter = null
-        var LocalAuthStarter = null
-        var lastStatStarter = []
-        AsyncStorage.getItem('haveFinger').then((a) => {
-            if (a != null) {
-                haveFingStarter = a
-            }
-        });
-        await AsyncStorage.getItem('localAuthPass').then((b) => {
-            if (b != null) {
-                LocalAuthStarter = b
-            }
-        });
-        lastStatStarter.push(haveFingStarter)
-        lastStatStarter.push(LocalAuthStarter)
-        return haveFingStarter
+    function NavigateAuth(props) {
+        return user ? <StatusFingerPrintSetPass {...props}/> : <AuthStackScreen {...props}/>
     }
 
     React.useEffect(() => {
@@ -305,12 +352,8 @@ export default function (props) {
         getFirstOpened()
         firebase.auth().onAuthStateChanged(function (user) {
             if (user) {
-                var statuses = getStatusLogin()
-                console.log(statuses)
                 setUser(user.uid);
             } else {
-                var statuses = getStatusLogin()
-                console.log(statuses)
                 setUser(null);
             }
         });
@@ -321,7 +364,7 @@ export default function (props) {
         React.useEffect(() => {
             setTimeout(() => {
                 setisReady(true)
-            }, 2000)
+            }, 2500)
         }, [])
         return isready ? <NavigateAuth {...props} /> : <SplashScreen/>
     }

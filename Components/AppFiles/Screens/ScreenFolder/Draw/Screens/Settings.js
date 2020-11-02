@@ -101,7 +101,6 @@ export default class Settings extends React.Component {
     async getFingStat() {
         await AsyncStorage.getItem('haveFinger').then((a) => {
             this.setState({haveFinger: a, refresh: false})
-            console.log(a)
         })
         this.renderContent()
     }

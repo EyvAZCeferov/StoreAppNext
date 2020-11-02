@@ -202,8 +202,6 @@ export default class AccountSettings extends React.Component {
                                 }
                             );
                     });
-                } else {
-                    this.props.navigation.navigate('Home');
                 }
             } else {
                 this.dropDownAlertRef.alertWithType('info', t('ppChoise'));

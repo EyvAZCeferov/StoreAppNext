@@ -128,8 +128,6 @@ export default function Notification(props) {
                     setRefresh(false)
                     renderContent()
                 });
-        } else {
-            props.navigation.navigate('Home');
         }
     }
 
@@ -179,7 +177,7 @@ export default function Notification(props) {
                 style={styles.firstList}
                 thumbnail
                 key={index}
-                onPress={(index)=>props.navigation.navigate("OtherPages", {
+                onPress={(index) => props.navigation.navigate("OtherPages", {
                     screen: 'AboutNotify',
                     params: {
                         uid: index,

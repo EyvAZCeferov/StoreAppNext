@@ -5,6 +5,7 @@ import {
     View,
     Keyboard,
     Text,
+    TouchableOpacity
 } from 'react-native';
 import {
     Button,
@@ -64,14 +65,14 @@ export default class LoginScreen extends React.Component {
 
     login = async () => {
         Keyboard.dismiss();
+        await AsyncStorage.setItem('haveFinger', '');
+        await AsyncStorage.setItem('localAuthPass', '');
         firebase
             .auth()
             .signInWithEmailAndPassword(this.state.phoneNumb, this.state.password)
             .then(
                 async () => {
                     this.dropDownAlertRef.alertWithType('success', t('signedIn'));
-                    await AsyncStorage.removeItem('haveFinger');
-                    await AsyncStorage.removeItem('localAuthPass');
                 },
                 (err) => {
                     this.dropDownAlertRef.alertWithType('error', err.message);
@@ -145,7 +146,9 @@ export default class LoginScreen extends React.Component {
                                 </View>
                                 <View style={customStyle.pVer15}>
                                     <View style={[{flexDirection: "row"}, customStyle.pHor15]}>
-                                        <View style={customStyle.pHor15}>
+                                        <TouchableOpacity
+                                            style={customStyle.pHor15}
+                                            onPress={() => this.props.navigation.navigate('ForgotPass')}>
                                             <MyText
                                                 style={[styles.remember, styles.forgotPass]}
                                                 onPress={() =>
@@ -153,7 +156,7 @@ export default class LoginScreen extends React.Component {
                                                 }>
                                                 {t('forgetPass')}
                                             </MyText>
-                                        </View>
+                                        </TouchableOpacity>
                                     </View>
                                 </View>
                                 <View>
@@ -178,7 +181,7 @@ export default class LoginScreen extends React.Component {
                                     <Button
                                         rounded
                                         onPress={() =>
-                                            this.props.navigation.navigate('CreateAccount', {screen: "Create"})
+                                            this.props.navigation.navigate('Create')
                                         }
                                         full
                                         success

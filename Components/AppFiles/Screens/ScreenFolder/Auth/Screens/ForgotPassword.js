@@ -65,10 +65,6 @@ export default class ForgotPassword extends React.Component {
         firebase.database().goOnline();
     }
 
-    componentWillUnmount() {
-        firebase.database().goOffline();
-    }
-
     sendLink = () => {
         Keyboard.dismiss();
         firebase
@@ -101,11 +97,15 @@ export default class ForgotPassword extends React.Component {
                     successImageSrc={succesImage}
                 />
                 <Container>
+                    <StatusBar backgroundColor="#7c9d32" style="light"/>
                     <Header style={customStyle.loginheader}>
+                        <StatusBar backgroundColor="#7c9d32" style="light"/>
                         <Thumbnail source={icon}/>
                     </Header>
                     <Body>
+                        <StatusBar backgroundColor="#7c9d32" style="light"/>
                         <Content>
+                            <StatusBar backgroundColor="#7c9d32" style="light"/>
                             <View>
                                 <View>
                                     <View>

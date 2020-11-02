@@ -103,7 +103,6 @@ export default class Bonuses extends React.Component {
                 });
         } else {
             this.listComponent();
-            this.props.navigation.navigate('Home');
         }
     }
 

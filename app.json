@@ -17,10 +17,6 @@
       "supportsTablet": true,
       "bundleIdentifier": "com.alov.payandway",
       "buildNumber": "1.0.0",
-      "googleServicesFile": "./Components/AppFiles/Functions/FireBase/FirebaseConfig.json",
-      "config": {
-        "googleMapsApiKey": "AIzaSyAnwXJXpo1gqAb6gVJ9PCmy0iBqJRflt80"
-      }
     },
     "android": {
       "icon": "./assets/icon.png",
@@ -28,7 +24,6 @@
       "versionCode": 1,
       "useNextNotificationsApi": true,
       "enableDangerousExperimentalLeanBuilds": true,
-      "googleServicesFile": "./Components/AppFiles/Functions/FireBase/FirebaseConfig.json",
       "config": {
         "googleMaps": {
           "apiKey": "AIzaSyAnwXJXpo1gqAb6gVJ9PCmy0iBqJRflt80"

@@ -56,7 +56,7 @@ export default class ProgramLockHeader extends React.Component {
     }
 
     renderElements() {
-        if (this.state.name != null || this.state.pp != null) {
+        if (this.state.pp !== null) {
             return (
                 <View style={styles.container}>
                     <View style={styles.header}>

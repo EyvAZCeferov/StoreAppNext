@@ -73,10 +73,10 @@ export default class ProgramLock extends React.Component {
                 .database()
                 .ref('users/' + user.uid + '/userInfos')
                 .on('value', (data) => {
-                    var newData = data.toJSON();
+                    var dat=data.toJSON()
                     this.setState({
-                        userAvatar: newData.profPic,
-                        userName: newData.email
+                        userAvatar: null,
+                        userName: dat.email
                     })
                 })
             this.renderContent()
@@ -157,7 +157,7 @@ export default class ProgramLock extends React.Component {
                     <ProgramLockHeader
                         {...this.props}
                         userName={this.state.userName}
-                        userAvatar={this.state.userAvatar}
+                        userAvatar={this.state.userAvatar ? this.state.userAvatar : null}
                     />
                 </View>
                 <View style={styles.codefieldArena}>
@@ -222,7 +222,7 @@ const styles = StyleSheet.create({
         width: width,
     },
     footer: {
-        height: 70,
+        height: 80,
         marginBottom: 15,
         left: 0,
         right: 0,

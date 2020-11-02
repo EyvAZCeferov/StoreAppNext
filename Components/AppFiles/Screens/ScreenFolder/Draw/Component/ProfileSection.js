@@ -98,8 +98,8 @@ export default function ProfileSection(props) {
     }
 
     async function out() {
-        await AsyncStorage.removeItem('haveFinger');
-        await AsyncStorage.removeItem('localAuthPass');
+        await AsyncStorage.setItem('haveFinger', '');
+        await AsyncStorage.setItem('localAuthPass', '');
         firebase.auth().signOut()
     }
 
