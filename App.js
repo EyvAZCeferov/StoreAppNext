@@ -10,6 +10,7 @@ import AsyncStorage from '@react-native-community/async-storage';
 import * as Network from 'expo-network'
 import {ProgramLockContext} from './Components/AppFiles/Functions/Hooks/Authentication/Lock/ProgramLockContext';
 import {PasswordSetAndFingerSetContext} from "./Components/AppFiles/Functions/Hooks/Authentication/FingerAndSetPass/PasswordSetAndFingerSetContext";
+import Bucket from './Components/AppFiles/Screens/ScreenFolder/Bread/Screens/Buckets/Bucket';
 
 enableScreens();
 import {Alert} from 'react-native'
@@ -205,7 +206,7 @@ const ProgramLockScreens = (props) => (
 )
 
 function PreView(props) {
-    return <NotifyInform/>
+    return <Bucket/>
 }
 
 export default function (props) {
@@ -372,7 +373,7 @@ export default function (props) {
     return (
         <Root>
             <NavigationContainer>
-                <SystemOpen {...props}/>
+                <PreView {...props}/>
             </NavigationContainer>
         </Root>
 
